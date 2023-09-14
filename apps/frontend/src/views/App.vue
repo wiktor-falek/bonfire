@@ -1,3 +1,3 @@
 <template>
-  <RouterView />
+  <h1>Channels</h1>
 </template>
