@@ -33,9 +33,9 @@ class Mongo {
     }
   }
 
-  static async close(): Promise<boolean> {
+  static async close() {
     this.client?.close();
-    return this.client !== undefined;
+    this.client = undefined;
   }
 }
 
