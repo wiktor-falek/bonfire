@@ -55,10 +55,10 @@ a,
   text-decoration: underline;
 }
 
-a:focus,
-.link:focus,
-button:focus,
-input:focus {
+a:focus-visible,
+.link:focus-visible,
+button:focus-visible,
+input:focus-visible {
   outline: 4px solid #00a8fc;
   border-radius: 3px;
 }
