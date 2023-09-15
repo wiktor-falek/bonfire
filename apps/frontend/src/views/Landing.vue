@@ -6,18 +6,22 @@ import Logo from "../components/Logo.vue";
   <header>
     <Logo />
   </header>
-  <h1>Imagine a campfire...</h1>
-  <h2>
-    ...where you and your friends can gather around, kindling connections with
-    others. A place that radiates warmth, making everyday conversations and
-    hangouts effortless. Welcome to Bonfire - Where friendship and community
-    thrive.
-  </h2>
+  <main>
+    <h1>Imagine a campfire...</h1>
+    <h2>
+      ...where you and your friends can gather around, kindling connections with
+      others. A place that radiates warmth, making everyday conversations and
+      hangouts effortless. Welcome to Bonfire - Where friendship and community
+      thrive.
+    </h2>
 
-  <div class="buttons">
-    <button class="button">Download for Linux</button>
-    <RouterLink to="/login" class="button">Open Bonfire in browser</RouterLink>
-  </div>
+    <div class="buttons">
+      <button class="button">Download for Linux</button>
+      <RouterLink to="/login" class="button"
+        >Open Bonfire in browser</RouterLink
+      >
+    </div>
+  </main>
 </template>
 
 <style scoped>
