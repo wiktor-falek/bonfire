@@ -1,7 +1,21 @@
 .auth-form {
-  padding: 30px;
+  padding: 15px;
   background-color: #313338;
   border-radius: 4px;
+  width: 100vw;
+  box-sizing: border-box;
+}
+
+@media screen and (min-width: 480px) {
+  .auth-form {
+    width: 400px;
+    padding: 30px;
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
 }
 
 label {
@@ -18,9 +32,9 @@ input {
   font-size: 1rem;
   height: 36px;
   padding: 2px 8px;
+  box-sizing: border-box;
   border: none;
   display: block;
-  width: 360px;
   border-radius: 2px;
   background-color: #1e1f22;
 }
@@ -41,7 +55,6 @@ button[type="submit"] {
   height: 44px;
   border: none;
   background-color: #e96045;
-  width: 100%;
   border-radius: 2px;
   margin-top: 24px;
   font-weight: bold;
