@@ -1,5 +1,8 @@
+# Bonfire - A real time chat application (totally not a Discord clone)
+
 ## Technologies used
 
-- Vue 3
 - Express
 - MongoDB (native driver)
+- Vue 3
+- Tanstack Query

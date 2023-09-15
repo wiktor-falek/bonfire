@@ -43,7 +43,7 @@ const loginRoute = computed(() => {
           autocomplete="off"
           id="email"
           type="email"
-          min="3"
+          min="6"
           max="256"
         />
 
@@ -52,8 +52,7 @@ const loginRoute = computed(() => {
           v-model="displayName"
           id="display-name"
           type="text"
-          min="3"
-          max="30"
+          max="32"
         />
 
         <label for="username" class="label-required">Username</label>
@@ -63,7 +62,7 @@ const loginRoute = computed(() => {
           id="username"
           type="text"
           min="3"
-          max="30"
+          max="32"
         />
 
         <label for="password" class="label-required">Password</label>
