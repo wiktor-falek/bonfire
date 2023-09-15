@@ -21,6 +21,7 @@ const router = createRouter({
       component: Login,
       meta: {
         skipAuth: true,
+        redirectToAppIfAuth: true,
       },
     },
     {
@@ -29,6 +30,7 @@ const router = createRouter({
       component: Register,
       meta: {
         skipAuth: true,
+        redirectToAppIfAuth: true,
       },
     },
     {
@@ -40,15 +42,17 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.skipAuth === true) {
-    return next();
+  const authenticated = localStorage.getItem("authenticated") === "true";
+
+  if (authenticated && to.meta.redirectToAppIfAuth) {
+    return next({ name: "app" });
   }
 
-  if (localStorage.getItem("authenticated") === "true") {
-    return next();
+  if (!authenticated && !to.meta.skipAuth) {
+    return next({ name: "login" });
   }
 
-  next({ name: "login" });
+  return next();
 });
 
 export default router;

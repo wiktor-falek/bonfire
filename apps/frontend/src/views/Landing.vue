@@ -16,7 +16,7 @@ import Logo from "../components/Logo.vue";
 
   <div class="buttons">
     <button class="button">Download for Linux</button>
-    <RouterLink to="/app" class="button">Open Bonfire in browser</RouterLink>
+    <RouterLink to="/login" class="button">Open Bonfire in browser</RouterLink>
   </div>
 </template>
 
