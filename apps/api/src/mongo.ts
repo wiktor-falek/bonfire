@@ -22,19 +22,12 @@ class Mongo {
     return this.client;
   }
 
-  static async connect() {
-    try {
-      const client = await this.getClient().connect();
-      console.log(`Connected to ${process.env.NODE_ENV ?? "development"} db`);
-      return client;
-    } catch (err) {
-      console.log("Failed to connect to db");
-      throw err;
-    }
+  static connect() {
+    return this.getClient().connect();
   }
 
   static async close() {
-    this.client?.close();
+    await this.client?.close();
     this.client = undefined;
   }
 }
