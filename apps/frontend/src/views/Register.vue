@@ -15,19 +15,12 @@ const { isLoading, isError, error, isSuccess, mutate } = useRegister();
 function handleSubmit(e: Event) {
   e.preventDefault();
 
-  mutate(
-    {
-      email: email.value,
-      displayName: displayName.value,
-      username: username.value,
-      password: password.value,
-    },
-    {
-      onSuccess: (res) => {
-        router.push("/channels/@me");
-      },
-    }
-  );
+  mutate({
+    email: email.value,
+    displayName: displayName.value,
+    username: username.value,
+    password: password.value,
+  });
 }
 
 const loginRoute = computed(() => {

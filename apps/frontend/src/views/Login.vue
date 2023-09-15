@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { computed, ref } from "vue";
 import useLogin from "../api/auth/useLogin";
-import router from "../router";
 
 const urlParams = new URLSearchParams(window.location.search);
 
@@ -13,14 +12,7 @@ const { isLoading, isError, error, isSuccess, mutate } = useLogin();
 function handleSubmit(e: Event) {
   e.preventDefault();
 
-  mutate(
-    { email: email.value, password: password.value },
-    {
-      onSuccess: (res) => {
-        router.push("/channels/@me");
-      },
-    }
-  );
+  mutate({ email: email.value, password: password.value });
 }
 
 function handlePasswordRecovery(e: MouseEvent) {

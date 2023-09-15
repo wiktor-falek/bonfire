@@ -1,3 +1,3 @@
 <template>
-  <h1>Channels</h1>
+  <h1>App View</h1>
 </template>

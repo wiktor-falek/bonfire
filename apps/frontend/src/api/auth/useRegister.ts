@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/vue-query";
 import api from "../configs/axiosConfig";
+import router from "../../router";
 
 const useRegister = () =>
   useMutation({
@@ -10,6 +11,10 @@ const useRegister = () =>
       password: string;
     }) => {
       return api.post("/auth/register", credentials);
+    },
+    onSuccess: (res) => {
+      localStorage.setItem("authenticated", "true");
+      router.push("/app");
     },
   });
 

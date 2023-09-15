@@ -2,6 +2,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import morgan from "morgan";
+import authRouter from "./routes/authRouter.js";
 
 const app = express();
 
@@ -17,5 +18,7 @@ app.use(cookieParser());
 
 // Logging
 app.use(morgan(":status :method :url :response-time[2] ms"));
+
+app.use("/auth", authRouter);
 
 export default app;
