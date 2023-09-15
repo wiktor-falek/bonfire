@@ -95,7 +95,6 @@ h2 {
 .register {
   font-size: 0.9rem;
   margin: 0;
-  margin-top: 6px;
 }
 
 .register-text {
