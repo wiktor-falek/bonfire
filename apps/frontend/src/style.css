@@ -1,6 +1,5 @@
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.6;
   font-weight: 400;
 
   color-scheme: light dark;
@@ -25,15 +24,11 @@ h6 {
   font-size: 1rem;
   font-weight: normal;
   margin: 0;
+  line-height: 1.6;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+p {
+  line-height: 1.6;
 }
 
 body {
@@ -46,6 +41,26 @@ body {
 
 button:hover {
   cursor: pointer;
+}
+
+a,
+.link {
+  all: unset;
+  color: #00a8fc;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+a:focus,
+.link:focus,
+button:focus,
+input:focus {
+  outline: 4px solid #00a8fc;
+  border-radius: 3px;
 }
 
 #app {

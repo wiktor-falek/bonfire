@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Landing from "./views/Landing.vue";
 import App from "./views/App.vue";
 import Login from "./views/Login.vue";
+import Register from "./views/Register.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -18,6 +19,14 @@ const router = createRouter({
       path: "/login",
       name: "login",
       component: Login,
+      meta: {
+        skipAuth: true,
+      },
+    },
+    {
+      path: "/register",
+      name: "register",
+      component: Register,
       meta: {
         skipAuth: true,
       },
