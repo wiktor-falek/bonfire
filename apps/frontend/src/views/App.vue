@@ -17,10 +17,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="loading" v-if="loading">
+  <main class="loading" v-if="loading" @contextmenu.prevent>
     <p>Loading...</p>
-  </div>
-  <main v-else>
+  </main>
+  <main v-else @contextmenu.prevent>
+    <div class="header">
+      <button>Menu</button>
+    </div>
     <h1>App View</h1>
   </main>
 </template>
@@ -39,5 +42,6 @@ main {
   width: 100vw;
   height: 100vh;
   background-color: #313338;
+  user-select: none;
 }
 </style>
