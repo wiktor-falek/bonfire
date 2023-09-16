@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import HamburgerMenu from "../components/HamburgerMenu.vue";
+import HomeSidePanel from "../components/HomeSidePanel.vue";
+import Bonfire from "../components/Bonfire.vue";
 
+const sidePanelIsOpen = ref(false);
 const loading = ref(true);
 
 onMounted(() => {
-  const MINIMUM_LOAD_TIME = 1000;
+  const MINIMUM_LOAD_TIME = 2000;
   const start = Date.now();
   // TODO: connect to socket server, watch server connection state
   const end = Date.now();
@@ -19,12 +22,16 @@ onMounted(() => {
 
 <template>
   <main class="loading" v-if="loading" @contextmenu.prevent>
-    <p>Loading...</p>
+    <Bonfire size="64" />
+    <div class="loading__info-container">
+      <strong>Did you know?</strong>
+      <p>I hate my life. Because it sucks, a lot.</p>
+    </div>
   </main>
   <main v-else @contextmenu.prevent>
     <div class="header desktop-hide">
       <button class="menu">
-        <HamburgerMenu></HamburgerMenu>
+        <HamburgerMenu @click="sidePanelIsOpen = true"></HamburgerMenu>
       </button>
     </div>
 
@@ -43,17 +50,22 @@ onMounted(() => {
           />
         </div>
         <div class="news__text">
-          <h1>What's new?</h1>
+          <strong>What's new?</strong>
           <ul>
             <li>foo</li>
             <li>bar</li>
             <li>baz</li>
           </ul>
-          <h1>Lorem Ipsum</h1>
+          <strong>Lorem Ipsum</strong>
         </div>
       </div>
     </div>
   </main>
+  <HomeSidePanel
+    :is-open="sidePanelIsOpen"
+    @close="sidePanelIsOpen = false"
+    class="desktop-hide"
+  />
 </template>
 
 <style scoped>
@@ -64,6 +76,14 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 20px;
+}
+
+.loading__info-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
 }
 
 main {
@@ -81,7 +101,7 @@ main {
   min-height: 48px;
   align-items: center;
   padding: 0 10px;
-  border-bottom: 1px solid rgb(107, 107, 107);
+  border-bottom: 1px solid var(--color-border-1);
 }
 
 .content {
@@ -129,6 +149,9 @@ main {
 }
 
 .news__text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   padding: 10px;
 }
 </style>

@@ -13,8 +13,10 @@
   -webkit-text-size-adjust: 100%;
 
   --font-gray-1: #b5bac1;
+  --border-color-1: rgb(90, 90, 90);
 }
 
+p,
 h1,
 h2,
 h3,
@@ -24,10 +26,6 @@ h6 {
   font-size: 1rem;
   font-weight: normal;
   margin: 0;
-  line-height: 1.6;
-}
-
-p {
   line-height: 1.6;
 }
 
