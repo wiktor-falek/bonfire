@@ -35,12 +35,11 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
-  width: 100vw;
-  min-height: 100vh;
 }
 
 main {
-  width: 100vw;
+  min-width: 100vw;
+  min-height: 100vh;
 }
 
 button:hover {
@@ -69,5 +68,24 @@ input:focus-visible {
 
 #app {
   margin: 0 auto;
-  min-height: 100vh;
 }
+
+@media (min-width: 820px) {
+  .desktop-hide {
+    display: none !important;
+  }
+}
+
+@media (max-width: 819px) {
+  .desktop-show {
+    display: none !important;
+  }
+}
+
+ul,
+ol {
+  padding-left: 14px;
+  margin: 0;
+}
+
+/* TODO: organize global styles */
