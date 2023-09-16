@@ -7,28 +7,42 @@ import Logo from "../components/Logo.vue";
     <Logo />
   </header>
   <main>
-    <h1>Imagine a campfire...</h1>
-    <h2>
-      ...where you and your friends can gather around, kindling connections with
-      others. A place that radiates warmth, making everyday conversations and
-      hangouts effortless. Welcome to Bonfire - Where friendship and community
-      thrive.
-    </h2>
+    <section class="hero">
+      <h1>Imagine a campfire...</h1>
+      <h2>
+        ...where you and your friends can gather around, kindling connections
+        with others. A place that radiates warmth, making everyday conversations
+        and hangouts effortless. Welcome to Bonfire - Where friendship and
+        community thrive.
+      </h2>
 
-    <div class="buttons">
-      <button class="button">Download for Linux</button>
-      <RouterLink to="/login" class="button"
-        >Open Bonfire in browser</RouterLink
-      >
-    </div>
+      <div class="buttons">
+        <button class="button">Download for Linux</button>
+        <RouterLink to="/login" class="button"
+          >Open Bonfire in browser</RouterLink
+        >
+      </div>
+    </section>
   </main>
 </template>
 
 <style scoped>
+main,
 header {
-  padding: 12px;
+  padding: 0 25px;
+  box-sizing: border-box;
+}
+.hero {
+  max-width: 720px;
+  margin: auto;
+}
+
+header {
+  height: 80px;
   display: flex;
   align-items: center;
+  margin: auto;
+  max-width: 1200px;
 }
 
 h1 {
@@ -46,10 +60,13 @@ h2 {
 
 .buttons {
   display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-top: 2rem;
+  flex-wrap: wrap;
+  width: fit-content;
+  margin: auto;
+  gap: 24px;
+  margin-top: 24px;
 }
+
 .button {
   padding: 12px 32px;
   border-radius: 30px;
