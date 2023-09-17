@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import HamburgerMenu from "../components/HamburgerMenu.vue";
-import HomeSidePanel from "../components/HomeSidePanel.vue";
+import BaseSidePanel from "../components/side-panel/BaseSidePanel.vue";
 import Bonfire from "../components/Bonfire.vue";
+import MobileSidePanel from "../components/side-panel/MobileSidePanel.vue";
 
 const sidePanelIsOpen = ref(false);
 const loading = ref(true);
@@ -29,42 +30,45 @@ onMounted(() => {
     </div>
   </main>
   <main v-else @contextmenu.prevent>
-    <div class="header desktop-hide">
-      <button class="menu">
-        <HamburgerMenu @click="sidePanelIsOpen = true"></HamburgerMenu>
-      </button>
-    </div>
+    <div class="wrapper">
+      <BaseSidePanel class="base-side-panel desktop-show" />
 
-    <div class="content">
-      <div class="buttons">
-        <button>Explore communities</button>
-        <button>Lorem Ipsum</button>
-        <button>Lorem Ipsum</button>
+      <div class="header desktop-hide">
+        <button class="menu">
+          <HamburgerMenu @click="sidePanelIsOpen = true"></HamburgerMenu>
+        </button>
       </div>
 
-      <div class="news">
-        <div class="news__banner">
-          <img
-            src="https://whatifgaming.com/wp-content/uploads/2022/03/Living-the-Mountain-Life.jpg"
-            alt=""
-          />
+      <div class="content">
+        <div class="buttons">
+          <button>Explore communities</button>
+          <button>Lorem Ipsum</button>
+          <button>Lorem Ipsum</button>
         </div>
-        <div class="news__text">
-          <strong>What's new?</strong>
-          <ul>
-            <li>foo</li>
-            <li>bar</li>
-            <li>baz</li>
-          </ul>
-          <strong>Lorem Ipsum</strong>
+
+        <div class="news">
+          <div class="news__banner">
+            <img
+              src="https://whatifgaming.com/wp-content/uploads/2022/03/Living-the-Mountain-Life.jpg"
+              alt=""
+            />
+          </div>
+          <div class="news__text">
+            <strong>What's new?</strong>
+            <ul>
+              <li>foo</li>
+              <li>bar</li>
+              <li>baz</li>
+            </ul>
+            <strong>Lorem Ipsum</strong>
+          </div>
         </div>
       </div>
     </div>
   </main>
-  <HomeSidePanel
+  <MobileSidePanel
     :is-open="sidePanelIsOpen"
     @close="sidePanelIsOpen = false"
-    class="desktop-hide"
   />
 </template>
 
@@ -96,6 +100,16 @@ main {
   user-select: none;
   display: flex;
   flex-direction: column;
+}
+
+@media (min-width: 820px) {
+  .wrapper {
+    display: flex;
+    flex-direction: row;
+  }
+  /* .base-side-panel {
+
+  } */
 }
 
 .header {
