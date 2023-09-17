@@ -63,7 +63,37 @@ const servers: Server[] = [
           </svg>
         </button>
       </div>
-      <div class="direct-messages"></div>
+      <div class="direct-messages">
+        <strong class="direct-messages__heading">Direct Messages</strong>
+        <div class="direct-messages__search">
+          <input
+            type="text"
+            placeholder="Find Conversation..."
+            class="direct-messages__search__find"
+          />
+          <button class="direct-messages__search__create">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="none"
+                stroke="#ddd"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 5v14m-7-7h14"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div class="direct-messages__conversations">
+          <!-- TODO: render conversations -->
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -96,7 +126,7 @@ const servers: Server[] = [
   flex-direction: column;
   gap: 8px;
   height: 100%;
-  width: 72px;
+  width: 88px;
   padding: 8px 8px;
   box-sizing: border-box;
   background-color: #212224;
@@ -117,8 +147,8 @@ hr {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgb(51, 49, 49);
-  transition: border-radius 27bf080.3s ease;
+  background-color: rgb(58, 56, 56);
+  transition: border-radius 0.25s ease;
 }
 
 .sidebar__direct-messages:hover,
@@ -129,5 +159,44 @@ hr {
 .sidebar__tile:hover,
 .sidebar__tile--rounded-corners {
   border-radius: 16px;
+}
+
+.direct-messages {
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.direct-messages__heading {
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
+
+.direct-messages__search {
+  display: flex;
+  justify-content: space-between;
+  height: 36px;
+  margin-bottom: 20px;
+}
+
+.direct-messages__search__find {
+  border: none;
+  background-color: #3d3e41;
+  padding-left: 8px;
+}
+
+.direct-messages__search__create {
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+}
+
+.direct-messages__conversations {
+  width: 100%;
+  height: 100%;
+  background-color: #3d3e41;
 }
 </style>
