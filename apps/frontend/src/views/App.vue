@@ -77,6 +77,9 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   gap: 20px;
+  box-sizing: border-box;
+  text-align: center;
+  padding: 30px;
 }
 
 .loading__info-container {
