@@ -32,7 +32,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.0.0",
     "morgan": "^1.10.0",
-    "resultat": "^1.0.6",
+    "resultat": "^1.0.7",
     "tsc-watch": "^6.0.4",
     "uuid": "^9.0.0",
     "zod": "^3.22.2"

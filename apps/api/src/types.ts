@@ -1,4 +1,4 @@
-import { ZodSchema, z } from "zod";
+import type { ZodSchema, z } from "zod";
 import type { Request } from "express";
 
 export type RequestInfer<S extends ZodSchema<any>> = Request<

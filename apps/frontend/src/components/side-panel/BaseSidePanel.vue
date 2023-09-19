@@ -238,7 +238,6 @@ hr {
 .direct-messages__conversations {
   width: 100%;
   height: 100%;
-  /* background-color: #3d3e41; */
   overflow-y: auto;
   padding: 0 6px;
   box-sizing: border-box;

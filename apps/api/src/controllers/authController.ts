@@ -4,7 +4,7 @@ import type {
   loginSchema,
   registerSchema,
 } from "../validators/userValidators.js";
-import User from "../models/userModel.js";
+import UserModel from "../models/userModel.js";
 
 export async function login(
   req: RequestInfer<typeof loginSchema>,
@@ -12,7 +12,7 @@ export async function login(
 ) {
   const { email, password } = req.body;
 
-  const result = await User.login(email, password);
+  const result = await UserModel.login(email, password);
 
   if (!result.ok) {
     return res.status(401).json({ error: result.err });
@@ -29,7 +29,12 @@ export async function register(
 ) {
   const { email, password, username, displayName } = req.body;
 
-  const result = await User.register(email, password, username, displayName);
+  const result = await UserModel.register(
+    email,
+    password,
+    username,
+    displayName
+  );
 
   if (!result.ok) {
     return res.status(401).json({ error: result.err });
