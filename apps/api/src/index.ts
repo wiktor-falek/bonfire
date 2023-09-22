@@ -33,5 +33,5 @@ process.on("SIGTERM", gracefulShutdown);
 //   );
 // }
 
-const messages = await MessageModel.getMessages("testchannel", 1695346014515);
+const messages = await MessageModel.getMessages("testchannel");
 console.log(messages);

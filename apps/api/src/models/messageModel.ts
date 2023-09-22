@@ -2,6 +2,7 @@ import Mongo from "../mongo.js";
 import { Ok, Err } from "resultat";
 import { z } from "zod";
 import type Message from "../entities/message.js";
+import { ObjectId } from "mongodb";
 
 const messageSchema = z.object({
   senderId: z.string().length(18),
@@ -70,13 +71,13 @@ class MessageModel {
         $unwind: "$messages",
       },
       {
-        $match: { "messages.timestamp": { $lt: beforeTimestamp } },
-      },
-      {
         $sort: { "messages.timestamp": -1 },
       },
       {
-        $limit: 5,
+        $match: { "messages.timestamp": { $lt: beforeTimestamp } },
+      },
+      {
+        $limit: 40,
       },
       {
         $replaceWith: "$messages",
