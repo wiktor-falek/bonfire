@@ -2,7 +2,7 @@ import Mongo from "../mongo.js";
 import { Ok, Err } from "resultat";
 import { z } from "zod";
 import type Message from "../entities/message.js";
-import { ObjectId } from "mongodb";
+import { ObjectId, type Document } from "mongodb";
 
 const messageSchema = z.object({
   senderId: z.string().length(18),
@@ -62,8 +62,11 @@ class MessageModel {
       : Ok(message);
   }
 
-  static async getMessages(channelId: string, beforeTimestamp = Date.now()) {
-    const pipeline = [
+  static async getMessages(
+    channelId: string,
+    lastMessageId?: ObjectId | string
+  ) {
+    const pipeline: Document[] = [
       {
         $match: { channelId },
       },
@@ -71,18 +74,26 @@ class MessageModel {
         $unwind: "$messages",
       },
       {
-        $sort: { "messages.timestamp": -1 },
+        $sort: { "messages._id": -1 },
       },
+    ];
+
+    if (lastMessageId !== undefined) {
+      pipeline.push({
+        $match: {
+          "messages._id": { $lt: new ObjectId(lastMessageId) },
+        },
+      });
+    }
+
+    pipeline.push(
       {
-        $match: { "messages.timestamp": { $lt: beforeTimestamp } },
-      },
-      {
-        $limit: 40,
+        $limit: 5,
       },
       {
         $replaceWith: "$messages",
-      },
-    ];
+      }
+    );
 
     const result = await this.collection.aggregate(pipeline).toArray();
 

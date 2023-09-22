@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import app from "./app.js";
 import Message from "./entities/message.js";
 import MessageModel from "./models/messageModel.js";
@@ -33,5 +34,8 @@ process.on("SIGTERM", gracefulShutdown);
 //   );
 // }
 
-const messages = await MessageModel.getMessages("testchannel");
+const messages = await MessageModel.getMessages(
+  "testchannel",
+  "650cf67ab745924796f9e0c3"
+);
 console.log(messages);
