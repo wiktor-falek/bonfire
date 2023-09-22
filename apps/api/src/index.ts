@@ -1,4 +1,6 @@
 import app from "./app.js";
+import Message from "./entities/message.js";
+import MessageModel from "./models/messageModel.js";
 import Mongo from "./mongo.js";
 
 await Mongo.connect()
@@ -23,3 +25,13 @@ const gracefulShutdown = async (signal: string) => {
 
 process.on("SIGINT", gracefulShutdown);
 process.on("SIGTERM", gracefulShutdown);
+
+// for (let i = 1; i < 11; i++) {
+//   await MessageModel.sendToChannel(
+//     "testchannel",
+//     new Message("testsender", i.toString())
+//   );
+// }
+
+const messages = await MessageModel.getMessages("testchannel", 1695346014515);
+console.log(messages);

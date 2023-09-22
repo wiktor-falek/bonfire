@@ -30,7 +30,7 @@ class ChannelModel {
     });
 
     if (!validation.success) {
-      return Err(validation.error.errors.toString()); // TODO: bump resultat to 1.0.7
+      return Err(validation.error.errors);
     }
 
     const channel = validation.data;

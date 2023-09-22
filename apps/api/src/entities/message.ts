@@ -6,7 +6,7 @@ class Message {
     this.senderId = senderId;
     this.content = content;
     this.timestamp = timestamp ?? Date.now();
-  }
+  } 
 }
 
 export default Message;
