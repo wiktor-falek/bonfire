@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Ok, Err } from "resultat";
 import { z } from "zod";
 import { email, username, displayName } from "../validators/userValidators.js";
-import generateNumericId from "../utils/generateNumericId.js";
+import { generateNumericId } from "../utils/id.js";
 
 const userSchema = z.object({
   id: z.string().length(18),
@@ -86,18 +86,19 @@ class UserModel {
     });
 
     if (!validation.success) {
-      console.error("Registration validation failed, this should not happen");
-      return Err("Something went wrong");
+      console.error(
+        "User validation failed during registration, this should not happen"
+      );
+      return Err(validation.error.issues)
     }
 
     const user = validation.data;
 
     const result = await this.collection.insertOne(user);
-    if (!result.acknowledged) {
-      return Err("Database write failed");
-    }
 
-    return Ok(1);
+    return !result.acknowledged
+      ? Err("Failed to create a user account")
+      : Ok(1);
   }
 
   static async login(email: string, password: string) {
@@ -119,10 +120,9 @@ class UserModel {
       { $set: { "account.sessionId": sessionId } }
     );
 
-    if (result.modifiedCount !== 1) {
-      return Err("Database write failed");
-    }
-    return Ok({ sessionId });
+    return result.acknowledged
+      ? Err("Something went wrong")
+      : Ok({ sessionId, user });
   }
 }
 

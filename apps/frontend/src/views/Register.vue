@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import useRegister from "../api/auth/useRegister";
-import router from "../router";
 
 const urlParams = new URLSearchParams(window.location.search);
 

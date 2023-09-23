@@ -1,10 +1,10 @@
-import type { Request, Response } from "express";
+import type { Response } from "express";
 import type { RequestInfer } from "../types.js";
 import type {
   loginSchema,
   registerSchema,
 } from "../validators/userValidators.js";
-import UserModel from "../models/userModel.js";
+import AuthService from "../services/authService.js";
 
 export async function login(
   req: RequestInfer<typeof loginSchema>,
@@ -12,15 +12,21 @@ export async function login(
 ) {
   const { email, password } = req.body;
 
-  const result = await UserModel.login(email, password);
+  const result = await AuthService.login(email, password);
 
   if (!result.ok) {
     return res.status(401).json({ error: result.err });
   }
 
-  const { sessionId } = result.val;
+  const { user, sessionId } = result.val;
+  const { username } = user.account;
 
-  return res.status(200).json({ sessionId });
+  res.cookie("sessionId", sessionId, {
+    httpOnly: true,
+    maxAge: 30 * 60 * 60 * 24 * 1000, // one month
+  });
+
+  return res.status(200).json({ authenticated: true, username });
 }
 
 export async function register(
@@ -29,7 +35,9 @@ export async function register(
 ) {
   const { email, password, username, displayName } = req.body;
 
-  const result = await UserModel.register(
+  console.log(req.body);
+
+  const result = await AuthService.register(
     email,
     password,
     username,
@@ -37,6 +45,7 @@ export async function register(
   );
 
   if (!result.ok) {
+    console.log(result.err);
     return res.status(401).json({ error: result.err });
   }
 

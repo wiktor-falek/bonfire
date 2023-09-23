@@ -1,20 +1,32 @@
-import bcrypt from "bcrypt";
-import { Err, Ok } from "resultat";
-import type Message from "../entities/message.js";
+import Message from "../entities/message.js";
+import MessageModel from "../models/messageModel.js";
+import type { ObjectId } from "mongodb";
+import { getChannelId } from "../utils/id.js";
 
 class MessageService {
-  // send to a private channel between two users
+  /**
+   * Sends a message to a channel between two users.
+   */
   static async sendDirectMessage(
     senderId: string,
     recipientId: string,
-    message: Message
+    content: string
   ) {
-    const channelId = bcrypt.hashSync(senderId + recipientId, 0);
+    const channelId = getChannelId(senderId, recipientId);
+    const message = new Message(senderId, content);
+    return MessageModel.sendToChannel(channelId, message);
   }
 
-  // retrieve n messages from a channel, optionally specify messages before certain timestamp (for pagination)
-  static async getMessagesFromChannel(channelId: string, amount = 30) {
-    return Err("Not Implemented");
+  /**
+   * Retrieve messages from a channel, optionally specify amount of messages,
+   * or appearing before a certain messageId for pagination.
+   */
+  static async getMessagesFromChannel(
+    channelId: string,
+    options: { amount?: number; lastMessageId?: string | ObjectId }
+  ) {
+    const { amount = 30, lastMessageId } = options;
+    return MessageModel.getMessages(channelId, amount, lastMessageId);
   }
 }
 

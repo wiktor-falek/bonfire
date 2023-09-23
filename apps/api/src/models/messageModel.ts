@@ -15,6 +15,8 @@ const channelMessageSchema = z.object({
   messages: z.array(messageSchema),
 });
 
+export type MessageType = z.infer<typeof messageSchema>;
+
 export type ChannelMessageType = z.infer<typeof channelMessageSchema>;
 
 /*
@@ -64,8 +66,11 @@ class MessageModel {
 
   static async getMessages(
     channelId: string,
+    limit: number,
     lastMessageId?: ObjectId | string
   ) {
+    // TODO: return Err() if channel does not exist instead of Ok([])
+
     const pipeline: Document[] = [
       {
         $match: { channelId },
@@ -88,14 +93,14 @@ class MessageModel {
 
     pipeline.push(
       {
-        $limit: 5,
+        $limit: limit,
       },
       {
         $replaceWith: "$messages",
       }
     );
 
-    const result = await this.collection.aggregate(pipeline).toArray();
+    const result = await this.collection.aggregate<MessageType>(pipeline).toArray();
 
     return result;
   }

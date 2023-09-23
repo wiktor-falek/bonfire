@@ -1,8 +1,7 @@
-import { ObjectId } from "mongodb";
 import app from "./app.js";
-import Message from "./entities/message.js";
-import MessageModel from "./models/messageModel.js";
+import UserModel from "./models/userModel.js";
 import Mongo from "./mongo.js";
+import cron from "node-cron";
 
 await Mongo.connect()
   .then(() => {
@@ -27,15 +26,6 @@ const gracefulShutdown = async (signal: string) => {
 process.on("SIGINT", gracefulShutdown);
 process.on("SIGTERM", gracefulShutdown);
 
-// for (let i = 1; i < 11; i++) {
-//   await MessageModel.sendToChannel(
-//     "testchannel",
-//     new Message("testsender", i.toString())
-//   );
-// }
-
-const messages = await MessageModel.getMessages(
-  "testchannel",
-  "650cf67ab745924796f9e0c3"
-);
-console.log(messages);
+cron.schedule("0 0 * * *", () => {
+  // SessionService.deleteExpiredSessions()
+})
