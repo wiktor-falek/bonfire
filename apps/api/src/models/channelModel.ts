@@ -4,9 +4,9 @@ import { z } from "zod";
 import type { WithoutId } from "mongodb";
 
 const channelSchema = z.object({
-  id: z.string().length(18),
+  id: z.string().length(21),
   name: z.string().optional(),
-  participants: z.array(z.string().length(18)).default([]),
+  participants: z.array(z.string().length(21)).default([]),
 });
 
 export type ChannelType = z.infer<typeof channelSchema>;

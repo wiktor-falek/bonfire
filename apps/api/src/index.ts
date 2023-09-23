@@ -1,5 +1,4 @@
 import app from "./app.js";
-import UserModel from "./models/userModel.js";
 import Mongo from "./mongo.js";
 import cron from "node-cron";
 

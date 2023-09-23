@@ -7,7 +7,7 @@ import { email, username, displayName } from "../validators/userValidators.js";
 import { generateNumericId } from "../utils/id.js";
 
 const userSchema = z.object({
-  id: z.string().length(18),
+  id: z.string().length(21),
   account: z.object({
     email,
     username,
@@ -49,10 +49,30 @@ class UserModel {
     return user;
   }
 
-  static async emailIsInUse(email: string) {
+  static async findBySessionId(sessionId: string) {
+    // TODO: support more than one sessionId
+    const user = await this.collection.findOne<UserType>({
+      "account.sessionId": sessionId,
+    });
+
+    return user;
+  }
+
+  static async emailExists(email: string) {
     const count = await this.collection.countDocuments(
       {
         "account.email": email,
+      },
+      { limit: 1 }
+    );
+
+    return Boolean(count);
+  }
+
+  static async sessionExists(sessionId: string) {
+    const count = await this.collection.countDocuments(
+      {
+        "account.sessionId": sessionId,
       },
       { limit: 1 }
     );
@@ -66,7 +86,7 @@ class UserModel {
     username: string,
     displayName: string
   ) {
-    const emailIsInUse = await this.emailIsInUse(email);
+    const emailIsInUse = await this.emailExists(email);
     if (emailIsInUse) {
       return Err("Email is already in use");
     }
@@ -76,7 +96,7 @@ class UserModel {
     const hash = await bcrypt.hash(password, salt);
 
     const validation = userSchema.safeParse({
-      id: generateNumericId(18),
+      id: generateNumericId(21),
       account: {
         email,
         username,
@@ -89,7 +109,7 @@ class UserModel {
       console.error(
         "User validation failed during registration, this should not happen"
       );
-      return Err(validation.error.issues)
+      return Err(validation.error.issues);
     }
 
     const user = validation.data;
@@ -120,7 +140,7 @@ class UserModel {
       { $set: { "account.sessionId": sessionId } }
     );
 
-    return result.acknowledged
+    return !result.acknowledged
       ? Err("Something went wrong")
       : Ok({ sessionId, user });
   }

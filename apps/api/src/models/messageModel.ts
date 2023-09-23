@@ -2,7 +2,7 @@ import Mongo from "../mongo.js";
 import { Ok, Err } from "resultat";
 import { z } from "zod";
 import type Message from "../entities/message.js";
-import { ObjectId, type Document } from "mongodb";
+import { ObjectId, type Document, MongoError } from "mongodb";
 
 const messageSchema = z.object({
   senderId: z.string().length(18),
@@ -100,9 +100,14 @@ class MessageModel {
       }
     );
 
-    const result = await this.collection.aggregate<MessageType>(pipeline).toArray();
-
-    return result;
+    try {
+      const result = await this.collection
+        .aggregate<MessageType>(pipeline)
+        .toArray();
+      return Ok(result);
+    } catch (e) {
+      return Err(e as MongoError);
+    }
   }
 }
 

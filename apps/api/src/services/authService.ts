@@ -1,22 +1,21 @@
 import UserModel from "../models/userModel.js";
 
 class AuthService {
-  static async register(
+  static register(
     email: string,
     password: string,
     username: string,
     displayName: string
   ) {
-    return await UserModel.register(email, password, username, displayName);
+    return UserModel.register(email, password, username, displayName);
   }
 
-  static async login(email: string, password: string) {
-    return await UserModel.login(email, password);
+  static login(email: string, password: string) {
+    return UserModel.login(email, password);
   }
 
-  static async isAuthorized(username: string) {
-    const user = await UserModel.findByUsername(username);
-    return user !== null;
+  static isSessionValid(sessionId: string) {
+    return UserModel.sessionExists(sessionId);
   }
 }
 

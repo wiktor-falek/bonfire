@@ -5,6 +5,7 @@ import type {
   registerSchema,
 } from "../validators/userValidators.js";
 import AuthService from "../services/authService.js";
+import { createSessionToken } from "../helpers/sessionToken.js";
 
 export async function login(
   req: RequestInfer<typeof loginSchema>,
@@ -15,18 +16,30 @@ export async function login(
   const result = await AuthService.login(email, password);
 
   if (!result.ok) {
+    console.error(result.err);
     return res.status(401).json({ error: result.err });
   }
 
   const { user, sessionId } = result.val;
-  const { username } = user.account;
+  const { id } = user;
+  const { username, displayName } = user.account;
+
+  const sessionToken = createSessionToken({
+    id,
+    username,
+  });
 
   res.cookie("sessionId", sessionId, {
     httpOnly: true,
     maxAge: 30 * 60 * 60 * 24 * 1000, // one month
   });
 
-  return res.status(200).json({ authenticated: true, username });
+  res.cookie("sessionToken", sessionToken, {
+    httpOnly: true,
+    maxAge: 30 * 60 * 60 * 24 * 1000, // one month
+  });
+
+  return res.status(200).json({ username, displayName, email });
 }
 
 export async function register(
