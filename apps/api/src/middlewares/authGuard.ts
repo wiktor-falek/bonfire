@@ -1,22 +1,27 @@
 import type { NextFunction, Request, Response } from "express";
-import AuthService from "../services/authService.js";
 import { decryptSessionToken } from "../helpers/sessionToken.js";
+import { authService } from "../instances.js";
 
-function authGuard(req: Request, res: Response, next: NextFunction) {
+async function authGuard(req: Request, res: Response, next: NextFunction) {
   const { sessionId, sessionToken } = req.cookies;
 
   if (typeof sessionId !== "string" || typeof sessionToken !== "string") {
     return res.status(401).json({ authenticated: false });
   }
 
-  const isAuthenticated = AuthService.isSessionValid(sessionId);
+  const sessionIsValid = await authService.isSessionValid(sessionId);
 
-  const session = decryptSessionToken(sessionToken);
+  const session = decryptSessionToken(sessionToken).unwrapOrElse((err) => {
+    console.error(err);
+    return null;
+  });
 
-  if (session.ok) {
-    const { id, username } = session.val;
+  if (session) {
+    const { id, username } = session;
     res.locals.user = { id, username };
   }
+
+  const isAuthenticated = sessionIsValid && session;
 
   return !isAuthenticated
     ? res.status(401).json({ authenticated: false })

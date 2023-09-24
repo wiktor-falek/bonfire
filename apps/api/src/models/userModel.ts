@@ -1,10 +1,10 @@
 import bcrypt from "bcrypt";
-import Mongo from "../mongo.js";
 import { v4 as uuidv4 } from "uuid";
 import { Ok, Err } from "resultat";
 import { z } from "zod";
 import { email, username, displayName } from "../validators/userValidators.js";
 import { generateNumericId } from "../utils/id.js";
+import type { Collection, Db, Document, MongoClient } from "mongodb";
 
 const userSchema = z.object({
   id: z.string().length(21),
@@ -21,10 +21,14 @@ const userSchema = z.object({
 export type UserType = z.infer<typeof userSchema>;
 
 class UserModel {
-  private static db = Mongo.getClient().db("bonfire");
-  private static collection = this.db.collection("users");
+  db: Db;
+  collection: Collection<Document>;
+  constructor(db: Db) {
+    this.db = db;
+    this.collection = db.collection("users");
+  }
 
-  static createIndexes() {
+  createIndexes() {
     return this.collection.createIndexes([
       {
         key: { id: 1 },
@@ -33,7 +37,7 @@ class UserModel {
     ]);
   }
 
-  static async findByUsername(username: string) {
+  async findByUsername(username: string) {
     const user = await this.collection.findOne<UserType>({
       "account.username": username,
     });
@@ -41,7 +45,7 @@ class UserModel {
     return user;
   }
 
-  static async findByEmail(email: string) {
+  async findByEmail(email: string) {
     const user = await this.collection.findOne<UserType>({
       "account.email": email,
     });
@@ -49,7 +53,7 @@ class UserModel {
     return user;
   }
 
-  static async findBySessionId(sessionId: string) {
+  async findBySessionId(sessionId: string) {
     // TODO: support more than one sessionId
     const user = await this.collection.findOne<UserType>({
       "account.sessionId": sessionId,
@@ -58,7 +62,7 @@ class UserModel {
     return user;
   }
 
-  static async emailExists(email: string) {
+  async emailExists(email: string) {
     const count = await this.collection.countDocuments(
       {
         "account.email": email,
@@ -69,7 +73,7 @@ class UserModel {
     return Boolean(count);
   }
 
-  static async sessionExists(sessionId: string) {
+  async sessionExists(sessionId: string) {
     const count = await this.collection.countDocuments(
       {
         "account.sessionId": sessionId,
@@ -80,7 +84,7 @@ class UserModel {
     return Boolean(count);
   }
 
-  static async register(
+  async register(
     email: string,
     password: string,
     username: string,
@@ -121,7 +125,7 @@ class UserModel {
       : Ok(1);
   }
 
-  static async login(email: string, password: string) {
+  async login(email: string, password: string) {
     const user = await this.findByEmail(email);
 
     if (user === null) {
@@ -145,7 +149,5 @@ class UserModel {
       : Ok({ sessionId, user });
   }
 }
-
-UserModel.createIndexes();
 
 export default UserModel;

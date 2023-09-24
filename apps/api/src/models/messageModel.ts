@@ -1,8 +1,7 @@
-import Mongo from "../mongo.js";
 import { Ok, Err } from "resultat";
 import { z } from "zod";
 import type Message from "../entities/message.js";
-import { ObjectId, type Document, MongoError } from "mongodb";
+import { ObjectId, type Document, MongoError, Collection, Db } from "mongodb";
 
 const messageSchema = z.object({
   senderId: z.string().length(18),
@@ -19,25 +18,15 @@ export type MessageType = z.infer<typeof messageSchema>;
 
 export type ChannelMessageType = z.infer<typeof channelMessageSchema>;
 
-/*
-users [
-  { id: string, ... },
-]
-
-channels [
-  { id: string, name?: string, participants: string[], ... },
-]
-
-messages [
-  { channelId: string, messages: Message[] },
-]
-*/
-
 class MessageModel {
-  private static db = Mongo.getClient().db("bonfire");
-  private static collection = this.db.collection("messages");
+  db: Db;
+  collection: Collection<Document>;
+  constructor(db: Db) {
+    this.db = db;
+    this.collection = db.collection("messages");
+  }
 
-  static createIndexes() {
+  createIndexes() {
     return this.collection.createIndexes([
       {
         key: { channelId: 1 },
@@ -49,7 +38,7 @@ class MessageModel {
     ]);
   }
 
-  static async sendToChannel(channelId: string, message: Message) {
+  async sendToChannel(channelId: string, message: Message) {
     const result = await this.collection.updateOne(
       { channelId },
       {
@@ -64,7 +53,7 @@ class MessageModel {
       : Ok(message);
   }
 
-  static async getMessages(
+  async getMessages(
     channelId: string,
     limit: number,
     lastMessageId?: ObjectId | string
@@ -110,7 +99,5 @@ class MessageModel {
     }
   }
 }
-
-MessageModel.createIndexes();
 
 export default MessageModel;

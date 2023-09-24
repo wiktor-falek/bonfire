@@ -4,8 +4,8 @@ import type {
   loginSchema,
   registerSchema,
 } from "../validators/userValidators.js";
-import AuthService from "../services/authService.js";
 import { createSessionToken } from "../helpers/sessionToken.js";
+import { authService } from "../instances.js";
 
 export async function login(
   req: RequestInfer<typeof loginSchema>,
@@ -13,7 +13,7 @@ export async function login(
 ) {
   const { email, password } = req.body;
 
-  const result = await AuthService.login(email, password);
+  const result = await authService.login(email, password);
 
   if (!result.ok) {
     console.error(result.err);
@@ -50,7 +50,7 @@ export async function register(
 
   console.log(req.body);
 
-  const result = await AuthService.register(
+  const result = await authService.register(
     email,
     password,
     username,

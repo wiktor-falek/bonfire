@@ -1,21 +1,23 @@
 import UserModel from "../models/userModel.js";
 
 class AuthService {
-  static register(
+  constructor(public userModel: UserModel) {}
+
+  register(
     email: string,
     password: string,
     username: string,
     displayName: string
   ) {
-    return UserModel.register(email, password, username, displayName);
+    return this.userModel.register(email, password, username, displayName);
   }
 
-  static login(email: string, password: string) {
-    return UserModel.login(email, password);
+  login(email: string, password: string) {
+    return this.userModel.login(email, password);
   }
 
-  static isSessionValid(sessionId: string) {
-    return UserModel.sessionExists(sessionId);
+  isSessionValid(sessionId: string) {
+    return this.userModel.sessionExists(sessionId);
   }
 }
 

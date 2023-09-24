@@ -1,5 +1,7 @@
+import type UserModel from "../models/userModel.js";
+
 class SessionService {
-  constructor() {}
+  constructor(private userModel: UserModel) {}
 
   /**
    * Clears session of the user that matches sessionId.

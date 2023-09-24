@@ -4,7 +4,7 @@ import type {
   messageQuerySchema,
   messageSchema,
 } from "../validators/messageValidators.js";
-import MessageService from "../services/messageService.js";
+import { messageService } from "../instances.js";
 
 export async function getMessages(
   req: RequestInfer<typeof messageQuerySchema>,
@@ -12,7 +12,7 @@ export async function getMessages(
 ) {
   const { channelId, lastMessageId } = req.body;
 
-  const result = await MessageService.getMessagesFromChannel(channelId, {
+  const result = await messageService.getMessagesFromChannel(channelId, {
     lastMessageId,
   });
 
@@ -27,7 +27,7 @@ export async function sendDirectMessage(
 ) {
   const { id: senderId } = res.locals.user;
   const { recipientId, content } = req.body;
-  const result = await MessageService.sendDirectMessage(
+  const result = await messageService.sendDirectMessage(
     senderId,
     recipientId,
     content

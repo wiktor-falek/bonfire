@@ -1,7 +1,6 @@
-import Mongo from "../mongo.js";
 import { Ok, Err } from "resultat";
 import { z } from "zod";
-import type { WithoutId } from "mongodb";
+import type { Collection, Db, Document, WithoutId } from "mongodb";
 
 const channelSchema = z.object({
   id: z.string().length(21),
@@ -12,10 +11,14 @@ const channelSchema = z.object({
 export type ChannelType = z.infer<typeof channelSchema>;
 
 class ChannelModel {
-  private static db = Mongo.getClient().db("bonfire");
-  private static collection = this.db.collection("channels");
+  db: Db;
+  collection: Collection<Document>;
+  constructor(db: Db) {
+    this.db = db;
+    this.collection = db.collection("channels");
+  }
 
-  static createIndexes() {
+  createIndexes() {
     return this.collection.createIndexes([
       {
         key: { id: 1 },
@@ -24,7 +27,7 @@ class ChannelModel {
     ]);
   }
 
-  static async createChannel(id: string) {
+  async createChannel(id: string) {
     const validation = channelSchema.safeParse({
       id,
     });
@@ -45,7 +48,7 @@ class ChannelModel {
       : Ok(id);
   }
 
-  static async findChannelById(id: string) {
+  async findChannelById(id: string) {
     const channel = await this.collection.findOne<WithoutId<ChannelType>>(
       { id: id },
       { projection: { _id: 0 } }
@@ -56,19 +59,17 @@ class ChannelModel {
       : Ok(channel);
   }
 
-  static async findChannelsByUserId(userId: string) {
+  async findChannelsByUserId(userId: string) {
     // TODO: find all channels where participants.includes(userId)
   }
 
-  static async addParticipantToChannel(userId: string, channelId: string) {
+  async addParticipantToChannel(userId: string, channelId: string) {
     // TODO: { $addToSet: { participants: userId } }
   }
 
-  static async removeParticipantFromChannel(userId: string, channelId: string) {
+  async removeParticipantFromChannel(userId: string, channelId: string) {
     // TODO: { $pull: { participants: userId } }
   }
 }
-
-ChannelModel.createIndexes();
 
 export default ChannelModel;
