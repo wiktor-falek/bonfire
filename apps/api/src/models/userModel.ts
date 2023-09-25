@@ -69,9 +69,12 @@ class UserModel {
   async createUser(user: User) {
     try {
       const result = await this.collection.insertOne(user);
-      return !result.acknowledged 
-        ? Err("Failed to create a user") 
-        : Ok(1);
+
+      if (!result.acknowledged) {
+        return Err("Failed to create a user");
+      }
+
+      return Ok(1);
     } catch (error) {
       console.error("Failed to create a user", error);
       return Err("Failed to create a user");
@@ -84,7 +87,11 @@ class UserModel {
       { $set: { "account.sessionId": sessionId } }
     );
 
-    return !result.acknowledged ? Err("Failed to update user session") : Ok(1);
+    if (!result.acknowledged) {
+      return Err("Failed to create a user");
+    }
+
+    return Ok(1);
   }
 }
 

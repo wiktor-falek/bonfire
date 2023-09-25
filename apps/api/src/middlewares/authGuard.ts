@@ -23,9 +23,11 @@ async function authGuard(req: Request, res: Response, next: NextFunction) {
 
   const isAuthenticated = sessionIsValid && session;
 
-  return !isAuthenticated
-    ? res.status(401).json({ authenticated: false })
-    : next();
+  if (!isAuthenticated) {
+    return res.status(401).json({ authenticated: false });
+  }
+
+  return next();
 }
 
 export default authGuard;

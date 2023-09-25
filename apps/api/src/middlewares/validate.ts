@@ -3,10 +3,12 @@ import type { NextFunction, Request, Response } from "express";
 
 export default function validate(schema: ZodSchema) {
   return (req: Request, res: Response, next: NextFunction) => {
-    const result = schema.safeParse(req);
+    const validation = schema.safeParse(req);
 
-    return result.success
-      ? next()
-      : res.status(422).json({ errors: result.error.errors });
+    if (!validation.success) {
+      return res.status(422).json({ error: validation.error.issues });
+    }
+
+    return next();
   };
 }

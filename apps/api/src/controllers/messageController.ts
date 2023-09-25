@@ -16,9 +16,11 @@ export async function getMessages(
     lastMessageId,
   });
 
-  return !result.ok
-    ? res.status(500).json({ error: result.err })
-    : res.status(200).json(result.val);
+  if (!result.ok) {
+    return res.status(500).json({ error: result.err });
+  }
+
+  return res.status(200).json(result.val);
 }
 
 export async function sendDirectMessage(
@@ -27,12 +29,16 @@ export async function sendDirectMessage(
 ) {
   const { id: senderId } = res.locals.user;
   const { recipientId, content } = req.body;
+
   const result = await messageService.sendDirectMessage(
     senderId,
     recipientId,
     content
   );
-  return !result.ok
-    ? res.status(500).json({ error: result.err })
-    : res.status(200).json(result.val);
+
+  if (!result.ok) {
+    return res.status(500).json({ error: result.err });
+  }
+
+  return res.status(200).json(result.val);
 }

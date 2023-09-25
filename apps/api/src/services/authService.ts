@@ -47,7 +47,7 @@ class AuthService {
       return result;
     }
 
-    return !result.ok ? result : Ok({ user, sessionId });
+    return Ok({ user, sessionId });
   }
 
   isSessionValid(sessionId: string) {

@@ -49,9 +49,11 @@ class MessageModel {
       { upsert: true }
     );
 
-    return !result.acknowledged
-      ? Err("Failed to write the message")
-      : Ok(message);
+    if (!result.acknowledged) {
+      return Err("Failed to write the message");
+    }
+
+    return Ok(message);
   }
 
   async getMessages(

@@ -44,9 +44,11 @@ class ChannelModel {
       { forceServerObjectId: false }
     );
 
-    return !result.acknowledged
-      ? Err(`Failed to create the channel with id=${id}`)
-      : Ok(id);
+    if (!result.acknowledged) {
+      return Err(`Failed to create the channel with id=${id}`);
+    }
+
+    return Ok(id);
   }
 
   async findChannelById(id: string) {
@@ -55,9 +57,11 @@ class ChannelModel {
       { projection: { _id: 0 } }
     );
 
-    return channel === null
-      ? Err(`Channel with id=${id} does not exist`)
-      : Ok(channel);
+    if (channel === null) {
+      return Err(`Channel with id=${id} does not exist`);
+    }
+
+    return Ok(channel);
   }
 
   async findChannelsByUserId(userId: string) {
