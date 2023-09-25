@@ -11,8 +11,8 @@ const channelSchema = z.object({
 export type ChannelType = z.infer<typeof channelSchema>;
 
 class ChannelModel {
-  db: Db;
-  collection: Collection<Document>;
+  private db: Db;
+  private collection: Collection<Document>;
 
   constructor(db: Db) {
     this.db = db;

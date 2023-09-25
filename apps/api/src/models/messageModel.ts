@@ -19,8 +19,8 @@ export type MessageType = z.infer<typeof messageSchema>;
 export type ChannelMessageType = z.infer<typeof channelMessageSchema>;
 
 class MessageModel {
-  db: Db;
-  collection: Collection<Document>;
+  private db: Db;
+  private collection: Collection<Document>;
 
   constructor(db: Db) {
     this.db = db;

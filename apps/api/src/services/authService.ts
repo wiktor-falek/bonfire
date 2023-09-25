@@ -5,7 +5,7 @@ import User from "../entities/user.js";
 import { v4 as uuidv4 } from "uuid";
 
 class AuthService {
-  constructor(public userModel: UserModel) {}
+  constructor(private userModel: UserModel) {}
 
   async register(
     email: string,

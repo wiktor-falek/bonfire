@@ -1,10 +1,10 @@
-import { Ok, Err } from "resultat";
+import { Ok, Err, type ResultErr, type ResultOk } from "resultat";
 import type { Collection, Db, Document } from "mongodb";
-import type User from "../entities/user.js";
+import User from "../entities/user.js";
 
 class UserModel {
-  db: Db;
-  collection: Collection<Document>;
+  private db: Db;
+  private collection: Collection<Document>;
 
   constructor(db: Db) {
     this.db = db;
