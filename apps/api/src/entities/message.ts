@@ -5,11 +5,12 @@ class Message {
   senderId: string;
   content: string;
   timestamp: number;
-  constructor(senderId: string, content: string, timestamp?: number) {
+
+  constructor(senderId: string, content: string) {
     this._id = new ObjectId();
     this.senderId = senderId;
     this.content = content;
-    this.timestamp = timestamp ?? Date.now();
+    this.timestamp = Date.now();
   }
 }
 

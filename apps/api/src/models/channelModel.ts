@@ -13,6 +13,7 @@ export type ChannelType = z.infer<typeof channelSchema>;
 class ChannelModel {
   db: Db;
   collection: Collection<Document>;
+
   constructor(db: Db) {
     this.db = db;
     this.collection = db.collection("channels");

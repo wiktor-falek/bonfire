@@ -21,6 +21,7 @@ export type ChannelMessageType = z.infer<typeof channelMessageSchema>;
 class MessageModel {
   db: Db;
   collection: Collection<Document>;
+
   constructor(db: Db) {
     this.db = db;
     this.collection = db.collection("messages");
