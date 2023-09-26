@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import Bonfire from "../Bonfire.vue";
+import router from "../../router";
 
 type Server = {
   name: string;
@@ -28,33 +29,38 @@ const servers: Server[] = [
 
 type Conversation = {
   name: string;
+  id: string;
 };
 
 const conversations = ref<Conversation[]>([
-  { name: "mock user 1" },
-  { name: "mock user 2" },
-  { name: "mock user 3" },
-  { name: "mock user 4" },
-  { name: "mock user 5" },
-  { name: "mock user 6" },
-  { name: "mock user 7" },
-  { name: "mock user 8" },
-  { name: "mock user 9" },
-  { name: "mock user 10" },
-  { name: "mock user 11" },
-  { name: "mock user 12" },
-  { name: "mock user 13" },
-  { name: "mock user 14" },
-  { name: "mock user 15" },
-  { name: "mock user 16" },
-  { name: "mock user 17" },
-  { name: "mock user 18" },
-  { name: "mock user 19" },
-  { name: "mock user 20" },
+  { name: "mock user 1", id: "1" },
+  { name: "mock user 2", id: "2" },
+  { name: "mock user 3", id: "3" },
+  { name: "mock user 4", id: "4" },
+  { name: "mock user 5", id: "5" },
+  { name: "mock user 6", id: "6" },
+  { name: "mock user 7", id: "7" },
+  { name: "mock user 8", id: "8" },
+  { name: "mock user 9", id: "9" },
+  { name: "mock user 10", id: "10" },
+  { name: "mock user 11", id: "11" },
+  { name: "mock user 12", id: "12" },
+  { name: "mock user 13", id: "13" },
+  { name: "mock user 14", id: "14" },
+  { name: "mock user 15", id: "15" },
+  { name: "mock user 16", id: "16" },
+  { name: "mock user 17", id: "17" },
+  { name: "mock user 18", id: "18" },
+  { name: "mock user 19", id: "19" },
+  { name: "mock user 20", id: "20" },
 ]);
 
 function handleConversationClose(index: number) {
   conversations.value.splice(index, 1);
+}
+
+function handleConversationClick(id: string) {
+  router.push(`/app/channel/${id}`);
 }
 </script>
 
@@ -116,6 +122,7 @@ function handleConversationClose(index: number) {
           class="direct-messages__conversations__conversation"
           v-for="(conversation, index) in conversations"
           :key="conversation.name"
+          @click="handleConversationClick(conversation.id)"
         >
           <div
             class="direct-messages__conversations__conversation__image"
@@ -257,7 +264,8 @@ hr {
   background-color: #3b3c3d;
 }
 
-.direct-messages__conversations__conversation:hover > .direct-messages__conversations__conversation__close {
+.direct-messages__conversations__conversation:hover
+  > .direct-messages__conversations__conversation__close {
   display: block;
 }
 

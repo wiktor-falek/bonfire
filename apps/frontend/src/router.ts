@@ -1,8 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Landing from "./views/Landing.vue";
-import App from "./views/App.vue";
 import Login from "./views/Login.vue";
 import Register from "./views/Register.vue";
+import App from "./views/app/App.vue";
+import AppHome from "./views/app/AppHome.vue";
+import AppChannel from "./views/app/AppChannel.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -37,6 +39,17 @@ const router = createRouter({
       path: "/app",
       name: "app",
       component: App,
+      children: [
+        {
+          path: "home",
+          component: AppHome,
+        },
+        {
+          path: "channel/:channelId",
+          component: AppChannel,
+          props: true,
+        },
+      ],
     },
   ],
 });

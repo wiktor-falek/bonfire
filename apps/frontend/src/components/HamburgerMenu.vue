@@ -1,13 +1,20 @@
+<script setup lang="ts">
+import useAppStore from "../stores/appStore";
+const appStore = useAppStore();
+</script>
+
 <template>
-  <div class="hamburger-menu">
+  <button class="hamburger-menu" @click="appStore.sidePanelIsOpen = true">
     <span class="line"></span>
     <span class="line"></span>
     <span class="line"></span>
-  </div>
+  </button>
 </template>
 
 <style scoped>
 .hamburger-menu {
+  all: unset;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   width: fit-content;
