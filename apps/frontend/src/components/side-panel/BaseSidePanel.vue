@@ -302,8 +302,8 @@ hr {
 .user-card {
   display: flex;
   align-items: center;
-  box-sizing: border-box;
   background-color: #232325;
+  min-height: 48px;
 }
 
 .user-card__profile {
@@ -313,7 +313,7 @@ hr {
   height: 100%;
 }
 .user-card__profile__image {
-  height: 42px;
+  height: 36px;
   aspect-ratio: 1 / 1;
   background-color: #47484b;
   border-radius: 50%;

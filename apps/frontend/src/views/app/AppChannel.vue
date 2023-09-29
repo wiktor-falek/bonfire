@@ -66,8 +66,13 @@ function handleSendMessage() {
     <Panel :border-top="true" class="panel--bottom">
       <button class="actions__action"></button>
       <button class="actions__action"></button>
-      <input class="panel--bottom__chat-input" type="text" v-model="content" />
-      <button class="actions__action" @click="handleSendMessage">S</button>
+      <input
+        class="panel--bottom__chat-input"
+        type="text"
+        v-model="content"
+        @keyup.enter="handleSendMessage"
+      />
+      <button class="actions__action"></button>
     </Panel>
   </div>
 </template>
@@ -151,6 +156,7 @@ function handleSendMessage() {
 }
 
 .message__image {
+  margin: 4px;
   height: 42px;
   aspect-ratio: 1 / 1;
   background-color: #535353;
@@ -159,6 +165,7 @@ function handleSendMessage() {
 .message__top {
   display: flex;
   gap: 8px;
+  align-items: center;
 }
 .message__top__display-name {
   font-weight: bold;
@@ -170,6 +177,8 @@ function handleSendMessage() {
 
 .message__top__date {
   cursor: default;
+  font-size: 0.9em;
+  color: #c9c3c3;
 }
 
 .message__content {
