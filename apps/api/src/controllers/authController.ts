@@ -6,9 +6,10 @@ import type {
 import { createSessionToken } from "../helpers/sessionToken.js";
 import { authService } from "../instances.js";
 import type { z } from "zod";
+import type { ValidatedRequest } from "../types.js";
 
 export async function login(
-  req: Request & z.infer<typeof loginSchema>,
+  req: ValidatedRequest<typeof loginSchema>,
   res: Response
 ) {
   const { email, password } = req.body;
