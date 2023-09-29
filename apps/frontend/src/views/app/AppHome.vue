@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import HamburgerMenu from "../../components/HamburgerMenu.vue";
+import Panel from "../../components/app/Panel.vue";
 </script>
 
 <template>
-  <div class="header desktop-hide">
-    <HamburgerMenu></HamburgerMenu>
-  </div>
+  <Panel :border-bottom="true" class="desktop-hide">
+    <HamburgerMenu />
+  </Panel>
 
   <div class="content">
     <div class="buttons">
@@ -42,15 +43,6 @@ main {
   user-select: none;
   display: flex;
   flex-direction: column;
-}
-
-.header {
-  display: flex;
-  height: 48px;
-  min-height: 48px;
-  align-items: center;
-  padding: 0 10px;
-  border-bottom: 1px solid var(--color-border-1);
 }
 
 .content {

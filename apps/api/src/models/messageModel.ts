@@ -89,6 +89,9 @@ class MessageModel {
       },
       {
         $replaceWith: "$messages",
+      },
+      {
+        $project: { _id: 0 },
       }
     );
 

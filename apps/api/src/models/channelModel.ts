@@ -1,18 +1,18 @@
+import type { Collection, Db, OptionalId } from "mongodb";
 import { Ok, Err } from "resultat";
 import { z } from "zod";
-import type { Collection, Db, Document, WithoutId } from "mongodb";
 
 const channelSchema = z.object({
   id: z.string().length(21),
-  name: z.string().optional(),
   participants: z.array(z.string().length(21)).default([]),
+  name: z.string().optional(),
 });
 
-export type ChannelType = z.infer<typeof channelSchema>;
+export type Channel = z.infer<typeof channelSchema>;
 
 class ChannelModel {
   private db: Db;
-  private collection: Collection<Document>;
+  private collection: Collection<Channel>;
 
   constructor(db: Db) {
     this.db = db;
@@ -39,10 +39,7 @@ class ChannelModel {
 
     const channel = validation.data;
 
-    const result = await this.collection.insertOne(
-      { channel },
-      { forceServerObjectId: false }
-    );
+    const result = await this.collection.insertOne(channel);
 
     if (!result.acknowledged) {
       return Err(`Failed to create the channel with id=${id}`);
@@ -52,7 +49,7 @@ class ChannelModel {
   }
 
   async findChannelById(id: string) {
-    const channel = await this.collection.findOne<WithoutId<ChannelType>>(
+    const channel = await this.collection.findOne<Channel>(
       { id: id },
       { projection: { _id: 0 } }
     );

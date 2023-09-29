@@ -13,7 +13,7 @@ export const messageSchema = z.object({
 });
 
 export const messageQuerySchema = z.object({
-  body: z.object({
+  query: z.object({
     channelId,
     lastMessageId: lastMessageId.optional(),
   }),

@@ -14,7 +14,7 @@ const useRegister = () =>
     },
     onSuccess: (res) => {
       localStorage.setItem("authenticated", "true");
-      router.push("/app");
+      router.push("/app/home");
     },
   });
 

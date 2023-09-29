@@ -1,14 +1,14 @@
-import type { Response } from "express";
-import type { RequestInfer } from "../types.js";
+import type { Request, Response } from "express";
 import type {
   loginSchema,
   registerSchema,
 } from "../validators/userValidators.js";
 import { createSessionToken } from "../helpers/sessionToken.js";
 import { authService } from "../instances.js";
+import type { z } from "zod";
 
 export async function login(
-  req: RequestInfer<typeof loginSchema>,
+  req: Request & z.infer<typeof loginSchema>,
   res: Response
 ) {
   const { email, password } = req.body;
@@ -43,7 +43,7 @@ export async function login(
 }
 
 export async function register(
-  req: RequestInfer<typeof registerSchema>,
+  req: Request & z.infer<typeof registerSchema>,
   res: Response
 ) {
   const { email, password, username, displayName } = req.body;

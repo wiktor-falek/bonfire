@@ -13,7 +13,7 @@ function close() {
 </script>
 
 <template>
-  <div class="overlay desktop-hide" v-show="isOpen" @click="close">
+  <div class="overlay desktop-hide" v-if="isOpen" @click="close">
     <BaseSidePanel class="side-panel" />
   </div>
 </template>

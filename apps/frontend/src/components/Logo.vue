@@ -17,7 +17,7 @@ import Bonfire from "./Bonfire.vue";
 }
 .logo__brand {
   display: block;
-  line-height: 1em;
+  line-height: 1;
   padding: 0;
   margin: 0;
   font-size: 24px;

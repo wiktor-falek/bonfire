@@ -21,6 +21,6 @@ app.use(cookieParser());
 app.use(morgan(":status :method :url :response-time[2] ms"));
 
 app.use("/auth", authRouter);
-app.use("/messages", messageRouter);
+app.use("/api/messages", messageRouter);
 
 export default app;

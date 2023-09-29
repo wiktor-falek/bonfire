@@ -2,57 +2,38 @@
 import { ref } from "vue";
 import Bonfire from "../Bonfire.vue";
 import router from "../../router";
+import useAppStore from "../../stores/appStore";
+
+const appStore = useAppStore();
 
 type Server = {
   name: string;
-  iconImgSrc: string;
+  imgSrc?: string;
 };
 
 const servers: Server[] = [
   {
     name: "test server 1",
-    iconImgSrc: "",
   },
   {
-    name: "test server 1",
-    iconImgSrc: "",
+    name: "test server 2",
   },
   {
-    name: "test server 1",
-    iconImgSrc: "",
+    name: "test server 3",
   },
   {
-    name: "test server 1",
-    iconImgSrc: "",
+    name: "test server 4",
   },
 ];
 
 type Conversation = {
   name: string;
   id: string;
+  imgSrc?: string;
 };
 
 const conversations = ref<Conversation[]>([
-  { name: "mock user 1", id: "1" },
-  { name: "mock user 2", id: "2" },
-  { name: "mock user 3", id: "3" },
-  { name: "mock user 4", id: "4" },
-  { name: "mock user 5", id: "5" },
-  { name: "mock user 6", id: "6" },
-  { name: "mock user 7", id: "7" },
-  { name: "mock user 8", id: "8" },
-  { name: "mock user 9", id: "9" },
-  { name: "mock user 10", id: "10" },
-  { name: "mock user 11", id: "11" },
-  { name: "mock user 12", id: "12" },
-  { name: "mock user 13", id: "13" },
-  { name: "mock user 14", id: "14" },
-  { name: "mock user 15", id: "15" },
-  { name: "mock user 16", id: "16" },
-  { name: "mock user 17", id: "17" },
-  { name: "mock user 18", id: "18" },
-  { name: "mock user 19", id: "19" },
-  { name: "mock user 20", id: "20" },
+  { name: "Qbi", id: "112105366920516103331" },
 ]);
 
 function handleConversationClose(index: number) {
@@ -60,6 +41,7 @@ function handleConversationClose(index: number) {
 }
 
 function handleConversationClick(id: string) {
+  appStore.sidePanelIsOpen = false;
   router.push(`/app/channel/${id}`);
 }
 </script>
@@ -132,7 +114,7 @@ function handleConversationClick(id: string) {
           </p>
           <button
             class="direct-messages__conversations__conversation__close"
-            @click="handleConversationClose(index)"
+            @click.stop="handleConversationClose(index)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -146,6 +128,19 @@ function handleConversationClick(id: string) {
               />
             </svg>
           </button>
+        </div>
+      </div>
+      <div class="user-card">
+        <div class="user-card__profile">
+          <div class="user-card__profile__image"></div>
+          <div class="user-card__profile__text">
+            <p class="user-card__profile__text__display-name">
+              {{ appStore.displayName }}
+            </p>
+            <p class="user-card__profile__text__username">
+              @{{ appStore.username }}
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -258,6 +253,7 @@ hr {
   border-radius: 4px;
   padding: 0 8px;
   gap: 10px;
+  cursor: pointer;
 }
 
 .direct-messages__conversations__conversation:hover {
@@ -272,10 +268,15 @@ hr {
 .direct-messages__conversations__conversation__image {
   background-color: #3a3838;
   border-radius: 50px;
+  height: 80%;
+  aspect-ratio: 1 / 1;
+  background-color: #47484b;
 }
 
 .direct-messages__conversations__conversation__name {
   text-overflow: ellipsis;
+  color: #bdbcbc;
+  font-weight: 600;
 }
 .direct-messages__conversations__conversation__close {
   margin-left: auto;
@@ -296,5 +297,29 @@ hr {
 
 .direct-messages__conversations__conversation__close:hover {
   color: #dad1d1;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  background-color: #232325;
+}
+
+.user-card__profile {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+}
+.user-card__profile__image {
+  height: 42px;
+  aspect-ratio: 1 / 1;
+  background-color: #47484b;
+  border-radius: 50%;
+}
+
+.user-card__profile__text > * {
+  line-height: 1.1;
 }
 </style>

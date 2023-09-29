@@ -1,10 +1,10 @@
-import { Ok, Err, type ResultErr, type ResultOk } from "resultat";
-import type { Collection, Db, Document } from "mongodb";
+import { Ok, Err } from "resultat";
+import type { Collection, Db } from "mongodb";
 import User from "../entities/user.js";
 
 class UserModel {
   private db: Db;
-  private collection: Collection<Document>;
+  private collection: Collection<User>;
 
   constructor(db: Db) {
     this.db = db;
@@ -24,6 +24,7 @@ class UserModel {
     const user = await this.collection.findOne<User>({
       "account.username": username,
     });
+
     return user;
   }
 
@@ -36,7 +37,6 @@ class UserModel {
   }
 
   async findBySessionId(sessionId: string) {
-    // TODO: support more than one sessionId
     const user = await this.collection.findOne<User>({
       "account.sessionId": sessionId,
     });
@@ -76,7 +76,6 @@ class UserModel {
 
       return Ok(1);
     } catch (error) {
-      console.error("Failed to create a user", error);
       return Err("Failed to create a user");
     }
   }

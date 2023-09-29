@@ -9,7 +9,7 @@ const appStore = useAppStore();
 const loading = ref(true);
 
 onMounted(() => {
-  const MINIMUM_LOAD_TIME = 2000;
+  const MINIMUM_LOAD_TIME = 500;
   const start = Date.now();
   // TODO: connect to socket server, watch server connection state
   const end = Date.now();
@@ -43,6 +43,10 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.wrapper {
+  height: 100vh;
+}
+
 .loading {
   width: 100vw;
   height: 100vh;
