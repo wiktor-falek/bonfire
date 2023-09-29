@@ -1,14 +1,12 @@
-import type { Collection, Db, OptionalId } from "mongodb";
+import type { Collection, Db, MongoError } from "mongodb";
 import { Ok, Err } from "resultat";
 import { z } from "zod";
 
-const channelSchema = z.object({
-  id: z.string().length(21),
-  participants: z.array(z.string().length(21)).default([]),
-  name: z.string().optional(),
-});
-
-export type Channel = z.infer<typeof channelSchema>;
+type Channel = {
+  id: string;
+  participants: string[];
+  name?: string;
+};
 
 class ChannelModel {
   private db: Db;
@@ -28,24 +26,21 @@ class ChannelModel {
     ]);
   }
 
-  async createChannel(id: string) {
-    const validation = channelSchema.safeParse({
+  async createChannel(id: string, name?: string) {
+    const channel: Channel = {
       id,
-    });
+      name,
+      participants: [],
+    };
 
-    if (!validation.success) {
-      return Err(validation.error.errors);
-    }
-
-    const channel = validation.data;
-
-    const result = await this.collection.insertOne(channel);
-
-    if (!result.acknowledged) {
+    try {
+      const result = await this.collection.insertOne(channel);
+      return Ok(id);
+    } catch (_e) {
+      const error = _e as MongoError;
+      console.error("UNHANDLED ERROR: createChannel", error);
       return Err(`Failed to create the channel with id=${id}`);
     }
-
-    return Ok(id);
   }
 
   async findChannelById(id: string) {

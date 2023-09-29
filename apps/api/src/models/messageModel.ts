@@ -1,22 +1,11 @@
-import { Ok, Err } from "resultat";
-import { z } from "zod";
 import type Message from "../entities/message.js";
+import { Ok, Err } from "resultat";
 import { ObjectId, type Document, MongoError, Collection, Db } from "mongodb";
 
-const messageSchema = z.object({
-  senderId: z.string().length(18),
-  content: z.string().trim().min(1).max(2000),
-  timestamp: z.number(),
-});
-
-const channelMessageSchema = z.object({
-  channelId: z.string().length(18),
-  messages: z.array(messageSchema),
-});
-
-export type MessageType = z.infer<typeof messageSchema>;
-
-export type ChannelMessageType = z.infer<typeof channelMessageSchema>;
+export type ChannelMessageType = {
+  channelId: string;
+  messages: Message[];
+};
 
 class MessageModel {
   private db: Db;
@@ -97,7 +86,7 @@ class MessageModel {
 
     try {
       const result = await this.collection
-        .aggregate<MessageType>(pipeline)
+        .aggregate<Message>(pipeline)
         .toArray();
       return Ok(result);
     } catch (e) {
