@@ -6,15 +6,15 @@ export type ValidatedRequest<T> = T extends z.Schema<infer Schema>
       [K in keyof Request]: K extends "body"
         ? Schema extends { body: infer Body }
           ? Body
-          : any
+          : unknown
         : K extends "params"
         ? Schema extends { params: infer Params }
           ? Params
-          : any
+          : unknown
         : K extends "query"
         ? Schema extends { query: infer Query }
           ? Query
-          : any
+          : unknown
         : Request[K];
     }
   : Request;

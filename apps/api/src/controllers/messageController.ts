@@ -1,13 +1,14 @@
 import type { Request, Response } from "express";
 import {
-  messageQuerySchema,
-  type messageSchema,
+  postMessageSchema,
+  getMessageSchema,
 } from "../validators/messageValidators.js";
 import { messageService } from "../instances.js";
 import type { z } from "zod";
+import type { ValidatedRequest } from "../types.js";
 
 export async function getMessages(
-  req: Request & z.infer<typeof messageQuerySchema>,
+  req: Request & z.infer<typeof getMessageSchema>,
   res: Response
 ) {
   const { channelId, lastMessageId } = req.query;
@@ -24,13 +25,11 @@ export async function getMessages(
 }
 
 export async function sendDirectMessage(
-  req: Request & z.infer<typeof messageSchema>,
+  req: ValidatedRequest<typeof postMessageSchema>,
   res: Response
 ) {
   const { id: senderId } = res.locals.user;
   const { recipientId, content } = req.body;
-
-  console.log(req.body);
 
   const result = await messageService.sendDirectMessage(
     senderId,

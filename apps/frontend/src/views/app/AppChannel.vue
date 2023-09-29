@@ -22,8 +22,11 @@ const messagesDiv = ref<HTMLElement>();
 const content = ref("");
 
 function handleSendMessage() {
-  if (content.value === "") return;
-  createMessage({ recipientId: user.value.id, content: content.value });
+  const trimmedContent = content.value.trim();
+  if (trimmedContent === "") return;
+
+  createMessage({ recipientId: user.value.id, content: trimmedContent });
+
   content.value = "";
 }
 </script>

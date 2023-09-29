@@ -6,14 +6,14 @@ export const username = z.string().min(3).max(32).trim();
 export const displayName = z.string().max(32).trim().default("");
 export const sessionId = z.string().min(100).max(200)
 
-export const loginSchema = z.object({
+export const postLoginSchema = z.object({
   body: z.object({
     email,
     password,
   }),
 });
 
-export const registerSchema = z.object({
+export const postRegisterSchema = z.object({
   body: z.object({
     email,
     password,
