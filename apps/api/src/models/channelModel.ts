@@ -1,6 +1,5 @@
 import type { Collection, Db, MongoError } from "mongodb";
 import { Ok, Err } from "resultat";
-import { z } from "zod";
 
 type Channel = {
   id: string;
@@ -14,7 +13,7 @@ class ChannelModel {
 
   constructor(db: Db) {
     this.db = db;
-    this.collection = db.collection("channels");
+    this.collection = this.db.collection("channels");
   }
 
   createIndexes() {
@@ -34,7 +33,7 @@ class ChannelModel {
     };
 
     try {
-      const result = await this.collection.insertOne(channel);
+      await this.collection.insertOne(channel);
       return Ok(id);
     } catch (_e) {
       const error = _e as MongoError;

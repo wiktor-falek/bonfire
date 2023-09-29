@@ -13,7 +13,7 @@ class MessageModel {
 
   constructor(db: Db) {
     this.db = db;
-    this.collection = db.collection("messages");
+    this.collection = this.db.collection("messages");
   }
 
   createIndexes() {

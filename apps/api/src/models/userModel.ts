@@ -8,7 +8,7 @@ class UserModel {
 
   constructor(db: Db) {
     this.db = db;
-    this.collection = db.collection("users");
+    this.collection = this.db.collection("users");
   }
 
   createIndexes() {
