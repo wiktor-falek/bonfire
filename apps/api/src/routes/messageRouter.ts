@@ -1,8 +1,8 @@
 import { Router } from "express";
 import validate from "../middlewares/validate.js";
 import {
-  messageQuerySchema,
-  messageSchema,
+  getMessageSchema,
+  postMessageSchema,
 } from "../validators/messageValidators.js";
 import {
   getMessages,
@@ -14,7 +14,7 @@ const router = Router();
 
 router.use(authGuard);
 
-router.get("/", validate(messageQuerySchema), getMessages);
-router.post("/", validate(messageSchema), sendDirectMessage);
+router.get("/", validate(getMessageSchema), getMessages);
+router.post("/", validate(postMessageSchema), sendDirectMessage);
 
 export default router;
