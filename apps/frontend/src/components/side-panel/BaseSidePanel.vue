@@ -3,6 +3,7 @@ import { ref } from "vue";
 import Bonfire from "../Bonfire.vue";
 import router from "../../router";
 import useAppStore from "../../stores/appStore";
+import Modal from "../Modal.vue";
 
 const appStore = useAppStore();
 
@@ -10,7 +11,6 @@ type Server = {
   name: string;
   imgSrc?: string;
 };
-
 const servers: Server[] = [
   {
     name: "test server 1",
@@ -31,7 +31,6 @@ type Conversation = {
   id: string;
   imgSrc?: string;
 };
-
 const conversations = ref<Conversation[]>([
   { name: "Qbi", id: "112105366920516103331" },
 ]);
@@ -43,6 +42,16 @@ function handleConversationClose(index: number) {
 function handleConversationClick(id: string) {
   appStore.sidePanelIsOpen = false;
   router.push(`/app/channel/${id}`);
+}
+
+const createConversationModalIsOpen = ref(false);
+
+function handleOpenCreateConversationModal() {
+  createConversationModalIsOpen.value = true;
+}
+
+function handleCloseCreateConversationModal() {
+  createConversationModalIsOpen.value = false;
 }
 </script>
 
@@ -80,7 +89,10 @@ function handleConversationClick(id: string) {
           placeholder="Find Conversation..."
           class="direct-messages__search__find"
         />
-        <button class="direct-messages__search__create">
+        <button
+          class="direct-messages__search__create"
+          @click="handleOpenCreateConversationModal"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -145,9 +157,23 @@ function handleConversationClick(id: string) {
       </div>
     </div>
   </div>
+  <Modal
+    :is-open="createConversationModalIsOpen"
+    @close="handleCloseCreateConversationModal"
+  >
+    <div id="modal--create-conversation">
+      <input type="text" placeholder="Search by username" />
+      <button @click="">Start Conversation</button>
+    </div>
+  </Modal>
 </template>
 
 <style scoped>
+#modal--create-conversation {
+  width: 200px;
+  height: 150px;
+  background-color: #212224;
+}
 .side-panel {
   height: 100vh;
   width: 85%;
