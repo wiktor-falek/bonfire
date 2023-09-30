@@ -55,16 +55,16 @@ class UserModel {
     return Boolean(count);
   }
 
-  async sessionExists(sessionId: string) {
-    const count = await this.collection.countDocuments(
-      {
-        "account.sessionId": sessionId,
-      },
-      { limit: 1 }
-    );
+  // async sessionExists(sessionId: string) {
+  //   const count = await this.collection.countDocuments(
+  //     {
+  //       "account.sessionId": sessionId,
+  //     },
+  //     { limit: 1 }
+  //   );
 
-    return Boolean(count);
-  }
+  //   return Boolean(count);
+  // }
 
   async createUser(user: User) {
     try {

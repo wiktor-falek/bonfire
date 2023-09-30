@@ -7,6 +7,7 @@ import messageRouter from "./routes/messageRouter.js";
 
 const app = express();
 
+// Middlewares
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -16,10 +17,9 @@ app.use(
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
-
-// Logging
 app.use(morgan(":status :method :url :response-time[2] ms"));
 
+// Routers
 app.use("/auth", authRouter);
 app.use("/api/messages", messageRouter);
 

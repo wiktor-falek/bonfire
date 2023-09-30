@@ -41,6 +41,7 @@ class AuthService {
 
     const sessionId = uuidv4();
 
+    // TODO: sessionStore.updateSession
     const result = await this.userModel.updateSession(sessionId, email);
 
     if (!result.ok) {
@@ -48,10 +49,6 @@ class AuthService {
     }
 
     return Ok({ user, sessionId });
-  }
-
-  isSessionValid(sessionId: string) {
-    return this.userModel.sessionExists(sessionId);
   }
 }
 
