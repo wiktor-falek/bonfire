@@ -1,17 +1,37 @@
-import { messageModel, userModel } from "../instances.js";
+import { mongoDb } from "../instances.js";
 
-function createIndexes() {
-  return Promise.all([
-    userModel.createIndexes(),
-    messageModel.createIndexes(),
-    // channelModel.createIndexes(),
-  ])
-    .then(() => {
-      console.log("Successfully created indexes");
-    })
-    .catch((err) => {
-      console.error("Failed to create indexes", err);
-    });
+async function createIndexes() {
+  try {
+    await Promise.all([
+      mongoDb.collection("users").dropIndexes(),
+      mongoDb.collection("channels").dropIndexes(),
+    ]);
+
+    const results = await Promise.all([
+      mongoDb.collection("users").createIndexes([
+        {
+          key: { id: 1 },
+          unique: true,
+        },
+      ]),
+      mongoDb.collection("channels").createIndexes([
+        {
+          key: { id: 1 },
+          unique: true,
+        },
+        {
+          key: { "messages.timestamp": 1 },
+        },
+        {
+          key: { participants: 1 },
+        },
+      ]),
+    ]);
+
+    return Promise.resolve(results.flat());
+  } catch (error) {
+    return Promise.reject(error);
+  }
 }
 
 export default createIndexes;

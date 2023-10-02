@@ -11,15 +11,6 @@ class UserModel {
     this.collection = this.db.collection("users");
   }
 
-  createIndexes() {
-    return this.collection.createIndexes([
-      {
-        key: { id: 1 },
-        unique: true,
-      },
-    ]);
-  }
-
   async findByUsername(username: string) {
     const user = await this.collection.findOne<User>({
       "account.username": username,
