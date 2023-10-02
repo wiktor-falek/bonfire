@@ -1,5 +1,5 @@
 import { WebSocket } from "ws";
-import { clients } from "./websocket.js";
+import { clients } from "../websocket.js";
 
 export function broadcastEmit(
   ws: WebSocket,
