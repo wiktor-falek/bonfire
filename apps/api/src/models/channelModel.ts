@@ -55,8 +55,11 @@ class ChannelModel {
     return Ok(channel);
   }
 
-  async findChannelsByUserId(userId: string) {
+  async findAllChannelsByUserId(userId: string): Promise<string[]> {
     // TODO: find all channels where participants.includes(userId)
+    return new Promise((resolve) => {
+      resolve([]);
+    });
   }
 
   async addParticipantToChannel(userId: string, channelId: string) {

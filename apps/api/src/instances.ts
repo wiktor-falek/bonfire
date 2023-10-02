@@ -1,4 +1,4 @@
-import ChannelModel from "./models/channelModel.js";
+// import ChannelModel from "./models/channelModel.js";
 import MessageModel from "./models/messageModel.js";
 import UserModel from "./models/userModel.js";
 import Mongo from "./mongo.js";
@@ -15,7 +15,7 @@ export const mongoDb = mongoClient.db("bonfire");
 
 // Models
 export const userModel = new UserModel(mongoDb);
-export const channelModel = new ChannelModel(mongoDb);
+// export const channelModel = new ChannelModel(mongoDb);
 export const messageModel = new MessageModel(mongoDb);
 
 // Services

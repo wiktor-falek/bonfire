@@ -1,10 +1,10 @@
-import { channelModel, messageModel, userModel } from "../instances.js";
+import { messageModel, userModel } from "../instances.js";
 
 function createIndexes() {
   return Promise.all([
     userModel.createIndexes(),
     messageModel.createIndexes(),
-    channelModel.createIndexes(),
+    // channelModel.createIndexes(),
   ])
     .then(() => {
       console.log("Successfully created indexes");
