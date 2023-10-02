@@ -1,15 +1,24 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import BaseSidePanel from "../../components/side-panel/BaseSidePanel.vue";
 import Bonfire from "../../components/Bonfire.vue";
 import MobileSidePanel from "../../components/side-panel/MobileSidePanel.vue";
 import useAppStore from "../../stores/appStore";
+import WebSocketClient from "../../socket";
 
 const appStore = useAppStore();
+
 const loading = ref(true);
 
+const socketClient = ref(new WebSocketClient("ws://localhost:3000"));
+const socket = ref(socketClient.value.connect());
+
+const isConnected = computed(() => {
+  return (socket.value.readyState === WebSocket.OPEN).toString();
+});
+
 onMounted(() => {
-  const MINIMUM_LOAD_TIME = 500;
+  const MINIMUM_LOAD_TIME = 5000;
   const start = Date.now();
   // TODO: connect to socket server, watch server connection state
   const end = Date.now();
@@ -23,6 +32,7 @@ onMounted(() => {
 
 <template>
   <main class="loading" v-if="loading" @contextmenu.prevent>
+    <p>{{ isConnected }}</p>
     <Bonfire size="64" />
     <div class="loading__info-container">
       <strong>Did you know?</strong>
