@@ -1,38 +1,41 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted } from "vue";
 import BaseSidePanel from "../../components/side-panel/BaseSidePanel.vue";
 import Bonfire from "../../components/Bonfire.vue";
 import MobileSidePanel from "../../components/side-panel/MobileSidePanel.vue";
 import useAppStore from "../../stores/appStore";
-import WebSocketClient from "../../socket";
 
 const appStore = useAppStore();
 
-const loading = ref(true);
+const socket = new WebSocket("ws://localhost:3000");
 
-const socketClient = ref(new WebSocketClient("ws://localhost:3000"));
-const socket = ref(socketClient.value.connect());
+socket.addEventListener("open", () => {
+  console.log("socket open");
+  // socket.send(JSON.stringify({ sus: true }));
+});
+
+socket.addEventListener("close", () => {
+  console.log("socket close");
+});
 
 const isConnected = computed(() => {
-  return (socket.value.readyState === WebSocket.OPEN).toString();
+  return (socket.readyState === WebSocket.OPEN).toString();
 });
 
 onMounted(() => {
-  const MINIMUM_LOAD_TIME = 5000;
-  const start = Date.now();
-  // TODO: connect to socket server, watch server connection state
-  const end = Date.now();
-  const timeoutDuration = MINIMUM_LOAD_TIME - (end - start);
-
-  setTimeout(() => {
-    loading.value = false;
-  }, timeoutDuration);
+  // const MINIMUM_LOAD_TIME = 5000;
+  // const start = Date.now();
+  // // TODO: connect to socket server, watch server connection state
+  // const end = Date.now();
+  // const timeoutDuration = MINIMUM_LOAD_TIME - (end - start);
+  // setTimeout(() => {
+  //   loading.value = false;
+  // }, timeoutDuration);
 });
 </script>
 
 <template>
-  <main class="loading" v-if="loading" @contextmenu.prevent>
-    <p>{{ isConnected }}</p>
+  <main class="loading" v-if="!isConnected" @contextmenu.prevent>
     <Bonfire size="64" />
     <div class="loading__info-container">
       <strong>Did you know?</strong>
