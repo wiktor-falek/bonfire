@@ -4,5 +4,11 @@
 
 - Express
 - MongoDB (native driver)
+- Redis
 - Vue 3
 - Tanstack Query
+
+## External dependencies
+
+- MongoDB
+- Redis

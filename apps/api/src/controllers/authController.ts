@@ -25,17 +25,7 @@ export async function login(
   const { id } = user;
   const { username, displayName } = user.account;
 
-  const sessionToken = createSessionToken({
-    id,
-    username,
-  });
-
   res.cookie("sessionId", sessionId, {
-    httpOnly: true,
-    maxAge: 30 * 60 * 60 * 24 * 1000, // one month
-  });
-
-  res.cookie("sessionToken", sessionToken, {
     httpOnly: true,
     maxAge: 30 * 60 * 60 * 24 * 1000, // one month
   });

@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { computed, onMounted } from "vue";
-import BaseSidePanel from "../../components/side-panel/BaseSidePanel.vue";
+import { onMounted, computed } from "vue";
 import Bonfire from "../../components/Bonfire.vue";
-import MobileSidePanel from "../../components/side-panel/MobileSidePanel.vue";
+import SidePanel from "../../components/SidePanel.vue";
 import useAppStore from "../../stores/appStore";
 
 const appStore = useAppStore();
@@ -44,15 +43,11 @@ onMounted(() => {
   </main>
   <main v-else @contextmenu.prevent>
     <div class="wrapper">
-      <BaseSidePanel class="base-side-panel desktop-show" />
+      <SidePanel />
 
       <RouterView></RouterView>
     </div>
   </main>
-  <MobileSidePanel
-    :is-open="appStore.sidePanelIsOpen"
-    @close="appStore.sidePanelIsOpen = false"
-  />
 </template>
 
 <style scoped>

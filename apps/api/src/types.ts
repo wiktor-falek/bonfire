@@ -24,7 +24,6 @@ declare global {
     interface Locals {
       user: {
         id: string;
-        username: string;
       };
     }
   }

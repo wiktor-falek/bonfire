@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import Bonfire from "../Bonfire.vue";
-import router from "../../router";
-import useAppStore from "../../stores/appStore";
-import Modal from "../Modal.vue";
+import Bonfire from "./Bonfire.vue";
+import router from "./../router";
+import useAppStore from "./../stores/appStore";
+import Modal from "./Modal.vue";
 
 const appStore = useAppStore();
 
@@ -56,7 +56,18 @@ function handleCloseCreateConversationModal() {
 </script>
 
 <template>
-  <div class="side-panel" @click.stop>
+  <div
+    class="overlay desktop-hide"
+    v-if="appStore.sidePanelIsOpen"
+    @click="appStore.sidePanelIsOpen = false"
+  ></div>
+  <div
+    class="side-panel"
+    :class="{
+      'desktop-show': !appStore.sidePanelIsOpen,
+    }"
+    @click.stop
+  >
     <div class="sidebar">
       <button class="sidebar__tile sidebar__direct-messages">
         <Bonfire size="36" />
@@ -169,18 +180,35 @@ function handleCloseCreateConversationModal() {
 </template>
 
 <style scoped>
-#modal--create-conversation {
-  width: 200px;
-  height: 150px;
-  background-color: #212224;
+.overlay {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1;
 }
+
 .side-panel {
   height: 100vh;
   width: 85%;
   max-width: 300px;
-  position: relative;
   background-color: #2b2d31;
   display: flex;
+  height: 100%;
+  z-index: 2;
+}
+
+@media (max-width: 819px) {
+  .side-panel {
+    /* makes it work well with the overlay when in desktop view */
+    position: fixed;
+
+    box-shadow: 9px -4px 32px -6px rgba(20, 20, 20, 0.75);
+    -webkit-box-shadow: 9px -4px 32px -6px rgba(20, 20, 20, 0.75);
+    -moz-box-shadow: 9px -4px 32px -6px rgba(20, 20, 20, 0.75);
+  }
 }
 
 .sidebar {
@@ -194,6 +222,12 @@ function handleCloseCreateConversationModal() {
   box-sizing: border-box;
   background-color: #212224;
   overflow-y: auto;
+}
+
+#modal--create-conversation {
+  width: 200px;
+  height: 150px;
+  background-color: #212224;
 }
 
 hr {
@@ -269,7 +303,6 @@ hr {
   overflow-y: auto;
   padding: 0 6px;
   box-sizing: border-box;
-  /* TODO: style scrollbar */
 }
 
 .direct-messages__conversations__conversation {

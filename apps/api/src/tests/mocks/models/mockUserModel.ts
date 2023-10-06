@@ -1,6 +1,8 @@
-import { Ok, type Result, type ResultErr, type ResultOk } from "resultat";
+import { Ok } from "resultat";
 import User from "../../../entities/user.js";
 import UserModel from "../../../models/userModel.js";
+
+// TODO: make an interface and have UserModel and MockUserModel implement them
 
 class MockUserModel extends UserModel {
   createIndexes() {
@@ -17,12 +19,6 @@ class MockUserModel extends UserModel {
     );
   }
 
-  findBySessionId(sessionId: string) {
-    return Promise.resolve(
-      new User({ username: "", displayName: "", email: "", hash: "" })
-    );
-  }
-
   findByUsername(username: string) {
     return Promise.resolve(
       new User({ username: "", displayName: "", email: "", hash: "" })
@@ -31,14 +27,6 @@ class MockUserModel extends UserModel {
 
   emailExists(email: string) {
     return Promise.resolve(true);
-  }
-
-  sessionExists(sessionId: string) {
-    return Promise.resolve(true);
-  }
-
-  updateSession(sessionId: string, email: string) {
-    return Promise.resolve(Ok(1));
   }
 }
 
