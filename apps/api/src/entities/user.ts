@@ -8,7 +8,6 @@ class User {
     displayName: string;
     registrationTimestamp: number;
     hash: string;
-    sessionId?: string;
   };
 
   constructor({

@@ -36,14 +36,6 @@ class UserModel {
     return user;
   }
 
-  async findBySessionId(sessionId: string) {
-    const user = await this.collection.findOne<User>({
-      "account.sessionId": sessionId,
-    });
-
-    return user;
-  }
-
   async emailExists(email: string) {
     const count = await this.collection.countDocuments(
       {
@@ -54,17 +46,6 @@ class UserModel {
 
     return Boolean(count);
   }
-
-  // async sessionExists(sessionId: string) {
-  //   const count = await this.collection.countDocuments(
-  //     {
-  //       "account.sessionId": sessionId,
-  //     },
-  //     { limit: 1 }
-  //   );
-
-  //   return Boolean(count);
-  // }
 
   async createUser(user: User) {
     try {
@@ -78,19 +59,6 @@ class UserModel {
     } catch (error) {
       return Err("Failed to create a user");
     }
-  }
-
-  async updateSession(sessionId: string, email: string) {
-    const result = await this.collection.updateOne(
-      { "account.email": email },
-      { $set: { "account.sessionId": sessionId } }
-    );
-
-    if (!result.acknowledged) {
-      return Err("Failed to create a user");
-    }
-
-    return Ok(1);
   }
 }
 

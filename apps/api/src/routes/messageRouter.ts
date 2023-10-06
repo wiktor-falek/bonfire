@@ -12,9 +12,9 @@ import authGuard from "../middlewares/authGuard.js";
 
 const router = Router();
 
-router.use(authGuard);
+// router.use(authGuard);
 
-router.get("/", validate(getMessageSchema), getMessages);
-router.post("/", validate(postMessageSchema), sendDirectMessage);
+router.get("/", authGuard, validate(getMessageSchema), getMessages);
+router.post("/", authGuard, validate(postMessageSchema), sendDirectMessage);
 
 export default router;
