@@ -3,9 +3,13 @@ import UserModel from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import User from "../entities/user.js";
 import { v4 as uuidv4 } from "uuid";
+import type SessionStore from "../stores/sessionStore.js";
 
 class AuthService {
-  constructor(private userModel: UserModel) {}
+  constructor(
+    private userModel: UserModel,
+    private sessionStore: SessionStore
+  ) {}
 
   async register(
     email: string,
@@ -41,17 +45,13 @@ class AuthService {
 
     const sessionId = uuidv4();
 
-    const result = await this.userModel.updateSession(sessionId, email);
+    const result = await this.sessionStore.createSession(sessionId, { userId: user.id });
 
     if (!result.ok) {
       return result;
     }
 
     return Ok({ user, sessionId });
-  }
-
-  isSessionValid(sessionId: string) {
-    return this.userModel.sessionExists(sessionId);
   }
 }
 

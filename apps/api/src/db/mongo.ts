@@ -2,7 +2,7 @@ import { MongoClient, ServerApiVersion } from "mongodb";
 
 class Mongo {
   private client: MongoClient;
-  
+
   constructor(uri: string) {
     this.client = new MongoClient(uri, {
       serverApi: {
