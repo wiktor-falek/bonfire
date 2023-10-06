@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { nextTick, onMounted, ref } from "vue";
+import { ref } from "vue";
 import HamburgerMenu from "../../components/HamburgerMenu.vue";
 import Panel from "../../components/app/Panel.vue";
 import useGetMessages from "../../api/messages/useGetMessages";
 import useCreateMessage from "../../api/messages/useCreateMessage";
 import formatTimestamp from "../../utils/formatTimestamp";
 
-const { channelId } = defineProps<{ channelId: string }>();
+const props = defineProps<{ channelId: string }>();
 
 const user = ref({
   displayName: "Qbi",
@@ -14,7 +14,7 @@ const user = ref({
   id: "755308752261532161188",
 });
 
-const { data: messages } = useGetMessages(channelId);
+const { data: messages } = useGetMessages(props.channelId);
 const { mutate: createMessage } = useCreateMessage();
 
 const messagesDiv = ref<HTMLElement>();

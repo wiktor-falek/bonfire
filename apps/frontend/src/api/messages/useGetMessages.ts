@@ -15,6 +15,7 @@ const useGetMessages = (channelId: string, lastMessageId?: string) =>
         lastMessageId,
       };
       const response = await api.get<Message[]>("/api/messages", { params });
+      console.log(response.data);
       return response.data.reverse();
     },
     queryKey: ["messages"],

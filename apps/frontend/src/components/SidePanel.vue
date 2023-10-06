@@ -32,7 +32,8 @@ type Conversation = {
   imgSrc?: string;
 };
 const conversations = ref<Conversation[]>([
-  { name: "Qbi", id: "112105366920516103331" },
+  { name: "Qbi", id: "504361243836630188067" },
+  { name: "Test", id: "504361243836630181337" },
 ]);
 
 function handleConversationClose(index: number) {
