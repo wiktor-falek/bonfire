@@ -10,7 +10,7 @@ const socket = new WebSocket("ws://localhost:3000");
 
 socket.addEventListener("open", () => {
   console.log("socket open");
-  // socket.send(JSON.stringify({ sus: true }));
+  socket.send(JSON.stringify({ type: "chat:message", data: "Hello" }));
 });
 
 socket.addEventListener("close", () => {

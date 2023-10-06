@@ -21,6 +21,5 @@ export const userModel = new UserModel(mongoDb);
 export const channelModel = new ChannelModel(mongoDb);
 
 // Services
-export const authService = new AuthService(userModel);
-export const sessionService = new SessionService(userModel);
+export const authService = new AuthService(userModel, sessionStore);
 export const messageService = new MessageService(channelModel);

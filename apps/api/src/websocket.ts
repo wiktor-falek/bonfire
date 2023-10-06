@@ -2,24 +2,32 @@ import type { WebSocket } from "ws";
 import registerChatHandler from "./socket/handlers/chatHandler.js";
 import { generateNumericId } from "./utils/id.js";
 import { wss } from "./index.js";
+import { z } from "zod";
 
 export const clients = new Map<string, WebSocket>();
 export const clientsMetadata = new Map<string, {}>();
 
+const websocketEventSchema = z.object({
+  type: z.string().min(1).max(128),
+  data: z.any(),
+});
+
+type WebSocketEvent = z.infer<typeof websocketEventSchema>;
+
 function deserialize(callback: Function) {
-  return function (data: Buffer) {
+  return (data: Buffer) => {
     try {
-      const jsonData = JSON.parse(data.toString());
-      callback(jsonData);
+      const eventData = websocketEventSchema.parse(JSON.parse(data.toString()));
+      callback(eventData);
     } catch (error) {
-      console.error("Error parsing JSON:", error);
+      console.error("Parsing error");
     }
   };
 }
 
 export const setupWebSocketServer = () => {
   wss.on("listening", () => {
-    console.log("listening apparently");
+    console.log("WebSocket server listening on ws://localhost:3000");
   });
 
   wss.on("connection", (ws) => {
@@ -36,8 +44,8 @@ export const setupWebSocketServer = () => {
 
     ws.on(
       "message",
-      deserialize((data: any) => {
-        console.log("Received JSON data:", data);
+      deserialize((event: WebSocketEvent) => {
+        console.log("Received event:", event);
       })
     );
 

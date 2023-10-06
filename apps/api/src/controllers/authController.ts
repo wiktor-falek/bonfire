@@ -39,8 +39,6 @@ export async function register(
 ) {
   const { email, password, username, displayName } = req.body;
 
-  console.log(req.body);
-
   const result = await authService.register(
     email,
     password,
