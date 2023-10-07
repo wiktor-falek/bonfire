@@ -1,5 +1,5 @@
 import type { WebSocket } from "ws";
-import registerChatHandler from "./socket/handlers/chatHandler.js";
+import { directMessageHandler } from "./socket/handlers/chatHandler.js";
 import { generateNumericId } from "./utils/id.js";
 import { wss } from "./index.js";
 import { z } from "zod";
@@ -12,13 +12,14 @@ const websocketEventSchema = z.object({
   data: z.any(),
 });
 
-type WebSocketEvent = z.infer<typeof websocketEventSchema>;
+export type WebSocketEvent = z.infer<typeof websocketEventSchema>;
 
 function deserialize(callback: Function) {
   return (data: Buffer) => {
     try {
-      const eventData = websocketEventSchema.parse(JSON.parse(data.toString()));
-      callback(eventData);
+      const event = websocketEventSchema.parse(JSON.parse(data.toString()));
+      console.log({ event });
+      callback(event);
     } catch (error) {
       console.error("Parsing error");
     }
@@ -45,13 +46,15 @@ export const setupWebSocketServer = () => {
     ws.on(
       "message",
       deserialize((event: WebSocketEvent) => {
-        console.log("Received event:", event);
+        switch (event.type) {
+          case "chat:message":
+            directMessageHandler(ws, userId, event.data);
+            break;
+
+          default:
+            console.error("Unknown event type:", event.type);
+        }
       })
     );
-
-    ws.on("ns:test", () => console.log("ns:test"));
-
-    // Handlers
-    registerChatHandler(ws, userId);
   });
 };

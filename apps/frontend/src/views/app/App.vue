@@ -17,6 +17,22 @@ socket.addEventListener("close", () => {
   console.log("socket close");
 });
 
+type WebSocketEvent = {
+  type: string;
+  data: any;
+};
+
+socket.addEventListener("message", (messageEvent) => {
+  const event = JSON.parse(messageEvent.data);
+  console.log(event);
+  switch (event.type) {
+    case "chat:message":
+      const content = event.data as string;
+      break;
+    default:
+  }
+});
+
 const isConnected = computed(() => {
   return (socket.readyState === WebSocket.OPEN).toString();
 });

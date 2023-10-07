@@ -1,40 +1,36 @@
 import type { WebSocket } from "ws";
-import { broadcastEmit } from "../utils.js";
+import { broadcastSend, send } from "../utils.js";
 import { channelModel } from "../../instances.js";
 import Message from "../../entities/message.js";
 
-function registerChatHandler(ws: WebSocket, userId: string) {
-  const directMessage = async (
-    channelId: string,
-    recipientId: string,
-    content: string
-  ) => {
-    // TODO: read from redis cache
-    const participantChannels = await channelModel.findAllChannelIdsByUserId(
-      userId
-    );
+export async function directMessageHandler(
+  ws: WebSocket,
+  userId: string,
+  data: { channelId: string; recipientId: string; content: string }
+) {
+  console.log("direct message handler");
+  const { channelId, recipientId, content } = data;
 
-    if (!participantChannels.includes(channelId)) {
-      ws.send(JSON.stringify({ error: "Not Authorizedl" }));
-    }
+  const participantChannels = await channelModel.findAllChannelIdsByUserId(
+    userId
+  );
 
-    const result = await channelModel.sendDirectMessage(
-      channelId,
-      recipientId,
-      new Message(userId, content)
-    );
+  if (!participantChannels.includes(channelId)) {
+    send(ws, "error", { reason: "Not Authorized" });
+  }
 
-    if (!result.ok) {
-      console.error(result.err);
-      return;
-    }
+  const result = await channelModel.sendDirectMessage(
+    channelId,
+    recipientId,
+    new Message(userId, content)
+  );
 
-    const message = result.val;
+  if (!result.ok) {
+    console.error(result.err);
+    return;
+  }
 
-    broadcastEmit(ws, "chat:message", { message });
-  };
+  const message = result.val;
 
-  ws.on("chat:direct-message", directMessage);
+  broadcastSend(ws, "chat:message", message);
 }
-
-export default registerChatHandler;

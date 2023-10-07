@@ -3,7 +3,6 @@ defineProps<{ isOpen: boolean }>();
 const emit = defineEmits(["close"]);
 
 function handleClose() {
-  console.log("close");
   emit("close");
 }
 </script>
