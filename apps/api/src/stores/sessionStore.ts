@@ -39,6 +39,10 @@ class SessionStore {
       return Err("Failed to retrieve session");
     }
   }
+
+  async deleteAllExpiredSessions() {
+    return Err("Not Implemented");
+  }
 }
 
 export default SessionStore;

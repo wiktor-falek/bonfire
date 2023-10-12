@@ -1,20 +1,24 @@
 import type Message from "../entities/message.js";
 import { Ok, Err } from "resultat";
-import { ObjectId, type Document, MongoError, Collection, Db } from "mongodb";
+import {
+  ObjectId,
+  type Document,
+  type MongoError,
+  type Collection,
+  type Db,
+} from "mongodb";
+import type {
+  IChannelModel,
+  ChannelType,
+} from "../interfaces/channelModelInterface.js";
 
-type ChannelType = {
-  id: string;
-  messages: Message[];
-  participants: string[];
-};
-
-class ChannelModel {
+class ChannelModel implements IChannelModel {
   private db: Db;
   private collection: Collection<ChannelType>;
 
   constructor(db: Db) {
     this.db = db;
-    this.collection = this.db.collection("channels");
+    this.collection = this.db.collection<ChannelType>("channels");
   }
 
   async sendDirectMessage(
@@ -48,7 +52,12 @@ class ChannelModel {
     limit: number,
     lastMessageId?: ObjectId | string
   ) {
-    // TODO: return Err() if channel does not exist instead of Ok([])
+    const channelExists =
+      (await this.collection.countDocuments({ id: channelId })) !== 0;
+
+    if (!channelExists) {
+      return Err("Channel does not exist");
+    }
 
     const pipeline: Document[] = [
       {

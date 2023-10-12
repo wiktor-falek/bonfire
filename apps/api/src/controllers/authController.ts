@@ -3,7 +3,6 @@ import type {
   postLoginSchema,
   postRegisterSchema,
 } from "../validators/userValidators.js";
-import { createSessionToken } from "../helpers/sessionToken.js";
 import { authService } from "../instances.js";
 import type { z } from "zod";
 import type { ValidatedRequest } from "../types.js";
@@ -22,7 +21,6 @@ export async function login(
   }
 
   const { user, sessionId } = result.val;
-  const { id } = user;
   const { username, displayName } = user.account;
 
   res.cookie("sessionId", sessionId, {

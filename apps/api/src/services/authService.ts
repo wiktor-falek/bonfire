@@ -45,7 +45,9 @@ class AuthService {
 
     const sessionId = uuidv4();
 
-    const result = await this.sessionStore.createSession(sessionId, { userId: user.id });
+    const result = await this.sessionStore.createSession(sessionId, {
+      userId: user.id,
+    });
 
     if (!result.ok) {
       return result;

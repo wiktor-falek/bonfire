@@ -1,10 +1,8 @@
 import { Ok } from "resultat";
 import User from "../../../entities/user.js";
-import UserModel from "../../../models/userModel.js";
+import type { IUserModel } from "../../../interfaces/userModelInterface.js";
 
-// TODO: make an interface and have UserModel and MockUserModel implement them
-
-class MockUserModel extends UserModel {
+class MockUserModel implements IUserModel {
   createIndexes() {
     return Promise.resolve([]);
   }

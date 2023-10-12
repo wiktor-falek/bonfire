@@ -24,5 +24,5 @@ server.listen(3000, () => {
 });
 
 cron.schedule("0 0 * * *", () => {
-  // sessionStore.deleteAllExpiredSessions();
+  sessionStore.deleteAllExpiredSessions();
 });

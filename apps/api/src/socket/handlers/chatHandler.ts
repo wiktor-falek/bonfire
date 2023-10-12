@@ -22,15 +22,6 @@ export async function directMessageHandler(
 
   const { recipientId, content } = validation.data;
 
-  // TODO: move outside of DMs
-  // const participantChannels = await channelModel.findAllChannelIdsByUserId(
-  //   userId
-  // );
-
-  // if (!participantChannels.includes(channelId)) {
-  //   send(ws, "error", { reason: "Not Authorized" });
-  // }
-
   const result = await messageService.sendDirectMessage(
     userId,
     recipientId,
