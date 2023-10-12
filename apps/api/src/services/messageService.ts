@@ -2,6 +2,8 @@ import Message from "../entities/message.js";
 import type { ObjectId } from "mongodb";
 import { getChannelId } from "../utils/id.js";
 import type ChannelModel from "../models/channelModel.js";
+import { Err } from "resultat";
+import { messageEntitySchema } from "../validators/messageValidators.js";
 
 class MessageService {
   constructor(private channelModel: ChannelModel) {}
@@ -16,6 +18,15 @@ class MessageService {
   ) {
     const channelId = getChannelId(senderId, recipientId);
     const message = new Message(senderId, content);
+
+    console.log(message);
+    const validation = messageEntitySchema.safeParse(message);
+    
+    if (!validation.success) {
+      return Err("Schema validation failed");
+    }
+
+
     return this.channelModel.sendDirectMessage(channelId, recipientId, message);
   }
 

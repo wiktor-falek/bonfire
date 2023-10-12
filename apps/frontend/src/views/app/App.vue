@@ -1,60 +1,14 @@
 <script setup lang="ts">
-import { onMounted, computed } from "vue";
 import Bonfire from "../../components/Bonfire.vue";
 import SidePanel from "../../components/SidePanel.vue";
-import useAppStore from "../../stores/appStore";
-
-const appStore = useAppStore();
-
-const socket = new WebSocket("ws://localhost:3000");
-
-socket.addEventListener("open", () => {
-  console.log("socket open");
-  socket.send(JSON.stringify({ type: "chat:message", data: "Hello" }));
-});
-
-socket.addEventListener("close", () => {
-  console.log("socket close");
-});
-
-type WebSocketEvent = {
-  type: string;
-  data: any;
-};
-
-socket.addEventListener("message", (messageEvent) => {
-  const event = JSON.parse(messageEvent.data);
-  console.log(event);
-  switch (event.type) {
-    case "chat:message":
-      const content = event.data as string;
-      break;
-    default:
-  }
-});
-
-const isConnected = computed(() => {
-  return (socket.readyState === WebSocket.OPEN).toString();
-});
-
-onMounted(() => {
-  // const MINIMUM_LOAD_TIME = 5000;
-  // const start = Date.now();
-  // // TODO: connect to socket server, watch server connection state
-  // const end = Date.now();
-  // const timeoutDuration = MINIMUM_LOAD_TIME - (end - start);
-  // setTimeout(() => {
-  //   loading.value = false;
-  // }, timeoutDuration);
-});
 </script>
 
 <template>
-  <main class="loading" v-if="!isConnected" @contextmenu.prevent>
+  <main class="loading" v-if="false" @contextmenu.prevent>
     <Bonfire size="64" />
     <div class="loading__info-container">
       <strong>Did you know?</strong>
-      <p>I hate my life. Because it sucks, a lot.</p>
+      <p>Fun fact here (no fun is being had at the moment)</p>
     </div>
   </main>
   <main v-else @contextmenu.prevent>

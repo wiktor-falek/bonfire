@@ -32,8 +32,8 @@ type Conversation = {
   imgSrc?: string;
 };
 const conversations = ref<Conversation[]>([
-  { name: "Qbi", id: "504361243836630188067" },
-  { name: "Test", id: "504361243836630181337" },
+  { name: "Qbi", id: "213742069213742069420" },
+  { name: "Test", id: "213742069213742069420" },
 ]);
 
 function handleConversationClose(index: number) {
@@ -181,6 +181,7 @@ function handleCloseCreateConversationModal() {
 </template>
 
 <style scoped>
+
 .overlay {
   width: 100%;
   height: 100%;

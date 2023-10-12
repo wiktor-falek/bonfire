@@ -1,31 +1,28 @@
-// socket.ts
-class WebSocketClient {
-  private url: string | URL;
-  socket?: WebSocket;
-  isConnected: boolean;
+const socket = new WebSocket("ws://localhost:3000");
 
-  constructor(url: string | URL) {
-    this.url = url;
-    this.isConnected = false;
+socket.addEventListener("open", () => {
+  console.log("socket open");
+});
+
+socket.addEventListener("close", () => {
+  console.log("socket close");
+});
+
+type WebSocketEvent = {
+  type: string;
+  data: any;
+};
+
+socket.addEventListener("message", (messageEvent) => {
+  const event: WebSocketEvent = JSON.parse(messageEvent.data);
+  console.log(event);
+  switch (event.type) {
+    case "chat:message":
+      // TODO: emit event
+      const content = event.data as string;
+      break;
+    default:
   }
+});
 
-  public connect(): WebSocket {
-    if (this.isConnected) {
-      return this.socket!;
-    }
-
-    this.socket = new WebSocket(this.url);
-
-    this.socket.addEventListener("open", () => {
-      this.isConnected = true;
-    });
-
-    this.socket.addEventListener("close", () => {
-      this.isConnected = false;
-    });
-
-    return this.socket!;
-  }
-}
-
-export default WebSocketClient;
+export default socket;

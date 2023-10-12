@@ -47,7 +47,6 @@ export async function register(
   );
 
   if (!result.ok) {
-    console.log(result.err);
     return res.status(401).json({ error: result.err });
   }
 

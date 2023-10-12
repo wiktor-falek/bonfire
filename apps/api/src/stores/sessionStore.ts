@@ -1,12 +1,14 @@
 import type { RedisClientType } from "redis";
 import { Err, Ok } from "resultat";
-import { v4 as uuidv4 } from "uuid";
 
 type SessionData = { userId: string };
 
 class SessionStore {
   constructor(private client: RedisClientType) {}
 
+  /**
+   * Creates a user session using the provided data.
+   */
   async createSession(sessionId: string, data: SessionData) {
     // const sessionCount = await this.getAllUserSessionsCount(data.userId);
     // if (sessionCount >= 5) {
@@ -21,9 +23,11 @@ class SessionStore {
     }
   }
 
+  /**
+   * Retrieves the user session data associated with the session ID.
+   */
   async getSession(sessionId: string) {
     try {
-      // Retrieve the user ID associated with the session ID from Redis
       const data = await this.client.hGet("userSessions", sessionId);
       if (!data) {
         return Err("Session not found or has expired");
