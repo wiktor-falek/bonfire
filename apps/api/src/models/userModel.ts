@@ -1,23 +1,15 @@
 import { Ok, Err } from "resultat";
 import type { Collection, Db } from "mongodb";
 import type User from "../entities/user.js";
+import type { IUserModel } from "../interfaces/userModelInterface.js";
 
-class UserModel {
+class UserModel implements IUserModel {
   private db: Db;
   private collection: Collection<User>;
 
   constructor(db: Db) {
     this.db = db;
-    this.collection = this.db.collection("users");
-  }
-
-  createIndexes() {
-    return this.collection.createIndexes([
-      {
-        key: { id: 1 },
-        unique: true,
-      },
-    ]);
+    this.collection = this.db.collection<User>("users");
   }
 
   async findByUsername(username: string) {

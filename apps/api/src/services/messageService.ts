@@ -1,10 +1,12 @@
 import Message from "../entities/message.js";
-import MessageModel from "../models/messageModel.js";
 import type { ObjectId } from "mongodb";
 import { getChannelId } from "../utils/id.js";
+import type ChannelModel from "../models/channelModel.js";
+import { Err } from "resultat";
+import { messageEntitySchema } from "../validators/messageValidators.js";
 
 class MessageService {
-  constructor(private messageModel: MessageModel) {}
+  constructor(private channelModel: ChannelModel) {}
 
   /**
    * Sends a message to a channel between two users.
@@ -16,7 +18,16 @@ class MessageService {
   ) {
     const channelId = getChannelId(senderId, recipientId);
     const message = new Message(senderId, content);
-    return this.messageModel.sendToChannel(channelId, message);
+
+    console.log(message);
+    const validation = messageEntitySchema.safeParse(message);
+    
+    if (!validation.success) {
+      return Err("Schema validation failed");
+    }
+
+
+    return this.channelModel.sendDirectMessage(channelId, recipientId, message);
   }
 
   /**
@@ -25,10 +36,10 @@ class MessageService {
    */
   async getMessagesFromChannel(
     channelId: string,
-    options: { amount?: number; lastMessageId?: string | ObjectId }
+    options?: { amount?: number; lastMessageId?: string | ObjectId }
   ) {
-    const { amount = 30, lastMessageId } = options;
-    return this.messageModel.getMessages(channelId, amount, lastMessageId);
+    const { amount = 30, lastMessageId } = options!;
+    return this.channelModel.getMessages(channelId, amount, lastMessageId);
   }
 }
 

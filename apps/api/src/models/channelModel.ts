@@ -1,51 +1,110 @@
-import type { Collection, Db, MongoError } from "mongodb";
+import type Message from "../entities/message.js";
 import { Ok, Err } from "resultat";
+import {
+  ObjectId,
+  type Document,
+  type MongoError,
+  type Collection,
+  type Db,
+} from "mongodb";
+import type {
+  IChannelModel,
+  ChannelType,
+} from "../interfaces/channelModelInterface.js";
 
-type Channel = {
-  id: string;
-  participants: string[];
-  name?: string;
-};
-
-class ChannelModel {
+class ChannelModel implements IChannelModel {
   private db: Db;
-  private collection: Collection<Channel>;
+  private collection: Collection<ChannelType>;
 
   constructor(db: Db) {
     this.db = db;
-    this.collection = this.db.collection("channels");
+    this.collection = this.db.collection<ChannelType>("channels");
   }
 
-  createIndexes() {
-    return this.collection.createIndexes([
+  async sendDirectMessage(
+    channelId: string,
+    recipientId: string,
+    message: Message
+  ) {
+    const result = await this.collection.updateOne(
+      { id: channelId },
       {
-        key: { id: 1 },
-        unique: true,
+        $setOnInsert: {
+          id: channelId,
+          participants: [message.senderId, recipientId],
+        },
+        $push: {
+          messages: message,
+        },
       },
-    ]);
+      { upsert: true }
+    );
+
+    if (!result.acknowledged) {
+      return Err("Failed to write the message");
+    }
+
+    return Ok(message);
   }
 
-  async createChannel(id: string, name?: string) {
-    const channel: Channel = {
-      id,
-      name,
-      participants: [],
-    };
+  async getMessages(
+    channelId: string,
+    limit: number,
+    lastMessageId?: ObjectId | string
+  ) {
+    const channelExists =
+      (await this.collection.countDocuments({ id: channelId })) !== 0;
+
+    if (!channelExists) {
+      return Err("Channel does not exist");
+    }
+
+    const pipeline: Document[] = [
+      {
+        $match: { id: channelId },
+      },
+      {
+        $unwind: "$messages",
+      },
+      {
+        $sort: { "messages._id": -1 },
+      },
+    ];
+
+    if (lastMessageId !== undefined) {
+      pipeline.push({
+        $match: {
+          "messages._id": { $lt: new ObjectId(lastMessageId) },
+        },
+      });
+    }
+
+    pipeline.push(
+      {
+        $limit: limit,
+      },
+      {
+        $replaceWith: "$messages",
+      },
+      {
+        $project: { _id: 0 },
+      }
+    );
 
     try {
-      await this.collection.insertOne(channel);
-      return Ok(id);
-    } catch (_e) {
-      const error = _e as MongoError;
-      console.error("UNHANDLED ERROR: createChannel", error);
-      return Err(`Failed to create the channel with id=${id}`);
+      const result = await this.collection
+        .aggregate<Message>(pipeline)
+        .toArray();
+      return Ok(result);
+    } catch (e) {
+      return Err(e as MongoError);
     }
   }
 
   async findChannelById(id: string) {
-    const channel = await this.collection.findOne<Channel>(
+    const channel = await this.collection.findOne(
       { id: id },
-      { projection: { _id: 0 } }
+      { projection: { _id: 0, messages: 0 } }
     );
 
     if (channel === null) {
@@ -55,8 +114,19 @@ class ChannelModel {
     return Ok(channel);
   }
 
-  async findChannelsByUserId(userId: string) {
-    // TODO: find all channels where participants.includes(userId)
+  async findAllChannelIdsByUserId(userId: string) {
+    try {
+      const channels = await this.collection
+        .find({ participants: userId })
+        .project<{ id: string }>({ id: 1 })
+        .toArray();
+
+      const channelIds = channels.map((channel) => channel.id);
+
+      return channelIds;
+    } catch (error) {
+      return [];
+    }
   }
 
   async addParticipantToChannel(userId: string, channelId: string) {

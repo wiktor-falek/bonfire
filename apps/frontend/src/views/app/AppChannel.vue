@@ -1,21 +1,20 @@
 <script setup lang="ts">
-import { nextTick, onMounted, ref } from "vue";
+import { ref } from "vue";
 import HamburgerMenu from "../../components/HamburgerMenu.vue";
 import Panel from "../../components/app/Panel.vue";
 import useGetMessages from "../../api/messages/useGetMessages";
-import useCreateMessage from "../../api/messages/useCreateMessage";
 import formatTimestamp from "../../utils/formatTimestamp";
+import socket from "../../socket";
 
-const { channelId } = defineProps<{ channelId: string }>();
+const props = defineProps<{ channelId: string }>();
 
 const user = ref({
   displayName: "Qbi",
   username: "Qbibubi",
-  id: "755308752261532161188",
+  id: "308487555110575308672",
 });
 
-const { data: messages } = useGetMessages(channelId);
-const { mutate: createMessage } = useCreateMessage();
+const { data: messages } = useGetMessages(props.channelId);
 
 const messagesDiv = ref<HTMLElement>();
 
@@ -24,8 +23,15 @@ const content = ref("");
 function handleSendMessage() {
   const trimmedContent = content.value.trim();
   if (trimmedContent === "") return;
-
-  createMessage({ recipientId: user.value.id, content: trimmedContent });
+  socket.send(
+    JSON.stringify({
+      type: "chat:direct-message",
+      data: {
+        recipientId: user.value.id,
+        content: trimmedContent,
+      },
+    })
+  );
 
   content.value = "";
 }

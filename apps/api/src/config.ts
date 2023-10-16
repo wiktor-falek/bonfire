@@ -1,25 +1,25 @@
 import "dotenv/config";
 
-type Env = {
-  NODE_ENV?: string;
-  JWT_SECRET?: string;
-};
-
 type Config = {
-  NODE_ENV: string;
-  JWT_SECRET: string;
+  [K in keyof Env]-?: Env[K];
 };
 
 /**
- * Throws an error if any field is undefined
+ * Asserts that every env variable is defined.
+ * Throws an error if any field is undefined.
  */
-const sanitizeConfig = (env: Env): Config => {
+function sanitizeConfig(env: any): Config {
   for (const [key, value] of Object.entries(env)) {
     if (value === undefined) {
       throw new Error(`Missing field ${key} in .env`);
     }
   }
   return env as Config;
+}
+
+type Env = {
+  NODE_ENV: string;
+  JWT_SECRET?: string;
 };
 
 const config: Env = {

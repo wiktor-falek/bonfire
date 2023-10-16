@@ -3,7 +3,6 @@ import { sessionStore } from "../instances.js";
 
 async function authGuard(req: Request, res: Response, next: NextFunction) {
   const { sessionId } = req.cookies;
-  console.log({ sessionId });
 
   if (typeof sessionId !== "string") {
     return res.status(401).json({ authenticated: false });
@@ -12,7 +11,6 @@ async function authGuard(req: Request, res: Response, next: NextFunction) {
   const result = await sessionStore.getSession(sessionId);
 
   if (!result.ok) {
-    console.log(result.err);
     return res.status(401).json({ authenticated: false });
   }
 

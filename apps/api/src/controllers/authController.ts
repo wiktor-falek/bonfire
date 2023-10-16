@@ -3,7 +3,6 @@ import type {
   postLoginSchema,
   postRegisterSchema,
 } from "../validators/userValidators.js";
-import { createSessionToken } from "../helpers/sessionToken.js";
 import { authService } from "../instances.js";
 import type { z } from "zod";
 import type { ValidatedRequest } from "../types.js";
@@ -22,7 +21,6 @@ export async function login(
   }
 
   const { user, sessionId } = result.val;
-  const { id } = user;
   const { username, displayName } = user.account;
 
   res.cookie("sessionId", sessionId, {
@@ -39,8 +37,6 @@ export async function register(
 ) {
   const { email, password, username, displayName } = req.body;
 
-  console.log(req.body);
-
   const result = await authService.register(
     email,
     password,
@@ -49,7 +45,6 @@ export async function register(
   );
 
   if (!result.ok) {
-    console.log(result.err);
     return res.status(401).json({ error: result.err });
   }
 

@@ -34,18 +34,20 @@ class AuthService {
     const user = await this.userModel.findByEmail(email);
 
     if (user === null) {
-      return Err("Incorrect username or password");
+      return Err("Incorrect email or password");
     }
 
     const isAuthenticated = await bcrypt.compare(password, user.account.hash);
 
     if (!isAuthenticated) {
-      return Err("Incorrect username or password");
+      return Err("Incorrect email or password");
     }
 
     const sessionId = uuidv4();
 
-    const result = await this.sessionStore.createSession(sessionId, { userId: user.id });
+    const result = await this.sessionStore.createSession(sessionId, {
+      userId: user.id,
+    });
 
     if (!result.ok) {
       return result;

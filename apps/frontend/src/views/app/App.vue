@@ -1,31 +1,14 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
 import Bonfire from "../../components/Bonfire.vue";
 import SidePanel from "../../components/SidePanel.vue";
-import useAppStore from "../../stores/appStore";
-
-const appStore = useAppStore();
-const loading = ref(true);
-
-onMounted(() => {
-  const MINIMUM_LOAD_TIME = 500;
-  const start = Date.now();
-  // TODO: connect to socket server, watch server connection state
-  const end = Date.now();
-  const timeoutDuration = MINIMUM_LOAD_TIME - (end - start);
-
-  setTimeout(() => {
-    loading.value = false;
-  }, timeoutDuration);
-});
 </script>
 
 <template>
-  <main class="loading" v-if="loading" @contextmenu.prevent>
+  <main class="loading" v-if="false" @contextmenu.prevent>
     <Bonfire size="64" />
     <div class="loading__info-container">
       <strong>Did you know?</strong>
-      <p>I hate my life. Because it sucks, a lot.</p>
+      <p>Fun fact here (no fun is being had at the moment)</p>
     </div>
   </main>
   <main v-else @contextmenu.prevent>
