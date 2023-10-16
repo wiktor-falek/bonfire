@@ -64,15 +64,20 @@ export class WsClient {
   }
 
   /**
-   * Send event to a client by id.
+   * Select client by id.
    * @example
-   * client.sendToClient("client-id", "event", "Hello, specific client!");
+   * client.toClient("client-id").send("event", "Hello, specific client!");
    */
-  sendToClient(clientId: string, eventName: string, data: JSONSerializable) {
-    const client = this.webSocketManager.clients.get(clientId);
-    if (client) {
-      this._send(eventName, data, [client]);
-    }
+  toClient(clientId: string) {
+    return {
+      /**
+       * Send event to a client by id.
+       * @example
+       * client.toClient("client-id").send("event", "Hello, specific client!");
+       */
+      send: (eventName: string, data: JSONSerializable) =>
+        this.sendToClient(clientId, eventName, data),
+    };
   }
 
   /**
@@ -108,11 +113,23 @@ export class WsClient {
     this._sendBroadcast(eventName, data, clients);
   }
 
+  private sendToClient(
+    clientId: string,
+    eventName: string,
+    data: JSONSerializable
+  ) {
+    const client = this.webSocketManager.clients.get(clientId);
+    if (client) {
+      this._send(eventName, data, [client]);
+    }
+  }
+
   private _send(
     eventName: string,
     data: JSONSerializable,
     clients: WsClient[]
   ) {
+    // TODO: remove overhead of readyState check
     for (const client of clients) {
       if (this.ws.readyState === WebSocket.OPEN) {
         client.ws.send(serialize(eventName, data));
@@ -125,6 +142,7 @@ export class WsClient {
     data: JSONSerializable,
     clients: WsClient[]
   ) {
+    // TODO: remove overhead of readyState check
     for (const client of clients) {
       if (this.ws.readyState === WebSocket.OPEN && this.ws !== client.ws) {
         client.ws.send(serialize(eventName, data));
