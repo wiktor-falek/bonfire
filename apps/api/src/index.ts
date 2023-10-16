@@ -4,7 +4,7 @@ import createIndexes from "./helpers/createIndexes.js";
 import { sessionStore } from "./instances.js";
 import { createServer } from "http";
 import { WebSocketServer } from "ws";
-import { setupWebSocketServer } from "./websocket.js";
+import { setupWebSocketServer } from "./websocket/index.js";
 
 await createIndexes()
   .then(() => {
