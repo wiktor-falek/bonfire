@@ -1,4 +1,4 @@
-# Bonfire - A real time chat application (totally not a Discord clone)
+# Bonfire - A real time browser chat application 
 
 ## Technologies used
 
