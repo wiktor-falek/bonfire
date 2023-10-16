@@ -39,6 +39,7 @@ const router = createRouter({
       path: "/app",
       name: "app",
       component: App,
+      redirect: "app/home",
       children: [
         {
           path: "home",

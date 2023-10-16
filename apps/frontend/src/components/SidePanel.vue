@@ -7,6 +7,8 @@ import Modal from "./Modal.vue";
 
 const appStore = useAppStore();
 
+const isOpenOnMobile = ref(false);
+
 type Server = {
   name: string;
   imgSrc?: string;
@@ -41,7 +43,7 @@ function handleConversationClose(index: number) {
 }
 
 function handleConversationClick(id: string) {
-  appStore.sidePanelIsOpen = false;
+  isOpenOnMobile.value = false;
   router.push(`/app/channel/${id}`);
 }
 
@@ -59,13 +61,13 @@ function handleCloseCreateConversationModal() {
 <template>
   <div
     class="overlay desktop-hide"
-    v-if="appStore.sidePanelIsOpen"
-    @click="appStore.sidePanelIsOpen = false"
+    v-if="isOpenOnMobile"
+    @click="isOpenOnMobile = false"
   ></div>
   <div
     class="side-panel"
     :class="{
-      'desktop-show': !appStore.sidePanelIsOpen,
+      'desktop-show': !isOpenOnMobile,
     }"
     @click.stop
   >
@@ -181,7 +183,6 @@ function handleCloseCreateConversationModal() {
 </template>
 
 <style scoped>
-
 .overlay {
   width: 100%;
   height: 100%;
