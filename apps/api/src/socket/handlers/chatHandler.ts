@@ -12,8 +12,8 @@ const sendDirectMessageSchema = z
 
 export async function directMessageHandler(
   ws: WebSocket,
-  userId: string,
-  data: any
+  data: any,
+  userId: string
 ) {
   const validation = sendDirectMessageSchema.safeParse(data);
   if (!validation.success) {

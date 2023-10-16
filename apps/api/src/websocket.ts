@@ -62,7 +62,7 @@ export const setupWebSocketServer = () => {
       deserialize((event: WebSocketEvent) => {
         switch (event.type) {
           case "chat:direct-message":
-            directMessageHandler(ws, userId, event.data);
+            directMessageHandler(ws, event.data, userId);
             break;
 
           default:
