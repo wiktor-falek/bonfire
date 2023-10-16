@@ -2,11 +2,18 @@
 
 ## Technologies used
 
+### Backend:
+
 - Express
-- MongoDB (native driver)
-- Redis
+- Node WebSocket Client (custom API with broadcasting, namespaces and state)
+- MongoDB
+- Redis (session management and caching)
+
+### Frontend:
+
 - Vue 3
 - Tanstack Query
+- WebSocket API
 
 ## External dependencies
 
