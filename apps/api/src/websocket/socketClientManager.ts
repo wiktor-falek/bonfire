@@ -1,25 +1,21 @@
 import { WebSocket } from "ws";
 import WsClient from "./wsClient.js";
 
-class WebSocketManager {
+class SocketClientManager {
   clients: Map<string, WsClient>;
-  clientsMeta: Map<string, { userId: string }>;
   namespaces: Map<string, Set<WsClient>>;
   constructor() {
     this.clients = new Map();
-    this.clientsMeta = new Map();
     this.namespaces = new Map();
   }
 
-  addClient(ws: WebSocket, userId: string) {
+  addClient(ws: WebSocket) {
     const client = new WsClient(ws, this);
     this.clients.set(client.id, client);
-    this.clientsMeta.set(client.id, { userId });
     return client;
   }
 
   deleteClient(id: string) {
-    this.clientsMeta.delete(id);
     return this.clients.delete(id);
   }
 
@@ -38,4 +34,4 @@ class WebSocketManager {
   }
 }
 
-export default WebSocketManager;
+export default SocketClientManager;

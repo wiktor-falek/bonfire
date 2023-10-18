@@ -18,7 +18,7 @@ export async function getMessages(
   });
 
   if (!result.ok) {
-    return res.status(500).json({ error: "Failed to fetch messages" });
+    return res.status(500).json({ error: result.err });
   }
 
   return res.status(200).json(result.val);

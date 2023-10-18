@@ -1,7 +1,6 @@
-import type { WebSocket } from "ws";
-import { broadcastSend, send } from "../utils.js";
 import { messageService } from "../../instances.js";
 import { z } from "zod";
+import type WsClient from "../wsClient.js";
 
 const sendDirectMessageSchema = z
   .object({
@@ -10,14 +9,10 @@ const sendDirectMessageSchema = z
   })
   .strict();
 
-export async function directMessageHandler(
-  ws: WebSocket,
-  data: any,
-  userId: string
-) {
+async function directMessage(client: WsClient, data: any, userId: string) {
   const validation = sendDirectMessageSchema.safeParse(data);
   if (!validation.success) {
-    return send(ws, "error", { reason: "Invalid Schema" });
+    return client.send("error", { reason: "Invalid Schema" });
   }
 
   const { recipientId, content } = validation.data;
@@ -29,11 +24,14 @@ export async function directMessageHandler(
   );
 
   if (!result.ok) {
-    send(ws, "error", { reason: "Failed to send the message" });
-    return;
+    return client.send("error", { reason: result.err });
   }
 
   const message = result.val;
 
-  broadcastSend(ws, "chat:message", message);
+  client.send("chat:message", message.toJson());
 }
+
+export default {
+  directMessage,
+};

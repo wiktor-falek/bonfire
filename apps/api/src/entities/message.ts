@@ -12,6 +12,14 @@ class Message {
     this.content = content;
     this.timestamp = Date.now();
   }
+
+  toJson() {
+    return {
+      senderId: this.senderId,
+      content: this.content,
+      timestamp: this.timestamp,
+    };
+  }
 }
 
 export default Message;

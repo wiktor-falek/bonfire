@@ -23,6 +23,7 @@ const content = ref("");
 function handleSendMessage() {
   const trimmedContent = content.value.trim();
   if (trimmedContent === "") return;
+  console.log("sending chat:direct-message");
   socket.send(
     JSON.stringify({
       type: "chat:direct-message",

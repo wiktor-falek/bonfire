@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from "uuid";
 import { WebSocket } from "ws";
 import { serialize, type JSONSerializable } from "./serialization.js";
-import type WebSocketManager from "./webSocketManager.js";
+import type SocketClientManager from "./socketClientManager.js";
 
 export class WsClient {
   ws: WebSocket;
   id: string;
-  constructor(ws: WebSocket, private webSocketManager: WebSocketManager) {
+  constructor(ws: WebSocket, private socketClientManager: SocketClientManager) {
     this.ws = ws;
     this.id = uuidv4();
   }
@@ -86,12 +86,12 @@ export class WsClient {
    * client.sendToAll("event", "Hello, all connected clients!");
    */
   sendToAll(eventName: string, data: JSONSerializable) {
-    const clients = [...this.webSocketManager.clients.values()];
+    const clients = [...this.socketClientManager.clients.values()];
     this._send(eventName, data, clients);
   }
 
   private broadcastSendToAll(eventName: string, data: JSONSerializable) {
-    const clients = [...this.webSocketManager.clients.values()];
+    const clients = [...this.socketClientManager.clients.values()];
     this._sendBroadcast(eventName, data, clients);
   }
 
@@ -100,7 +100,7 @@ export class WsClient {
     eventName: string,
     data: JSONSerializable
   ) {
-    const clients = this.webSocketManager.getClientsFromNamespace(namespace);
+    const clients = this.socketClientManager.getClientsFromNamespace(namespace);
     this._send(eventName, data, clients);
   }
 
@@ -109,7 +109,7 @@ export class WsClient {
     eventName: string,
     data: JSONSerializable
   ) {
-    const clients = this.webSocketManager.getClientsFromNamespace(namespace);
+    const clients = this.socketClientManager.getClientsFromNamespace(namespace);
     this._sendBroadcast(eventName, data, clients);
   }
 
@@ -118,7 +118,7 @@ export class WsClient {
     eventName: string,
     data: JSONSerializable
   ) {
-    const client = this.webSocketManager.clients.get(clientId);
+    const client = this.socketClientManager.clients.get(clientId);
     if (client) {
       this._send(eventName, data, [client]);
     }
