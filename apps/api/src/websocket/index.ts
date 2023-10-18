@@ -1,4 +1,4 @@
-import type { WebSocketServer } from "ws";
+import { WebSocket, type WebSocketServer } from "ws";
 import SocketClientManager from "./socketClientManager.js";
 import getCookie from "../utils/getCookie.js";
 import { sessionStore } from "../instances.js";
@@ -36,25 +36,31 @@ function registerWebSocketServer(wss: WebSocketServer) {
     client.subscribe(`user_${userId}`);
 
     ws.on("close", () => {
-      client.unsubscribe(`user_${userId}`); // TODO: remove once automatized
-      socketClientManager.deleteClient(client.id);
+      socketClientManager.deleteClient(client);
       console.log(`User ${userId} disconnected`);
     });
 
-    ws.on(
-      "message",
-      deserialize((event: WebSocketEvent) => {
-        console.log(event.type);
-        switch (event.type) {
-          case "chat:direct-message":
-            chatHandler.directMessage(client, event.data, userId);
-            break;
+    ws.on("message", (data) => {
+      if (ws.readyState !== WebSocket.OPEN) {
+        return console.error(
+          "Received message but connection is not fully open"
+        );
+      }
 
-          default:
-            console.error("Unknown event type:", event.type);
-        }
-      })
-    );
+      const event = deserialize(data);
+      if (event === null) {
+        return console.error("Invalid data format");
+      }
+
+      switch (event.type) {
+        case "chat:direct-message":
+          chatHandler.directMessage(client, event.data, userId);
+          break;
+
+        default:
+          console.error("Unknown event type:", event.type);
+      }
+    });
   });
 }
 

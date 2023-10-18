@@ -33,8 +33,10 @@ async function directMessage(client: WsClient, data: any, userId: string) {
   // TODO: send ACK instead
   client.send("chat:message", message.toJson());
 
-  const userNamespace = `user_${userId}`;
-  client.broadcast.to(userNamespace).send("chat:message", message.toJson());
+  const userClientsNamespace = `user_${userId}`;
+  client.broadcast
+    .to(userClientsNamespace)
+    .send("chat:message", message.toJson());
 }
 
 export default {

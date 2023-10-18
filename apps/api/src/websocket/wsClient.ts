@@ -4,8 +4,8 @@ import { serialize, type JSONSerializable } from "./serialization.js";
 import type SocketClientManager from "./socketClientManager.js";
 
 export class WsClient {
-  ws: WebSocket;
-  id: string;
+  readonly ws: WebSocket;
+  readonly id: string;
   constructor(ws: WebSocket, private socketClientManager: SocketClientManager) {
     this.ws = ws;
     this.id = uuidv4();
@@ -96,14 +96,14 @@ export class WsClient {
    * Subscribe to a specified namespace to receive events sent to it.
    */
   subscribe(namespace: string) {
-    this.socketClientManager.joinNamespace(namespace, this);
+    this.socketClientManager._joinNamespace(namespace, this);
   }
 
   /**
    * Unsubscribe from a specified namespace, ceasing to receive events sent to it.
    */
   unsubscribe(namespace: string) {
-    this.socketClientManager.leaveNamespace(namespace, this);
+    this.socketClientManager._leaveNamespace(namespace, this);
   }
 
   private broadcastSendToAll(eventName: string, data: JSONSerializable) {
@@ -145,11 +145,8 @@ export class WsClient {
     data: JSONSerializable,
     clients: WsClient[] | IterableIterator<WsClient>
   ) {
-    // TODO: remove overhead of readyState check
     for (const client of clients) {
-      if (this.ws.readyState === WebSocket.OPEN) {
-        client.ws.send(serialize(eventName, data));
-      }
+      client.ws.send(serialize(eventName, data));
     }
   }
 
@@ -158,9 +155,8 @@ export class WsClient {
     data: JSONSerializable,
     clients: WsClient[] | IterableIterator<WsClient>
   ) {
-    // TODO: remove overhead of readyState check
     for (const client of clients) {
-      if (this.ws.readyState === WebSocket.OPEN && this.ws !== client.ws) {
+      if (this.ws !== client.ws) {
         client.ws.send(serialize(eventName, data));
       }
     }

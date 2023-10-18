@@ -1,11 +1,11 @@
-# Bonfire - A real time browser chat application 
+# Bonfire - A real time browser chat application
 
 ## Technologies used
 
 ### Backend:
 
 - Express
-- Node WebSocket Client (custom API with broadcasting, namespaces and state)
+- Node WebSocket Client (custom API with different emits and namespaces)
 - MongoDB
 - Redis (session management and caching)
 
