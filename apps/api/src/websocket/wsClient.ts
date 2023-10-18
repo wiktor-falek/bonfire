@@ -86,12 +86,12 @@ export class WsClient {
    * client.sendToAll("event", "Hello, all connected clients!");
    */
   sendToAll(eventName: string, data: JSONSerializable) {
-    const clients = [...this.socketClientManager.clients.values()];
+    const clients = this.socketClientManager.clients.values();
     this._send(eventName, data, clients);
   }
 
   private broadcastSendToAll(eventName: string, data: JSONSerializable) {
-    const clients = [...this.socketClientManager.clients.values()];
+    const clients = this.socketClientManager.clients.values();
     this._sendBroadcast(eventName, data, clients);
   }
 
@@ -127,7 +127,7 @@ export class WsClient {
   private _send(
     eventName: string,
     data: JSONSerializable,
-    clients: WsClient[]
+    clients: WsClient[] | IterableIterator<WsClient>
   ) {
     // TODO: remove overhead of readyState check
     for (const client of clients) {
@@ -140,7 +140,7 @@ export class WsClient {
   private _sendBroadcast(
     eventName: string,
     data: JSONSerializable,
-    clients: WsClient[]
+    clients: WsClient[] | IterableIterator<WsClient>
   ) {
     // TODO: remove overhead of readyState check
     for (const client of clients) {
