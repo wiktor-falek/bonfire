@@ -28,9 +28,23 @@ export class WsClient {
       /**
        * Send event to all connected clients except this client.
        * @example
-       * client.broadcast.sendToAll("event", "Hello, everyone except me!");
+       * client.broadcast.sendToAll("event", "Hello, all connected clients except me!");
        */
       sendToAll: this.broadcastSendToAll,
+      /**
+       * Select clients that subscribe to the namespace except this client.
+       * @example
+       * client.broadcast.to("room").send("event", "Hello, room!");
+       */
+      to: (namespace: string) => ({
+        /**
+         * Send event to all clients in the namespace except this client.
+         * @example
+         * client.broadcast.to("room").send("event", "Hello, everyone in the room except me!");
+         */
+        send: (eventName: string, data: JSONSerializable) =>
+          this.broadcastSendToNamespace(namespace, eventName, data),
+      }),
     };
   }
 
@@ -48,18 +62,6 @@ export class WsClient {
        */
       send: (eventName: string, data: JSONSerializable) =>
         this.sendToNamespace(namespace, eventName, data),
-      /**
-       * Omit this client.
-       */
-      broadcast: {
-        /**
-         * Send event to all clients in the namespace except this client.
-         * @example
-         * client.to("room").broadcast.send("event", "Hello, everyone in the room except me!");
-         */
-        send: (eventName: string, data: JSONSerializable) =>
-          this.broadcastSendToNamespace(namespace, eventName, data),
-      },
     };
   }
 
