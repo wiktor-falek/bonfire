@@ -16,21 +16,26 @@ class SocketClientManager {
   }
 
   deleteClient(id: string) {
+    // TODO: unsubscribe from all namespaces
     return this.clients.delete(id);
   }
 
   joinNamespace(namespace: string, client: WsClient) {
     const namespaceSet = this.namespaces.get(namespace) ?? new Set();
     namespaceSet.add(client);
-    return this.namespaces.set(namespace, namespaceSet);
+    this.namespaces.set(namespace, namespaceSet);
+  }
+
+  leaveNamespace(namespace: string, client: WsClient) {
+    const namespaceSet = this.namespaces.get(namespace);
+    if (namespaceSet === undefined) {
+      return false;
+    }
+    return this.namespaces.get(namespace)?.delete(client) ?? false;
   }
 
   getClientsFromNamespace(namespace: string) {
     return Array.from(this.namespaces.get(namespace) ?? []);
-  }
-
-  leaveNamespace(namespace: string) {
-    return this.namespaces.delete(namespace);
   }
 }
 

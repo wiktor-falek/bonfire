@@ -10,6 +10,7 @@ const sendDirectMessageSchema = z
   .strict();
 
 async function directMessage(client: WsClient, data: any, userId: string) {
+  // TODO: find a cleaner solution
   const validation = sendDirectMessageSchema.safeParse(data);
   if (!validation.success) {
     return client.send("error", { reason: "Invalid Schema" });

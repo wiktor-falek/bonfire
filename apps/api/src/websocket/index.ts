@@ -13,7 +13,6 @@ function registerWebSocketServer(wss: WebSocketServer) {
   });
 
   wss.on("connection", async (ws, req) => {
-    console.log("connection");
     const client = socketClientManager.addClient(ws);
 
     const sessionId = getCookie("sessionId", req.headers.cookie);
@@ -32,7 +31,12 @@ function registerWebSocketServer(wss: WebSocketServer) {
 
     console.log(`User ${userId} connected with sesssion`, sessionId);
 
+    // Subscribe all clients to a personal namespace of the user,
+    // to allow sending events to all devices of that user.
+    client.subscribe(`user_${userId}`);
+
     ws.on("close", () => {
+      client.unsubscribe(`user_${userId}`); // TODO: remove once automatized
       socketClientManager.deleteClient(client.id);
       console.log(`User ${userId} disconnected`);
     });

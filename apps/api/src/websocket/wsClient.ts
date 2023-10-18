@@ -92,6 +92,20 @@ export class WsClient {
     this._send(eventName, data, clients);
   }
 
+  /**
+   * Subscribe to a specified namespace to receive events sent to it.
+   */
+  subscribe(namespace: string) {
+    this.socketClientManager.joinNamespace(namespace, this);
+  }
+
+  /**
+   * Unsubscribe from a specified namespace, ceasing to receive events sent to it.
+   */
+  unsubscribe(namespace: string) {
+    this.socketClientManager.leaveNamespace(namespace, this);
+  }
+
   private broadcastSendToAll(eventName: string, data: JSONSerializable) {
     const clients = this.socketClientManager.clients.values();
     this._sendBroadcast(eventName, data, clients);
