@@ -6,7 +6,6 @@ import useAppStore from "./../stores/appStore";
 import Modal from "./Modal.vue";
 import emitter from "../emitter";
 
-
 emitter.on("openSidePanel", () => {
   isOpenOnMobile.value = true;
 });

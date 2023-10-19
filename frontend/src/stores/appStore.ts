@@ -2,10 +2,10 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 
 const useAppStore = defineStore("app", () => {
-  const username = ref("apdo");
-  const displayName = ref("Apdo");
+  const username = ref("TODO");
+  const displayName = ref("TODO");
 
-  return { username, displayName /*sidePanelIsOpen*/ };
+  return { username, displayName };
 });
 
 export default useAppStore;
