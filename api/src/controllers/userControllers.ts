@@ -1,12 +1,9 @@
 import type { ValidatedRequest } from "../types.js";
-import type { Response } from "express";
+import type { Request, Response } from "express";
 import { userService } from "../instances.js";
-import type { z } from "zod";
+import type { getUserProfileByIdSchema } from "../validators/userValidators.js";
 
-export async function getCurrentUserProfileInfo(
-  req: ValidatedRequest<typeof z.any>,
-  res: Response
-) {
+export async function getCurrentUserProfileInfo(req: Request, res: Response) {
   const userId = res.locals.user.id;
 
   const result = await userService.getUserProfileInfo(userId);
@@ -21,10 +18,9 @@ export async function getCurrentUserProfileInfo(
 }
 
 export async function getUserProfileInfoById(
-  req: ValidatedRequest<typeof z.any>,
+  req: ValidatedRequest<typeof getUserProfileByIdSchema>,
   res: Response
 ) {
-  // TODO: Request schema, params: { userId: string }
   const { userId } = req.params;
 
   const result = await userService.getUserProfileInfo(userId);

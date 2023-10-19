@@ -5,6 +5,7 @@ const password = z.string().min(8).max(100);
 const username = z.string().min(3).max(32).trim();
 const displayName = z.string().max(32).trim().default("");
 const sessionId = z.string().min(100).max(200);
+const userId = z.string().length(21);
 
 export const postLoginSchema = z.object({
   body: z.object({
@@ -19,5 +20,11 @@ export const postRegisterSchema = z.object({
     password,
     username,
     displayName,
+  }),
+});
+
+export const getUserProfileByIdSchema = z.object({
+  params: z.object({
+    userId,
   }),
 });
