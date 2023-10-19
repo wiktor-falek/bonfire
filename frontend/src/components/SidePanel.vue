@@ -4,9 +4,14 @@ import Bonfire from "./Bonfire.vue";
 import router from "./../router";
 import useAppStore from "./../stores/appStore";
 import Modal from "./Modal.vue";
+import emitter from "../emitter";
+
+
+emitter.on("openSidePanel", () => {
+  isOpenOnMobile.value = true;
+});
 
 const appStore = useAppStore();
-
 const isOpenOnMobile = ref(false);
 
 type Server = {

@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import useAppStore from "../stores/appStore";
-const appStore = useAppStore();
+import emitter from "../emitter";
+
+function emitOpenSidePanelEvent() {
+  emitter.emit("openSidePanel");
+}
 </script>
 
 <template>
-  <button class="hamburger-menu" @click="appStore.sidePanelIsOpen = true">
+  <button class="hamburger-menu" @click="emitOpenSidePanelEvent">
     <span class="line"></span>
     <span class="line"></span>
     <span class="line"></span>
