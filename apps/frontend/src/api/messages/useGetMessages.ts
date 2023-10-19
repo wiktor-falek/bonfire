@@ -18,6 +18,7 @@ const useGetMessages = (channelId: string, lastMessageId?: string) =>
       return response.data.reverse();
     },
     queryKey: ["messages"],
+    staleTime: Infinity,
   });
 
 export default useGetMessages;

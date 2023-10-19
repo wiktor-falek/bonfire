@@ -2,7 +2,7 @@ import { WebSocket, type WebSocketServer } from "ws";
 import SocketClientManager from "./socketClientManager.js";
 import getCookie from "../utils/getCookie.js";
 import { sessionStore } from "../instances.js";
-import { deserialize, type WebSocketEvent } from "./serialization.js";
+import { deserialize } from "./serialization.js";
 import chatHandler from "./handlers/chatHandler.js";
 
 function registerWebSocketServer(wss: WebSocketServer) {
@@ -17,13 +17,12 @@ function registerWebSocketServer(wss: WebSocketServer) {
 
     const sessionId = getCookie("sessionId", req.headers.cookie);
 
-    if (!sessionId) {
-      return client.send("error", { reason: "Authentication Failed" });
-    }
-
     const result = await sessionStore.getSession(sessionId);
     if (!result.ok) {
-      return client.send("error", { reason: "Authentication Failed" });
+      client.send("error", { reason: "Authentication Failed" });
+      client.ws.close();
+      socketClientManager.deleteClient(client);
+      return;
     }
 
     const session = result.val;

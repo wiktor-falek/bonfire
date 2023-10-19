@@ -59,7 +59,7 @@ class SocketClientManager {
     return this.namespaces.get(namespace)?.delete(client) ?? false;
   }
 
-  getClientsFromNamespace(namespace: string) {
+  _getClientsFromNamespace(namespace: string) {
     return Array.from(this.namespaces.get(namespace) ?? []);
   }
 }

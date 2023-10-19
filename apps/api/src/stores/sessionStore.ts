@@ -26,7 +26,10 @@ class SessionStore {
   /**
    * Retrieves the user session data associated with the session ID.
    */
-  async getSession(sessionId: string) {
+  async getSession(sessionId?: string) {
+    if (sessionId === undefined) {
+      return Err("Session does not exist");
+    }
     try {
       const data = await this.client.hGet("userSessions", sessionId);
       if (!data) {

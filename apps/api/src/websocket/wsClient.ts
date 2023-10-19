@@ -116,7 +116,8 @@ export class WsClient {
     eventName: string,
     data: JSONSerializable
   ) {
-    const clients = this.socketClientManager.getClientsFromNamespace(namespace);
+    const clients =
+      this.socketClientManager._getClientsFromNamespace(namespace);
     this._send(eventName, data, clients);
   }
 
@@ -125,7 +126,8 @@ export class WsClient {
     eventName: string,
     data: JSONSerializable
   ) {
-    const clients = this.socketClientManager.getClientsFromNamespace(namespace);
+    const clients =
+      this.socketClientManager._getClientsFromNamespace(namespace);
     this._sendBroadcast(eventName, data, clients);
   }
 
