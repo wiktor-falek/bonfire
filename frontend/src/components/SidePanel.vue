@@ -2,16 +2,26 @@
 import { ref } from "vue";
 import Bonfire from "./Bonfire.vue";
 import router from "./../router";
-import useAppStore from "./../stores/appStore";
 import Modal from "./Modal.vue";
 import emitter from "../emitter";
+import getCurrentProfile from "../api/users/getCurrentProfile";
 
 emitter.on("openSidePanel", () => {
   isOpenOnMobile.value = true;
 });
 
-const appStore = useAppStore();
 const isOpenOnMobile = ref(false);
+const userProfile = ref({
+  username: "",
+  displayName: "",
+  imgSrc: "",
+});
+
+async function fetchUserProfile() {
+  userProfile.value = await getCurrentProfile();
+}
+
+fetchUserProfile();
 
 type Server = {
   name: string;
@@ -165,10 +175,10 @@ function handleCloseCreateConversationModal() {
           <div class="user-card__profile__image"></div>
           <div class="user-card__profile__text">
             <p class="user-card__profile__text__display-name">
-              {{ appStore.displayName }}
+              {{ userProfile.displayName }}
             </p>
             <p class="user-card__profile__text__username">
-              @{{ appStore.username }}
+              @{{ userProfile.username }}
             </p>
           </div>
         </div>

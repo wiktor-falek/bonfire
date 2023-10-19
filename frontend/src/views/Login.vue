@@ -1,18 +1,16 @@
 <script lang="ts" setup>
 import { computed, ref } from "vue";
-import useLogin from "../api/auth/useLogin";
+import login from "../api/auth/login";
 
 const urlParams = new URLSearchParams(window.location.search);
 
 const email = ref(urlParams.get("email") ?? "");
 const password = ref("");
 
-const { isLoading, isError, error, isSuccess, mutate } = useLogin();
-
 function handleSubmit(e: Event) {
   e.preventDefault();
 
-  mutate({ email: email.value, password: password.value });
+  login({ email: email.value, password: password.value });
 }
 
 function handlePasswordRecovery(e: MouseEvent) {

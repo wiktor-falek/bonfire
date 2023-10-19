@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import useRegister from "../api/auth/useRegister";
+import register from "../api/auth/register";
 
 const urlParams = new URLSearchParams(window.location.search);
 
@@ -9,12 +9,10 @@ const displayName = ref("");
 const username = ref("");
 const password = ref("");
 
-const { isLoading, isError, error, isSuccess, mutate } = useRegister();
-
 function handleSubmit(e: Event) {
   e.preventDefault();
 
-  mutate({
+  register({
     email: email.value,
     displayName: displayName.value,
     username: username.value,
@@ -47,12 +45,7 @@ const loginRoute = computed(() => {
         />
 
         <label for="displayName">Display Name</label>
-        <input
-          v-model="displayName"
-          id="display-name"
-          type="text"
-          max="32"
-        />
+        <input v-model="displayName" id="display-name" type="text" max="32" />
 
         <label for="username" class="label-required">Username</label>
         <input

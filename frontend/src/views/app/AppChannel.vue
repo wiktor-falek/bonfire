@@ -2,19 +2,25 @@
 import { ref } from "vue";
 import HamburgerMenu from "../../components/HamburgerMenu.vue";
 import Panel from "../../components/app/Panel.vue";
-import useGetMessages from "../../api/messages/useGetMessages";
+import getMessages, { type Message } from "../../api/messages/getMessages";
 import formatTimestamp from "../../utils/formatTimestamp";
-import socket from "../../socket";
+import socket, { socketEmitter } from "../../socket";
 
 const props = defineProps<{ channelId: string }>();
+
+const messages = ref<Message[]>();
+
+const fetchMessages = async () => {
+  messages.value = await getMessages(props.channelId);
+};
+
+fetchMessages();
 
 const user = ref({
   displayName: "Qbi",
   username: "Qbibubi",
   id: "308487555110575308672",
 });
-
-const { data: messages } = useGetMessages(props.channelId);
 
 const messagesDiv = ref<HTMLElement>();
 
@@ -36,6 +42,10 @@ function handleSendMessage() {
 
   content.value = "";
 }
+
+socketEmitter.on("chat:message", (message) => {
+  messages.value?.push(message);
+});
 </script>
 
 <template>

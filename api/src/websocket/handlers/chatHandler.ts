@@ -31,12 +31,12 @@ async function directMessage(client: WsClient, data: any, userId: string) {
   const message = result.val;
 
   // TODO: send ACK instead
-  client.send("chat:message", message.toJson());
+  // client.send("chat:message", message.toJson());
 
-  const userClientsNamespace = `user_${userId}`;
-  client.broadcast
-    .to(userClientsNamespace)
-    .send("chat:message", message.toJson());
+  const userClientsNamespace = `user_${recipientId}`;
+  console.log(userClientsNamespace);
+  // client.sendToAll("chat:message", message.toJson());
+  client.to(userClientsNamespace).send("chat:message", message.toJson());
 }
 
 export default {

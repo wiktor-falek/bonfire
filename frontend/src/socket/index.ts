@@ -1,3 +1,15 @@
+import mitt from "mitt";
+
+type Events = {
+  "chat:message": {
+    senderId: string;
+    content: string;
+    timestamp: number;
+  };
+};
+
+export const socketEmitter = mitt<Events>();
+
 const socket = new WebSocket("ws://localhost:3000");
 
 socket.addEventListener("open", () => {
@@ -19,7 +31,7 @@ socket.addEventListener("message", (messageEvent) => {
   switch (event.type) {
     case "chat:message":
       // TODO: emit event
-      const content = event.data as string;
+      socketEmitter.emit("chat:message", event.data);
       break;
     default:
   }
