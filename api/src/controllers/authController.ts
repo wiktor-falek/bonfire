@@ -1,11 +1,10 @@
-import type { Request, Response } from "express";
+import type { ValidatedRequest } from "../types.js";
+import type { Response } from "express";
 import type {
   postLoginSchema,
   postRegisterSchema,
 } from "../validators/userValidators.js";
 import { authService } from "../instances.js";
-import type { z } from "zod";
-import type { ValidatedRequest } from "../types.js";
 
 export async function login(
   req: ValidatedRequest<typeof postLoginSchema>,
@@ -32,7 +31,7 @@ export async function login(
 }
 
 export async function register(
-  req: Request & z.infer<typeof postRegisterSchema>,
+  req: ValidatedRequest<typeof postRegisterSchema>,
   res: Response
 ) {
   const { email, password, username, displayName } = req.body;
@@ -41,7 +40,7 @@ export async function register(
     email,
     password,
     username,
-    displayName
+    displayName ?? ""
   );
 
   if (!result.ok) {

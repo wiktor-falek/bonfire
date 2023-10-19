@@ -13,19 +13,21 @@ class UserModel implements IUserModel {
   }
 
   async findByUsername(username: string) {
-    const user = await this.collection.findOne<User>({
+    return this.collection.findOne<User>({
       "account.username": username,
     });
-
-    return user;
   }
 
   async findByEmail(email: string) {
-    const user = await this.collection.findOne<User>({
+    return this.collection.findOne<User>({
       "account.email": email,
     });
+  }
 
-    return user;
+  async findById(id: string) {
+    return this.collection.findOne<User>({
+      id,
+    });
   }
 
   async emailExists(email: string) {
