@@ -31,8 +31,9 @@ function registerWebSocketServer(wss: WebSocketServer) {
 
     console.log(`User ${userId} connected with sesssion`, sessionId);
 
-    // Subscribe all clients to a personal namespace of the user,
-    // to allow sending events to all devices of that user.
+    // Subscribe all clients to a personal namespace of the user.
+    // This enables sending events to all connected devices of that user,
+    // by doing client.to(`user_${userId}`).send(...)
     client.subscribe(`user_${userId}`);
 
     ws.on("close", () => {
@@ -53,6 +54,7 @@ function registerWebSocketServer(wss: WebSocketServer) {
       }
 
       switch (event.type) {
+        // TODO: schema validation, pass inferred type of data to the handler
         case "chat:direct-message":
           chatHandler.directMessage(client, event.data, userId);
           break;

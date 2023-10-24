@@ -100,7 +100,7 @@ export class WsClient<
   }
 
   /**
-   * Subscribe to a specified namespace to receive events sent to it.
+   * Subscribe to the specified namespace to receive events sent to it.
    */
   subscribe(namespace: string) {
     this.socketClientManager._joinNamespace(namespace, this);
