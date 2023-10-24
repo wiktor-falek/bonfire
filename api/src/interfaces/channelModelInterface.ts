@@ -1,5 +1,5 @@
 import type { Result } from "resultat";
-import type Message from "../entities/message.js";
+import type { Message } from "../entities/message.js";
 import type { MongoError, ObjectId } from "mongodb";
 
 export type ChannelType = {

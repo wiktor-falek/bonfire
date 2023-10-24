@@ -1,4 +1,4 @@
-import type Message from "../entities/message.js";
+import type { Message } from "../entities/message.js";
 import { Ok, Err } from "resultat";
 import {
   ObjectId,

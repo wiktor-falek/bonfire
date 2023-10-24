@@ -1,7 +1,7 @@
 import { Err, Ok } from "resultat";
 import UserModel from "../models/userModel.js";
 import bcrypt from "bcrypt";
-import User from "../entities/user.js";
+import { createUser } from "../entities/user.js";
 import { v4 as uuidv4 } from "uuid";
 import type SessionStore from "../stores/sessionStore.js";
 
@@ -25,7 +25,7 @@ class AuthService {
 
     const hash = await bcrypt.hash(password, 10);
 
-    const user = new User({ email, username, displayName, hash });
+    const user = createUser({ email, username, displayName, hash });
 
     return this.userModel.createUser(user);
   }

@@ -1,5 +1,5 @@
 import type { Result } from "resultat";
-import type User from "../entities/user.js";
+import type { User } from "../entities/user.js";
 
 export type IUserModel = {
   findByUsername(username: string): Promise<User | null>;

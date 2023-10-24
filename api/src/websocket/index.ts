@@ -4,9 +4,10 @@ import getCookie from "../utils/getCookie.js";
 import { sessionStore } from "../instances.js";
 import { deserialize } from "./serialization.js";
 import chatHandler from "./handlers/chatHandler.js";
+import type { ServerToClientEvents } from "./types.js";
 
 function registerWebSocketServer(wss: WebSocketServer) {
-  const socketClientManager = new SocketClientManager();
+  const socketClientManager = new SocketClientManager<ServerToClientEvents>();
 
   wss.on("listening", () => {
     console.log("WebSocket server listening on ws://localhost:3000");

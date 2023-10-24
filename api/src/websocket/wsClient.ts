@@ -3,10 +3,17 @@ import { WebSocket } from "ws";
 import { serialize, type JSONSerializable } from "./serialization.js";
 import type SocketClientManager from "./socketClientManager.js";
 
-export class WsClient {
+type Key<Events> = Extract<keyof Events, string>;
+
+export class WsClient<
+  Events extends { [K in keyof Events]: JSONSerializable }
+> {
   readonly ws: WebSocket;
   readonly id: string;
-  constructor(ws: WebSocket, private socketClientManager: SocketClientManager) {
+  constructor(
+    ws: WebSocket,
+    private socketClientManager: SocketClientManager<Events>
+  ) {
     this.ws = ws;
     this.id = uuidv4();
   }
@@ -16,7 +23,7 @@ export class WsClient {
    * @example
    * client.send("event", "Hello, client!");
    */
-  send(eventName: string, data: JSONSerializable) {
+  send<K extends Key<Events>>(eventName: K, data: Events[K]) {
     this._send(eventName, data, [this]);
   }
 
@@ -42,7 +49,7 @@ export class WsClient {
          * @example
          * client.broadcast.to("room").send("event", "Hello, everyone in the room except me!");
          */
-        send: (eventName: string, data: JSONSerializable) =>
+        send: <K extends Key<Events>>(eventName: K, data: Events[K]) =>
           this.broadcastSendToNamespace(namespace, eventName, data),
       }),
     };
@@ -60,7 +67,7 @@ export class WsClient {
        * @example
        * client.to("room").send("event", "Hello, room!");
        */
-      send: (eventName: string, data: JSONSerializable) =>
+      send: <K extends Key<Events>>(eventName: K, data: Events[K]) =>
         this.sendToNamespace(namespace, eventName, data),
     };
   }
@@ -77,7 +84,7 @@ export class WsClient {
        * @example
        * client.toClient("client-id").send("event", "Hello, specific client!");
        */
-      send: (eventName: string, data: JSONSerializable) =>
+      send: <K extends Key<Events>>(eventName: K, data: Events[K]) =>
         this.sendToClient(clientId, eventName, data),
     };
   }
@@ -87,7 +94,7 @@ export class WsClient {
    * @example
    * client.sendToAll("event", "Hello, all connected clients!");
    */
-  sendToAll(eventName: string, data: JSONSerializable) {
+  sendToAll<K extends Key<Events>>(eventName: K, data: Events[K]) {
     const clients = this.socketClientManager.clients.values();
     this._send(eventName, data, clients);
   }
@@ -106,35 +113,38 @@ export class WsClient {
     this.socketClientManager._leaveNamespace(namespace, this);
   }
 
-  private broadcastSendToAll(eventName: string, data: JSONSerializable) {
+  private broadcastSendToAll<K extends Key<Events>>(
+    eventName: K,
+    data: Events[K]
+  ) {
     const clients = this.socketClientManager.clients.values();
     this._sendBroadcast(eventName, data, clients);
   }
 
-  private sendToNamespace(
+  private sendToNamespace<K extends Key<Events>>(
     namespace: string,
-    eventName: string,
-    data: JSONSerializable
+    eventName: K,
+    data: Events[K]
   ) {
     const clients =
       this.socketClientManager._getClientsFromNamespace(namespace);
     this._send(eventName, data, clients);
   }
 
-  private broadcastSendToNamespace(
+  private broadcastSendToNamespace<K extends Key<Events>>(
     namespace: string,
-    eventName: string,
-    data: JSONSerializable
+    eventName: K,
+    data: Events[K]
   ) {
     const clients =
       this.socketClientManager._getClientsFromNamespace(namespace);
     this._sendBroadcast(eventName, data, clients);
   }
 
-  private sendToClient(
+  private sendToClient<K extends Key<Events>>(
     clientId: string,
-    eventName: string,
-    data: JSONSerializable
+    eventName: K,
+    data: Events[K]
   ) {
     const client = this.socketClientManager.clients.get(clientId);
     if (client) {
@@ -142,20 +152,20 @@ export class WsClient {
     }
   }
 
-  private _send(
-    eventName: string,
-    data: JSONSerializable,
-    clients: WsClient[] | IterableIterator<WsClient>
+  private _send<K extends Key<Events>>(
+    eventName: K,
+    data: Events[K],
+    clients: WsClient<Events>[] | IterableIterator<WsClient<Events>>
   ) {
     for (const client of clients) {
       client.ws.send(serialize(eventName, data));
     }
   }
 
-  private _sendBroadcast(
-    eventName: string,
-    data: JSONSerializable,
-    clients: WsClient[] | IterableIterator<WsClient>
+  private _sendBroadcast<K extends Key<Events>>(
+    eventName: K,
+    data: Events[K],
+    clients: WsClient<Events>[] | IterableIterator<WsClient<Events>>
   ) {
     for (const client of clients) {
       if (this.ws !== client.ws) {

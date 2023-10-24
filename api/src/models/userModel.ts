@@ -1,6 +1,6 @@
 import { Ok, Err } from "resultat";
 import type { Collection, Db } from "mongodb";
-import type User from "../entities/user.js";
+import type { User } from "../entities/user.js";
 import type { IUserModel } from "../interfaces/userModelInterface.js";
 
 class UserModel implements IUserModel {

@@ -1,6 +1,7 @@
 import { messageService } from "../../instances.js";
 import { z } from "zod";
 import type WsClient from "../wsClient.js";
+import type { ServerToClientEvents } from "../types.js";
 
 const sendDirectMessageSchema = z
   .object({
@@ -9,7 +10,11 @@ const sendDirectMessageSchema = z
   })
   .strict();
 
-async function directMessage(client: WsClient, data: any, userId: string) {
+async function directMessage(
+  client: WsClient<ServerToClientEvents>,
+  data: any,
+  userId: string
+) {
   // TODO: find a cleaner solution
   const validation = sendDirectMessageSchema.safeParse(data);
   if (!validation.success) {
@@ -30,13 +35,10 @@ async function directMessage(client: WsClient, data: any, userId: string) {
 
   const message = result.val;
 
-  // TODO: send ACK instead
-  // client.send("chat:message", message.toJson());
+  client.send("ACK_chat:message", null);
 
   const userClientsNamespace = `user_${recipientId}`;
-  console.log(userClientsNamespace);
-  // client.sendToAll("chat:message", message.toJson());
-  client.to(userClientsNamespace).send("chat:message", message.toJson());
+  client.to(userClientsNamespace).send("chat:message", message);
 }
 
 export default {

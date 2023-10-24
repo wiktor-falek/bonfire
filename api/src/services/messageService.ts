@@ -1,4 +1,4 @@
-import Message from "../entities/message.js";
+import { createMessage } from "../entities/message.js";
 import type { ObjectId } from "mongodb";
 import { getChannelId } from "../utils/id.js";
 import type ChannelModel from "../models/channelModel.js";
@@ -17,15 +17,14 @@ class MessageService {
     content: string
   ) {
     const channelId = getChannelId(senderId, recipientId);
-    const message = new Message(senderId, content);
+    const message = createMessage(senderId, content);
 
     console.log(message);
     const validation = messageEntitySchema.safeParse(message);
-    
+
     if (!validation.success) {
       return Err("Schema validation failed");
     }
-
 
     return this.channelModel.sendDirectMessage(channelId, recipientId, message);
   }

@@ -1,25 +1,17 @@
 import { ObjectId } from "mongodb";
 
-class Message {
-  _id: ObjectId;
+export type Message = {
+  _id: string;
   senderId: string;
   content: string;
   timestamp: number;
+};
 
-  constructor(senderId: string, content: string) {
-    this._id = new ObjectId();
-    this.senderId = senderId;
-    this.content = content;
-    this.timestamp = Date.now();
-  }
-
-  toJson() {
-    return {
-      senderId: this.senderId,
-      content: this.content,
-      timestamp: this.timestamp,
-    };
-  }
+export function createMessage(senderId: string, content: string): Message {
+  return {
+    _id: new ObjectId().toString(),
+    senderId,
+    content,
+    timestamp: Date.now(),
+  };
 }
-
-export default Message;

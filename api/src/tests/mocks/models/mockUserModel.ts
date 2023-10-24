@@ -1,5 +1,5 @@
 import { Ok } from "resultat";
-import User from "../../../entities/user.js";
+import { createUser, type User } from "../../../entities/user.js";
 import type { IUserModel } from "../../../interfaces/userModelInterface.js";
 
 class MockUserModel implements IUserModel {
@@ -13,13 +13,13 @@ class MockUserModel implements IUserModel {
 
   findByEmail(email: string) {
     return Promise.resolve(
-      new User({ username: "", displayName: "", email, hash: "" })
+      createUser({ username: "", displayName: "", email, hash: "" })
     );
   }
 
   findByUsername(username: string) {
     return Promise.resolve(
-      new User({ username: "", displayName: "", email: "", hash: "" })
+      createUser({ username: "", displayName: "", email: "", hash: "" })
     );
   }
 

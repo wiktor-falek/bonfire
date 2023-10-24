@@ -1,12 +1,15 @@
 import { WebSocket } from "ws";
 import WsClient from "./wsClient.js";
+import type { JSONSerializable } from "./serialization.js";
 
-class SocketClientManager {
+class SocketClientManager<
+  Events extends { [K in keyof Events]: JSONSerializable }
+> {
   // client.id to WsClient instance mapping.
-  clients: Map<string, WsClient>;
+  clients: Map<string, WsClient<Events>>;
 
   // Namespace to subscribed clients mapping.
-  private namespaces: Map<string, Set<WsClient>>;
+  private namespaces: Map<string, Set<WsClient<Events>>>;
 
   // client.id to subscribed namespaces mapping.
   private clientSubscribedNamespaces: Map<string, Set<string>>;
@@ -17,12 +20,12 @@ class SocketClientManager {
   }
 
   addClient(ws: WebSocket) {
-    const client = new WsClient(ws, this);
+    const client = new WsClient<Events>(ws, this);
     this.clients.set(client.id, client);
     return client;
   }
 
-  deleteClient(client: WsClient) {
+  deleteClient(client: WsClient<Events>) {
     // unsubscribe from all namespaces
     const namespaces = this.clientSubscribedNamespaces.get(client.id);
     if (namespaces) {
@@ -34,7 +37,7 @@ class SocketClientManager {
     return this.clients.delete(client.id);
   }
 
-  _joinNamespace(namespace: string, client: WsClient) {
+  _joinNamespace(namespace: string, client: WsClient<Events>) {
     const namespaceSet = this.namespaces.get(namespace) ?? new Set();
     namespaceSet.add(client);
     this.namespaces.set(namespace, namespaceSet);
@@ -48,7 +51,7 @@ class SocketClientManager {
     this.clientSubscribedNamespaces.set(client.id, clientNamespacesSet);
   }
 
-  _leaveNamespace(namespace: string, client: WsClient) {
+  _leaveNamespace(namespace: string, client: WsClient<Events>) {
     const namespaceSet = this.namespaces.get(namespace);
     if (namespaceSet === undefined) {
       return false;
