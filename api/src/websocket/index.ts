@@ -21,9 +21,7 @@ function registerWebSocketServer(wss: WebSocketServer) {
     const result = await sessionStore.getSession(sessionId);
     if (!result.ok) {
       client.send("error", { reason: "Authentication Failed" });
-      client.ws.close();
-      socketClientManager.deleteClient(client);
-      return;
+      return socketClientManager.deleteClient(client);
     }
 
     const session = result.val;
@@ -31,9 +29,9 @@ function registerWebSocketServer(wss: WebSocketServer) {
 
     console.log(`User ${userId} connected with sesssion`, sessionId);
 
-    // Subscribe all clients to a personal namespace of the user.
+    // Subscribe the client to a personal namespace of the user.
     // This enables sending events to all connected devices of that user,
-    // by doing client.to(`user_${userId}`).send(...)
+    // by using client.to(`user_${userId}`).send(...)
     client.subscribe(`user_${userId}`);
 
     ws.on("close", () => {

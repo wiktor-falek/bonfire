@@ -34,6 +34,8 @@ class SocketClientManager<
       }
     }
 
+    client.ws.close();
+
     return this.clients.delete(client.id);
   }
 
