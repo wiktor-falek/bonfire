@@ -1,26 +1,19 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import HamburgerMenu from "../../components/HamburgerMenu.vue";
 import Panel from "../../components/app/Panel.vue";
 import getMessages, { type Message } from "../../api/messages/getMessages";
 import formatTimestamp from "../../utils/formatTimestamp";
 import socket, { socketEmitter } from "../../socket";
+import getUserProfileById, {
+  type UserProfile,
+} from "../../api/users/getUserProfileById";
 
 const props = defineProps<{ channelId: string }>();
 
 const messages = ref<Message[]>();
 
-const fetchMessages = async () => {
-  messages.value = await getMessages(props.channelId);
-};
-
-fetchMessages();
-
-const user = ref({
-  displayName: "Qbi",
-  username: "Qbibubi",
-  id: "308487555110575308672",
-});
+const user = ref<UserProfile>();
 
 const messagesDiv = ref<HTMLElement>();
 
@@ -28,8 +21,7 @@ const content = ref("");
 
 function handleSendMessage() {
   const trimmedContent = content.value.trim();
-  if (trimmedContent === "") return;
-  console.log("sending chat:direct-message");
+  if (trimmedContent === "" || !user.value) return;
   socket.send(
     JSON.stringify({
       type: "chat:direct-message",
@@ -46,6 +38,29 @@ function handleSendMessage() {
 socketEmitter.on("chat:message", (message) => {
   messages.value?.push(message);
 });
+
+function loadMessagess(channelId: string) {
+  getMessages(channelId).then((_messages) => {
+    messages.value = _messages;
+  });
+}
+
+function loadUser(userId: string = "755308752261532161188") {
+  getUserProfileById(userId).then((_user) => {
+    console.log({ _user });
+    user.value = _user;
+  });
+}
+
+loadMessagess(props.channelId);
+loadUser();
+
+watch(props, () => {
+  user.value = undefined;
+  messages.value = [];
+  loadMessagess(props.channelId);
+  loadUser();
+});
 </script>
 
 <template>
@@ -55,8 +70,8 @@ socketEmitter.on("chat:message", (message) => {
 
       <div class="flex-between">
         <div class="user-info">
-          <p class="user-info__display-name">{{ user.displayName }}</p>
-          <p class="user-info__username">@{{ user.username }}</p>
+          <p class="user-info__display-name">{{ user?.displayName }}</p>
+          <p class="user-info__username">@{{ user?.username }}</p>
         </div>
         <div class="actions">
           <button class="actions__action"></button>

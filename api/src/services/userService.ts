@@ -6,11 +6,15 @@ class UserService {
 
   async getUserProfileInfo(userId: string) {
     const user = await this.userModel.findById(userId);
-    if (user === null) return Err("Failed to get user profile");
+
+    if (user === null) {
+      return Err("Failed to get user profile");
+    }
 
     return Ok({
-      displayName: user.account.displayName,
+      id: user.id,
       username: user.account.username,
+      displayName: user.account.displayName,
       imgSrc: "",
     });
   }

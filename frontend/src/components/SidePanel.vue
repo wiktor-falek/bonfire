@@ -49,7 +49,7 @@ type Conversation = {
 };
 const conversations = ref<Conversation[]>([
   { name: "Qbi", id: "213742069213742069420" },
-  { name: "Test", id: "213742069213742069420" },
+  { name: "Test", id: "213742069213742069999" },
 ]);
 
 function handleConversationClose(index: number) {

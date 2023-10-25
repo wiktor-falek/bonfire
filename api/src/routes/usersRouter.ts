@@ -3,7 +3,7 @@ import validate from "../middlewares/validate.js";
 import {
   getCurrentUserProfileInfo,
   getUserProfileInfoById,
-} from "../controllers/userControllers.js";
+} from "../controllers/userController.js";
 import authGuard from "../middlewares/authGuard.js";
 import { getUserProfileByIdSchema } from "../validators/userValidators.js";
 
