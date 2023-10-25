@@ -20,7 +20,7 @@ const messagesDiv = ref<HTMLElement>();
 const content = ref("");
 
 function handleSendMessage() {
-  const trimmedContent = content.value.trim();
+  const trimmedContent = content.value.trimEnd();
   if (trimmedContent === "" || !user.value) return;
   socket.send(
     JSON.stringify({
