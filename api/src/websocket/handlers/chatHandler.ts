@@ -35,7 +35,8 @@ async function directMessage(
 
   const message = result.val;
 
-  client.send("ACK_chat:message", null);
+  // TODO: client.send("ACK_chat:message", null);
+  client.send("chat:message", message);
 
   const userClientsNamespace = `user_${recipientId}`;
   client.to(userClientsNamespace).send("chat:message", message);
