@@ -1,9 +1,9 @@
-import { createMessage } from "../entities/message.js";
 import type { ObjectId } from "mongodb";
-import { getChannelId } from "../utils/id.js";
 import type ChannelModel from "../models/channelModel.js";
 import { Err } from "resultat";
+import { createMessage } from "../entities/message.js";
 import { messageEntitySchema } from "../validators/messageValidators.js";
+import { getDirectMessageChannelId } from "../utils/id.js";
 
 class MessageService {
   constructor(private channelModel: ChannelModel) {}
@@ -16,7 +16,8 @@ class MessageService {
     recipientId: string,
     content: string
   ) {
-    const channelId = getChannelId(senderId, recipientId);
+    // const channelId = "213742069213742069420";
+    const channelId = await getDirectMessageChannelId(senderId, recipientId);
     const message = createMessage(senderId, content);
 
     console.log(message);

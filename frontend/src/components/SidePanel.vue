@@ -5,17 +5,16 @@ import router from "./../router";
 import Modal from "./Modal.vue";
 import emitter from "../emitter";
 import getCurrentProfile from "../api/users/getCurrentProfile";
+import { UserProfile } from "../api/users/getUserProfileById";
+import { getDirectMessageChannelId } from "../utils/id";
 
 emitter.on("openSidePanel", () => {
   isOpenOnMobile.value = true;
 });
 
 const isOpenOnMobile = ref(false);
-const userProfile = ref({
-  username: "",
-  displayName: "",
-  imgSrc: "",
-});
+
+const userProfile = ref<UserProfile>();
 
 async function fetchUserProfile() {
   userProfile.value = await getCurrentProfile();
@@ -42,23 +41,33 @@ const servers: Server[] = [
   },
 ];
 
-type Conversation = {
-  name: string;
-  id: string;
-  imgSrc?: string;
-};
-const conversations = ref<Conversation[]>([
-  { name: "Qbi", id: "213742069213742069420" },
-  { name: "Test", id: "213742069213742069999" },
+const userProfiles = ref<UserProfile[]>([
+  {
+    id: "755308752261532161188",
+    username: "qbibubi",
+    displayName: "Qbi",
+    imgSrc: "",
+  },
+  {
+    id: "755308752261532142069",
+    username: "mockerson",
+    displayName: "mock",
+    imgSrc: "",
+  },
 ]);
 
 function handleConversationClose(index: number) {
-  conversations.value.splice(index, 1);
+  userProfiles.value.splice(index, 1);
 }
 
-function handleConversationClick(id: string) {
+async function handleConversationClick(profileId: string) {
+  if (!userProfile.value?.id) return;
+
   isOpenOnMobile.value = false;
-  router.push(`/app/channel/${id}`);
+
+  const userId = userProfile.value.id;
+  const channelId = await getDirectMessageChannelId(userId, profileId);
+  router.push(`/app/channel/${channelId}`);
 }
 
 const createConversationModalIsOpen = ref(false);
@@ -142,15 +151,15 @@ function handleCloseCreateConversationModal() {
       <div class="direct-messages__conversations">
         <div
           class="direct-messages__conversations__conversation"
-          v-for="(conversation, index) in conversations"
-          :key="conversation.name"
-          @click="handleConversationClick(conversation.id)"
+          v-for="(profile, index) in userProfiles"
+          :key="profile.username"
+          @click="handleConversationClick(profile.id)"
         >
           <div
             class="direct-messages__conversations__conversation__image"
           ></div>
           <p class="direct-messages__conversations__conversation__name">
-            {{ conversation.name }}
+            {{ profile.displayName }}
           </p>
           <button
             class="direct-messages__conversations__conversation__close"
@@ -175,10 +184,10 @@ function handleCloseCreateConversationModal() {
           <div class="user-card__profile__image"></div>
           <div class="user-card__profile__text">
             <p class="user-card__profile__text__display-name">
-              {{ userProfile.displayName }}
+              {{ userProfile?.displayName }}
             </p>
             <p class="user-card__profile__text__username">
-              @{{ userProfile.username }}
+              @{{ userProfile?.username }}
             </p>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import crypto, { createHash } from "node:crypto";
+import crypto from "node:crypto";
 
 export function generateNumericId(length: number): string {
   const id = Array.from({ length }, () =>
@@ -8,12 +8,19 @@ export function generateNumericId(length: number): string {
 }
 
 /**
- * Deterministically generate channelId using two ids of users
+ * Calculates the channel id for direct messages between two users.
  */
-export function getChannelId(firstUserId: string, secondUserId: string) {
-  // const combined = firstUserId + secondUserId;
-  // const hash = createHash("sha256").update(combined, "utf8").digest("hex");
-  // const numeric = BigInt("0x" + hash).toString();
-  // return numeric.slice(0, 21);
-  return "213742069213742069420";
+export async function getDirectMessageChannelId(
+  firstUserId: string,
+  secondUserId: string
+) {
+  const sortedIds = [firstUserId, secondUserId].sort().join("");
+
+  const encoder = new TextEncoder();
+  const data = encoder.encode(sortedIds);
+
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer)).join("");
+
+  return hashArray.slice(0, 21);
 }

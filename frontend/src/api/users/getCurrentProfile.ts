@@ -1,6 +1,7 @@
 import api from "../configs/axiosConfig";
 
 type UserProfile = {
+  id: string;
   username: string;
   displayName: string;
   imgSrc: string;

@@ -8,12 +8,14 @@ import socket, { socketEmitter } from "../../socket";
 import getUserProfileById, {
   type UserProfile,
 } from "../../api/users/getUserProfileById";
+import getCurrentProfile from "../../api/users/getCurrentProfile";
 
 const props = defineProps<{ channelId: string }>();
 
 const messages = ref<Message[]>();
 
-const user = ref<UserProfile>();
+const currentUserProfile = ref<UserProfile>(); // TODO: move to store
+const otherUserProfile = ref<UserProfile>();
 
 const messagesDiv = ref<HTMLElement>();
 
@@ -21,12 +23,17 @@ const content = ref("");
 
 function handleSendMessage() {
   const trimmedContent = content.value.trimEnd();
-  if (trimmedContent === "" || !user.value) return;
+  if (
+    trimmedContent === "" ||
+    !currentUserProfile.value ||
+    !otherUserProfile.value
+  )
+    return;
   socket.send(
     JSON.stringify({
       type: "chat:direct-message",
       data: {
-        recipientId: user.value.id,
+        recipientId: otherUserProfile.value.id,
         content: trimmedContent,
       },
     })
@@ -45,21 +52,29 @@ function loadMessagess(channelId: string) {
   });
 }
 
+// TODO: unhardcode userId
 function loadUser(userId: string = "755308752261532161188") {
-  getUserProfileById(userId).then((_user) => {
-    console.log({ _user });
-    user.value = _user;
+  // TODO: move to store
+  getCurrentProfile().then((profile) => {
+    currentUserProfile.value = profile;
+  });
+
+  getUserProfileById(userId).then((profile) => {
+    otherUserProfile.value = profile;
   });
 }
 
-loadMessagess(props.channelId);
-loadUser();
+function load() {
+  loadUser();
+  loadMessagess(props.channelId);
+}
+
+load();
 
 watch(props, () => {
-  user.value = undefined;
+  otherUserProfile.value = undefined;
   messages.value = [];
-  loadMessagess(props.channelId);
-  loadUser();
+  load();
 });
 </script>
 
@@ -70,8 +85,10 @@ watch(props, () => {
 
       <div class="flex-between">
         <div class="user-info">
-          <p class="user-info__display-name">{{ user?.displayName }}</p>
-          <p class="user-info__username">@{{ user?.username }}</p>
+          <p class="user-info__display-name">
+            {{ otherUserProfile?.displayName }}
+          </p>
+          <p class="user-info__username">@{{ otherUserProfile?.username }}</p>
         </div>
         <div class="actions">
           <button class="actions__action"></button>
