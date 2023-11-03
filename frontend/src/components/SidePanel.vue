@@ -430,9 +430,14 @@ hr {
 
 .menu__search {
   display: flex;
-  justify-content: space-between;
-  height: 36px;
-  gap: 8px;
+  justify-content: center;
+  gap: 6px;
+  margin: 0;
+  height: 42px;
+  padding: 3px;
+  padding-bottom: 9px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #47484b;
 }
 
 .menu__search__find {
@@ -449,7 +454,8 @@ hr {
   display: flex;
   align-items: center;
   justify-content: center;
-  aspect-ratio: 1 / 1;
+  width: 28px;
+  height: 28px;
 }
 
 .direct-messages__conversations {
