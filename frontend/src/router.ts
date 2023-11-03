@@ -46,6 +46,14 @@ const router = createRouter({
           component: AppHome,
         },
         {
+          path: "friends",
+          component: AppHome,
+        },
+        {
+          path: "stuff",
+          component: AppHome,
+        },
+        {
           path: "channel/:channelId",
           component: AppChannel,
           props: true,

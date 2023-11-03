@@ -54,6 +54,66 @@ const userProfiles = ref<UserProfile[]>([
     displayName: "mock",
     imgSrc: "",
   },
+  {
+    id: "755308752261532142069",
+    username: "mockerson",
+    displayName: "mock",
+    imgSrc: "",
+  },
+  {
+    id: "755308752261532142069",
+    username: "mockerson",
+    displayName: "mock",
+    imgSrc: "",
+  },
+  {
+    id: "755308752261532142069",
+    username: "mockerson",
+    displayName: "mock",
+    imgSrc: "",
+  },
+  {
+    id: "755308752261532142069",
+    username: "mockerson",
+    displayName: "mock",
+    imgSrc: "",
+  },
+  {
+    id: "755308752261532142069",
+    username: "mockerson",
+    displayName: "mock",
+    imgSrc: "",
+  },
+  {
+    id: "755308752261532142069",
+    username: "mockerson",
+    displayName: "mock",
+    imgSrc: "",
+  },
+  {
+    id: "755308752261532142069",
+    username: "mockerson",
+    displayName: "mock",
+    imgSrc: "",
+  },
+  {
+    id: "755308752261532142069",
+    username: "mockerson",
+    displayName: "mock",
+    imgSrc: "",
+  },
+  {
+    id: "755308752261532142069",
+    username: "mockerson",
+    displayName: "mock",
+    imgSrc: "",
+  },
+  {
+    id: "755308752261532142069",
+    username: "mockerson",
+    displayName: "mock",
+    imgSrc: "",
+  },
 ]);
 
 function handleConversationClose(index: number) {
@@ -118,67 +178,101 @@ function handleCloseCreateConversationModal() {
         </svg>
       </button>
     </div>
-    <div class="direct-messages">
-      <strong class="direct-messages__heading">Direct Messages</strong>
-      <div class="direct-messages__search">
-        <input
-          type="text"
-          placeholder="Find Conversation..."
-          class="direct-messages__search__find"
-        />
-        <button
-          class="direct-messages__search__create"
-          @click="handleOpenCreateConversationModal"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill="none"
-              stroke="#ddd"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 5v14m-7-7h14"
-            />
-          </svg>
-        </button>
-      </div>
-
-      <div class="direct-messages__conversations">
-        <div
-          class="direct-messages__conversations__conversation"
-          v-for="(profile, index) in userProfiles"
-          :key="profile.username"
-          @click="handleConversationClick(profile.id)"
-        >
-          <div
-            class="direct-messages__conversations__conversation__image"
-          ></div>
-          <p class="direct-messages__conversations__conversation__name">
-            {{ profile.displayName }}
-          </p>
+    <div class="main-panel">
+      <div class="menu">
+        <div class="menu__search">
+          <input
+            type="text"
+            placeholder="Find Conversation..."
+            class="menu__search__find"
+          />
           <button
-            class="direct-messages__conversations__conversation__close"
-            @click.stop="handleConversationClose(index)"
+            class="menu__search__create"
+            @click="handleOpenCreateConversationModal"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
             >
               <path
-                fill="currentColor"
-                d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326a.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275a.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018a.751.751 0 0 1-.018-1.042L6.94 8L3.72 4.78a.75.75 0 0 1 0-1.06Z"
+                fill="none"
+                stroke="#ddd"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 5v14m-7-7h14"
               />
             </svg>
           </button>
         </div>
+
+        <RouterLink
+          to="/app/home"
+          class="menu__option"
+          :class="{
+            'menu__option--selected':
+              router.currentRoute.value.fullPath.includes('/app/home'),
+          }"
+          >News</RouterLink
+        >
+        <RouterLink
+          to="/app/friends"
+          class="menu__option"
+          :class="{
+            'menu__option--selected':
+              router.currentRoute.value.fullPath.includes('/app/friends'),
+          }"
+          >Friends</RouterLink
+        >
+        <RouterLink
+          to="/app/stuff"
+          class="menu__option"
+          :class="{
+            'menu__option--selected':
+              router.currentRoute.value.fullPath.includes('/app/stuff'),
+          }"
+          >Stuff</RouterLink
+        >
       </div>
+
+      <strong class="direct-messages__heading">Direct Messages</strong>
+
+      <div class="direct-messages">
+        <div class="direct-messages__conversations">
+          <div
+            class="direct-messages__conversations__conversation"
+            v-for="(profile, index) in userProfiles"
+            :key="profile.username"
+            @click="handleConversationClick(profile.id)"
+          >
+            <div
+              class="direct-messages__conversations__conversation__image"
+            ></div>
+            <p class="direct-messages__conversations__conversation__name">
+              {{ profile.displayName }}
+            </p>
+            <button
+              class="direct-messages__conversations__conversation__close"
+              @click.stop="handleConversationClose(index)"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill="currentColor"
+                  d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326a.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275a.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018a.751.751 0 0 1-.018-1.042L6.94 8L3.72 4.78a.75.75 0 0 1 0-1.06Z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div class="user-card">
         <div class="user-card__profile">
           <div class="user-card__profile__image"></div>
@@ -284,28 +378,64 @@ hr {
   border-radius: 16px;
 }
 
-.direct-messages {
+.main-panel {
   width: 100%;
   display: flex;
   flex-direction: column;
+  gap: 10px;
+}
+
+.menu {
+  padding-left: 6px;
+  padding-right: 6px;
+  padding-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.menu__option {
+  all: unset;
+  font-weight: bold;
+  color: #bdbcbc;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  padding-left: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.menu__option:hover:not(.menu__option--selected) {
+  background-color: #38383a;
+}
+
+.menu__option--selected {
+  background-color: #404146;
+  transition: background-color 0.2s ease-out;
+}
+
+.direct-messages {
+  flex: 1;
+  overflow-y: auto;
 }
 
 .direct-messages__heading {
-  padding-top: 15px;
-  padding-bottom: 15px;
-  padding-left: 10px;
+  padding-left: 16px;
+  color: #918d8d;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
 }
 
-.direct-messages__search {
+.menu__search {
   display: flex;
   justify-content: space-between;
   height: 36px;
-  margin-bottom: 12px;
-  margin-left: 10px;
   gap: 8px;
 }
 
-.direct-messages__search__find {
+.menu__search__find {
   border: none;
   background-color: #212224;
   padding-left: 8px;
@@ -314,13 +444,12 @@ hr {
   border-radius: 4px;
 }
 
-.direct-messages__search__create {
+.menu__search__create {
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   aspect-ratio: 1 / 1;
-  margin-right: 8px;
 }
 
 .direct-messages__conversations {
