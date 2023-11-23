@@ -4,7 +4,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #313338;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -84,6 +84,12 @@ ul,
 ol {
   padding-left: 14px;
   margin: 0;
+}
+
+hr {
+  all: unset;
+  margin-top: -1px;
+  border-top: 1px solid var(--border-color-1);
 }
 
 /* TODO: organize global styles */

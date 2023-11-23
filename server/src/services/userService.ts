@@ -1,6 +1,13 @@
 import { Err, Ok } from "resultat";
 import type UserModel from "../models/userModel.js";
 
+type UserProfile = {
+  id: string;
+  username: string;
+  displayName: string;
+  imgSrc?: string;
+};
+
 class UserService {
   constructor(private userModel: UserModel) {}
 
@@ -15,8 +22,7 @@ class UserService {
       id: user.id,
       username: user.account.username,
       displayName: user.account.displayName,
-      imgSrc: "",
-    });
+    } as UserProfile);
   }
 }
 

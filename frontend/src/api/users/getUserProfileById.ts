@@ -4,7 +4,7 @@ export type UserProfile = {
   id: string;
   username: string;
   displayName: string;
-  imgSrc: string;
+  imgSrc?: string;
 };
 
 async function getUserProfileById(userId: string) {

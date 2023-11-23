@@ -5,6 +5,7 @@ import Register from "./views/Register.vue";
 import App from "./views/app/App.vue";
 import AppHome from "./views/app/AppHome.vue";
 import AppChannel from "./views/app/AppChannel.vue";
+import AppFriends from "./views/app/AppFriends.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -47,7 +48,7 @@ const router = createRouter({
         },
         {
           path: "friends",
-          component: AppHome,
+          component: AppFriends,
         },
         {
           path: "stuff",

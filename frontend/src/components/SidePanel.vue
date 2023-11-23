@@ -12,6 +12,10 @@ emitter.on("openSidePanel", () => {
   isOpenOnMobile.value = true;
 });
 
+emitter.on("closeSidePanel", () => {
+  isOpenOnMobile.value = false;
+});
+
 const isOpenOnMobile = ref(false);
 
 const userProfile = ref<UserProfile>();
@@ -210,15 +214,17 @@ function handleCloseCreateConversationModal() {
 
         <RouterLink
           to="/app/home"
+          @click="emitter.emit('closeSidePanel')"
           class="menu__option"
           :class="{
             'menu__option--selected':
               router.currentRoute.value.fullPath.includes('/app/home'),
           }"
-          >News</RouterLink
+          >Home</RouterLink
         >
         <RouterLink
           to="/app/friends"
+          @click="emitter.emit('closeSidePanel')"
           class="menu__option"
           :class="{
             'menu__option--selected':
@@ -228,6 +234,7 @@ function handleCloseCreateConversationModal() {
         >
         <RouterLink
           to="/app/stuff"
+          @click="emitter.emit('closeSidePanel')"
           class="menu__option"
           :class="{
             'menu__option--selected':

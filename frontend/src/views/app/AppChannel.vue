@@ -188,7 +188,7 @@ watch(props, () => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: #333333;
+  /* background-color: #333333; */
   gap: 8px;
   overflow-y: scroll;
 }
