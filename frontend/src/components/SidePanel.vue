@@ -325,12 +325,13 @@ function handleCloseCreateConversationModal() {
   display: flex;
   height: 100%;
   z-index: 2;
+  position: fixed;
 }
 
 @media (max-width: 819px) {
   .side-panel {
     /* makes it work well with the overlay when in desktop view */
-    position: fixed;
+    /* position: fixed; */
 
     box-shadow: 9px -4px 32px -6px rgba(20, 20, 20, 0.75);
     -webkit-box-shadow: 9px -4px 32px -6px rgba(20, 20, 20, 0.75);

@@ -15,7 +15,9 @@ import SidePanel from "../../components/SidePanel.vue";
     <div class="wrapper">
       <SidePanel />
 
-      <RouterView></RouterView>
+      <div class="content">
+        <RouterView></RouterView>
+      </div>
     </div>
   </main>
 </template>
@@ -46,10 +48,18 @@ import SidePanel from "../../components/SidePanel.vue";
   align-items: center;
 }
 
+.content {
+  width: 100%;
+}
+
 @media (min-width: 820px) {
   .wrapper {
     display: flex;
     flex-direction: row;
+  }
+
+  .content {
+    margin-left: 300px;
   }
 }
 </style>
