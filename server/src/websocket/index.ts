@@ -27,7 +27,7 @@ function registerWebSocketServer(wss: WebSocketServer) {
     const session = result.val;
     const { userId } = session;
 
-    console.log(`User ${userId} connected with sesssion`, sessionId);
+    console.log(`User ${userId} connected with sesssion ${sessionId}`);
 
     // Subscribe the client to a personal namespace of the user.
     // This enables sending events to all connected devices of that user,
