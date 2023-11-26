@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import HamburgerMenu from "../../components/HamburgerMenu.vue";
-import Panel from "../../components/app/Panel.vue";
+import Header from "../../components/app/Header.vue";
 </script>
 
 <template>
-  <Panel :border-bottom="true" class="desktop-hide">
+  <Header class="desktop-hide">
     <HamburgerMenu />
-  </Panel>
+  </Header>
 
   <div class="content">
     <div class="buttons">

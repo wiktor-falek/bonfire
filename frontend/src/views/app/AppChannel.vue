@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import HamburgerMenu from "../../components/HamburgerMenu.vue";
-import Panel from "../../components/app/Panel.vue";
+import Header from "../../components/app/Header.vue";
+import Footer from "../../components/app/Footer.vue";
 import getMessages, { type Message } from "../../api/messages/getMessages";
 import formatTimestamp from "../../utils/formatTimestamp";
 import socket, { socketEmitter } from "../../socket";
@@ -29,6 +30,7 @@ function handleSendMessage() {
     !otherUserProfile.value
   )
     return;
+
   socket.send(
     JSON.stringify({
       type: "chat:direct-message",
@@ -80,7 +82,7 @@ watch(props, () => {
 
 <template>
   <div id="channel">
-    <Panel :border-bottom="true" class="panel--top">
+    <Header>
       <HamburgerMenu id="hamburger-menu" class="desktop-hide" />
 
       <div class="flex-between">
@@ -96,7 +98,7 @@ watch(props, () => {
           <button class="actions__action"></button>
         </div>
       </div>
-    </Panel>
+    </Header>
 
     <div class="messages">
       <div class="message" v-for="message in messages" ref="messagesDiv">
@@ -113,19 +115,23 @@ watch(props, () => {
           </p>
         </div>
       </div>
+      <!-- TODO: loading screen -->
+      <!-- <div v-if="!messages?.length">
+        <p>There are no messages in this channel</p>
+      </div> -->
     </div>
 
-    <Panel :border-top="true" class="panel--bottom">
+    <Footer class="footer">
       <button class="actions__action"></button>
       <button class="actions__action"></button>
       <input
-        class="panel--bottom__chat-input"
+        class="footer__chat-input"
         type="text"
         v-model="content"
         @keyup.enter="handleSendMessage"
       />
       <button class="actions__action"></button>
-    </Panel>
+    </Footer>
   </div>
 </template>
 
@@ -134,19 +140,19 @@ watch(props, () => {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
+  height: 100vh;
 }
 
 #hamburger-menu {
   margin-right: 16px;
 }
 
-.panel--bottom {
+.footer {
   display: flex;
   gap: 12px;
 }
 
-.panel--bottom__chat-input {
+.footer__chat-input {
   flex: 1;
 }
 

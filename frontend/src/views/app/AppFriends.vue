@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import HamburgerMenu from "../../components/HamburgerMenu.vue";
-import Panel from "../../components/app/Panel.vue";
+import Header from "../../components/app/Header.vue";
 import type { UserProfile } from "../../api/users/getUserProfileById";
 
 type MenuOption = "online" | "offline" | "pending";
@@ -33,9 +33,9 @@ function selectMenuOption(option: MenuOption) {
 </script>
 
 <template>
-  <Panel :border-bottom="true" class="desktop-hide">
+  <Header class="desktop-hide">
     <HamburgerMenu />
-  </Panel>
+  </Header>
 
   <div class="friends">
     <div class="navigation">

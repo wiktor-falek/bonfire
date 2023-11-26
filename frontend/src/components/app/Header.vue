@@ -1,17 +1,9 @@
 <script setup lang="ts">
-const { borderBottom = false, borderTop = false } = defineProps<{
-  borderBottom?: true;
-  borderTop?: true;
-}>();
 </script>
 
 <template>
   <div
     class="panel"
-    :style="{
-      'border-bottom': borderBottom && '1px solid var(--border-color-1)',
-      'border-top': borderTop && '1px solid var(--border-color-1)',
-    }"
   >
     <slot></slot>
   </div>
@@ -27,5 +19,8 @@ const { borderBottom = false, borderTop = false } = defineProps<{
   min-height: 48px;
   padding: 0 10px;
   background-color: #292828;
+  border-bottom: 1px solid var(--border-color-1);
+  position: sticky;
+  top: 0;
 }
 </style>
