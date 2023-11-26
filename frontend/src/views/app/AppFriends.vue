@@ -4,15 +4,11 @@ import HamburgerMenu from "../../components/HamburgerMenu.vue";
 import Header from "../../components/app/Header.vue";
 import type { UserProfile } from "../../api/users/getUserProfileById";
 
-type MenuOption = "online" | "offline" | "pending";
-
-const selectedMenuOption = ref<MenuOption>("online");
-
+type MenuOption = "online" | "offline" | "pending" | "blocked" | "add-friend";
 type Status = "online" | "away" | "dnd" | "offline";
-
 type UserProfileWithStatus = UserProfile & { status: Status };
 
-// TODO: get status of each user
+const selectedMenuOption = ref<MenuOption>("online");
 
 const friendProfiles = ref<UserProfileWithStatus[]>([
   { displayName: "mock", username: "mockerson", id: "123", status: "offline" },
@@ -37,125 +33,151 @@ function selectMenuOption(option: MenuOption) {
     <HamburgerMenu />
   </Header>
 
-  <div class="friends">
-    <div class="navigation">
-      <div class="navigation__top">
-        <h1 class="title">Friends</h1>
-        <button class="add-friend">+ Add Friend</button>
+  <div class="navigation">
+    <h1 class="header">Friends</h1>
+    <div class="navigation__menu">
+      <button
+        @click="selectMenuOption('online')"
+        class="navigation__menu__option"
+      >
+        Online
+      </button>
+      <button
+        @click="selectMenuOption('offline')"
+        class="navigation__menu__option"
+      >
+        Offline
+      </button>
+      <button
+        @click="selectMenuOption('pending')"
+        class="navigation__menu__option"
+      >
+        Pending
+      </button>
+
+      <button
+        @click="selectMenuOption('blocked')"
+        class="navigation__menu__option"
+      >
+        Blocked
+      </button>
+
+      <button
+        @click="selectMenuOption('add-friend')"
+        class="navigation__menu__option"
+        id="add-friend"
+      >
+        Add Friend
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="left">
+      <div v-if="selectedMenuOption === 'add-friend'">
+        <h1>Add Friend</h1>
+        <input type="text" />
       </div>
 
-      <div class="wrapper">
-        <div class="navigation__menu">
-          <button
-            class="navigation__menu__option"
-            @click="selectMenuOption('online')"
-          >
-            Online
-          </button>
-          <button
-            class="navigation__menu__option"
-            @click="selectMenuOption('offline')"
-          >
-            Offline
-          </button>
-          <button
-            class="navigation__menu__option"
-            @click="selectMenuOption('pending')"
-          >
-            Pending
-          </button>
-        </div>
-
+      <div v-else class="user-friends-section">
         <input type="text" name="" id="" class="search" placeholder="Search" />
+        <div class="profiles" v-for="profile in friendProfiles">
+          <hr class="profile__separator" />
+          <!-- <div class="separator"></div> -->
+          <div class="profile">
+            <div class="profile__image">
+              <img src="" />
+            </div>
+            <div class="profile__text">
+              <p class="profile__names">
+                <span class="profile__names__display-name"
+                  >{{ profile.displayName }}&nbsp;</span
+                >
+                <span class="profile__names__username">{{
+                  profile.username
+                }}</span>
+              </p>
+              <p class="profile__status">
+                {{ statusTextMap[profile.status] }}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="profiles" v-for="profile in friendProfiles">
-      <hr class="profile__separator" />
-      <!-- <div class="separator"></div> -->
-      <div class="profile">
-        <div class="profile__image">
-          <img src="" />
-        </div>
-        <div class="profile__text">
-          <p class="profile__names">
-            <span class="profile__names__display-name"
-              >{{ profile.displayName }}&nbsp;</span
-            >
-            <span class="profile__names__username">{{ profile.username }}</span>
-          </p>
-          <p class="profile__status">
-            {{ statusTextMap[profile.status] }}
-          </p>
-        </div>
-      </div>
+    <div class="right">
+      <h1 class="header">Active Now</h1>
     </div>
   </div>
 </template>
 
 <style scoped>
-.friends {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 5px 10px;
+.container {
+  display: flex;
+  flex: 1 200px;
+}
+
+.left {
+  flex: 1;
+}
+
+.right {
+  width: 352px;
+  display: flex;
+}
+
+@media (max-width: 1264px) {
+  .right {
+    display: none;
+  }
 }
 
 .navigation {
-  display: flex;
-  flex-direction: column;
-  max-height: fit-content;
   width: 100%;
+  box-sizing: border-box;
+  padding: 10px 32px;
+  display: flex;
+  max-height: fit-content;
   gap: 10px;
-  align-items: center;
-  max-width: 300px;
   box-sizing: border-box;
 }
 
-.navigation__top {
-  display: flex;
-  max-height: fit-content;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.title {
+.header {
   font-weight: bold;
 }
 
 .navigation__menu {
   display: flex;
-  font-weight: bold;
-  font-size: 0.9rem;
-  gap: 4px;
-  margin-bottom: 8px;
+  gap: 8px;
 }
 
-.navigation__menu > * {
+.navigation__menu__option {
   all: unset;
   cursor: pointer;
   background-color: #38383a;
-  padding: 2px 16px;
-  width: 56px;
+  padding: 0 12px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid var(--border-color-1);
-  border-radius: 8px;
+  border-radius: 4px;
 }
 
-.add-friend {
-  all: unset;
-  cursor: pointer;
-  font-weight: bold;
+#add-friend {
+  background-color: #e26031;
 }
 
 .search {
   all: unset;
   border-radius: 4px;
   padding-left: 5px;
+  --margin-x: 32px;
+  width: calc(100% - calc(var(--margin-x) * 2));
+  margin-left: var(--margin-x);
+  margin-right: var(--margin-x);
+  margin-bottom: 12px;
   box-sizing: border-box;
-  margin-bottom: 8px;
-  width: 100%;
   height: 2em;
   background-color: #212224;
 }
@@ -182,14 +204,24 @@ function selectMenuOption(option: MenuOption) {
   padding: 0 10px;
 }
 
+@media (min-width: 820px) {
+  .profile {
+    height: 64px;
+  }
+
+  .profile__image {
+    margin-bottom: 4px;
+  }
+}
+
 .profile:hover {
   background-color: #404146;
   cursor: pointer;
 }
 
 .profile__image {
-  height: 36px;
-  width: 36px;
+  height: 32px;
+  width: 32px;
   border-radius: 50%;
   border: none;
   background-color: #404146;
