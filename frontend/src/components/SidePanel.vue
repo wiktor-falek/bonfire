@@ -43,6 +43,42 @@ const servers: Server[] = [
   {
     name: "test server 4",
   },
+  {
+    name: "test server 1",
+  },
+  {
+    name: "test server 2",
+  },
+  {
+    name: "test server 3",
+  },
+  {
+    name: "test server 4",
+  },
+  {
+    name: "test server 1",
+  },
+  {
+    name: "test server 2",
+  },
+  {
+    name: "test server 3",
+  },
+  {
+    name: "test server 4",
+  },
+  {
+    name: "test server 1",
+  },
+  {
+    name: "test server 2",
+  },
+  {
+    name: "test server 3",
+  },
+  {
+    name: "test server 4",
+  },
 ];
 
 const userProfiles = ref<UserProfile[]>([
@@ -350,6 +386,16 @@ function handleCloseCreateConversationModal() {
   box-sizing: border-box;
   background-color: #212224;
   overflow-y: auto;
+  scrollbar-width: 0px;
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.sidebar::-webkit-scrollbar {
+  display: none;
 }
 
 #modal--create-conversation {
