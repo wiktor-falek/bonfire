@@ -55,7 +55,7 @@ const userProfiles = ref<UserProfile[]>([
   {
     id: "755308752261532142069",
     username: "mockerson",
-    displayName: "mockkkkkkkkkkkkkkkkkkkkkkkkkk",
+    displayName: "verylongmockerson",
     imgSrc: "",
   },
   {
@@ -476,13 +476,14 @@ hr {
 }
 
 .direct-messages__conversations__conversation {
+  height: 42px;
+  padding: 0 8px;
+  border-radius: 4px;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  height: 42px;
-  border-radius: 4px;
-  padding: 0 8px;
-  gap: 10px;
-  cursor: pointer;
+  justify-content: space-between;
+  overflow: hidden;
 }
 
 .direct-messages__conversations__conversation:hover {
@@ -491,7 +492,7 @@ hr {
 
 .direct-messages__conversations__conversation:hover
   > .direct-messages__conversations__conversation__close {
-  display: block;
+  visibility: visible;
 }
 
 .direct-messages__conversations__conversation__image {
@@ -500,12 +501,16 @@ hr {
   height: 80%;
   aspect-ratio: 1 / 1;
   background-color: #47484b;
+  margin-right: 10px;
 }
 
 .direct-messages__conversations__conversation__name {
-  text-overflow: ellipsis;
   color: #bdbcbc;
   font-weight: 600;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .direct-messages__conversations__conversation__close {
   margin-left: auto;
@@ -516,7 +521,7 @@ hr {
   aspect-ratio: 1 / 1;
   background-color: inherit;
   color: #918d8d;
-  display: none;
+  visibility: hidden;
 }
 
 .direct-messages__conversations__conversation__close svg {
