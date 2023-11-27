@@ -23,6 +23,10 @@ import SidePanel from "../../components/SidePanel.vue";
 </template>
 
 <style scoped>
+main {
+  user-select: none;
+}
+
 .wrapper {
   height: 100vh;
 }
