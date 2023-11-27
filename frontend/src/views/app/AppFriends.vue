@@ -1,20 +1,26 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import HamburgerMenu from "../../components/HamburgerMenu.vue";
 import Header from "../../components/app/Header.vue";
 import type { UserProfile } from "../../api/users/getUserProfileById";
 
-type MenuOption = "online" | "offline" | "pending" | "blocked" | "add-friend";
+type FilterOption = "online" | "offline" | "pending" | "blocked";
+type MenuOption = FilterOption | "add-friend";
+
 type Status = "online" | "away" | "dnd" | "offline";
 type UserProfileWithStatus = UserProfile & { status: Status };
 
 const selectedMenuOption = ref<MenuOption>("online");
 
-const friendProfiles = ref<UserProfileWithStatus[]>([
+const userProfiles = ref<UserProfileWithStatus[]>([
   { displayName: "mock", username: "mockerson", id: "123", status: "offline" },
   { displayName: "mock", username: "mockerson", id: "123", status: "offline" },
   { displayName: "mock", username: "mockerson", id: "123", status: "offline" },
 ]);
+
+const filteredUserProfiles = computed(() =>
+  userProfiles.value.filter((p) => p.status === selectedMenuOption.value)
+);
 
 const statusTextMap: Record<Status, string> = {
   online: "Online",
@@ -39,18 +45,29 @@ function selectMenuOption(option: MenuOption) {
       <button
         @click="selectMenuOption('online')"
         class="navigation__menu__option"
+        :class="{
+          'navigation__menu__option--selected': selectedMenuOption === 'online',
+        }"
       >
         Online
       </button>
       <button
         @click="selectMenuOption('offline')"
         class="navigation__menu__option"
+        :class="{
+          'navigation__menu__option--selected':
+            selectedMenuOption === 'offline',
+        }"
       >
         Offline
       </button>
       <button
         @click="selectMenuOption('pending')"
         class="navigation__menu__option"
+        :class="{
+          'navigation__menu__option--selected':
+            selectedMenuOption === 'pending',
+        }"
       >
         Pending
       </button>
@@ -58,6 +75,10 @@ function selectMenuOption(option: MenuOption) {
       <button
         @click="selectMenuOption('blocked')"
         class="navigation__menu__option"
+        :class="{
+          'navigation__menu__option--selected':
+            selectedMenuOption === 'blocked',
+        }"
       >
         Blocked
       </button>
@@ -65,6 +86,10 @@ function selectMenuOption(option: MenuOption) {
       <button
         @click="selectMenuOption('add-friend')"
         class="navigation__menu__option"
+        :class="{
+          'navigation__menu__option--selected':
+            selectedMenuOption === 'add-friend',
+        }"
         id="add-friend"
       >
         Add Friend
@@ -81,7 +106,12 @@ function selectMenuOption(option: MenuOption) {
 
       <div v-else class="user-friends-section">
         <input type="text" name="" id="" class="search" placeholder="Search" />
-        <div class="profiles" v-for="profile in friendProfiles">
+
+        <p class="user-count">
+          {{ selectedMenuOption }} - {{ filteredUserProfiles.length }}
+        </p>
+
+        <div class="profiles" v-for="profile in filteredUserProfiles">
           <hr class="profile__separator" />
           <!-- <div class="separator"></div> -->
           <div class="profile">
@@ -137,10 +167,13 @@ function selectMenuOption(option: MenuOption) {
   width: 100%;
   box-sizing: border-box;
   padding: 10px 32px;
+  height: 48px;
   display: flex;
   max-height: fit-content;
   gap: 10px;
   box-sizing: border-box;
+  border-bottom: 1px solid #47484b;
+  margin-bottom: 10px;
 }
 
 .header {
@@ -155,17 +188,37 @@ function selectMenuOption(option: MenuOption) {
 .navigation__menu__option {
   all: unset;
   cursor: pointer;
-  background-color: #38383a;
   padding: 0 12px;
   height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 4px;
+  color: #ccc;
+}
+
+.navigation__menu__option:hover {
+  color: #eee;
+  background-color: #404042;
+}
+
+.navigation__menu__option:active {
+  color: white;
+}
+
+.navigation__menu__option--selected {
+  color: white !important;
+  background-color: #4d4d50;
 }
 
 #add-friend {
-  background-color: #e26031;
+  color: white;
+  background-color: #e96434;
+}
+
+#add-friend.navigation__menu__option--selected {
+  color: #ff652c !important;
+  background: none;
 }
 
 .search {
@@ -176,16 +229,26 @@ function selectMenuOption(option: MenuOption) {
   width: calc(100% - calc(var(--margin-x) * 2));
   margin-left: var(--margin-x);
   margin-right: var(--margin-x);
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   box-sizing: border-box;
   height: 2em;
   background-color: #212224;
+}
+
+.user-count {
+  margin-left: 28px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  color: #918d8d;
+  font-weight: bold;
 }
 
 .profiles {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  margin: 0 20px;
 }
 
 .profile__separator {
