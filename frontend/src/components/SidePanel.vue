@@ -55,7 +55,7 @@ const userProfiles = ref<UserProfile[]>([
   {
     id: "755308752261532142069",
     username: "mockerson",
-    displayName: "mock",
+    displayName: "mockkkkkkkkkkkkkkkkkkkkkkkkkk",
     imgSrc: "",
   },
   {
@@ -388,6 +388,8 @@ hr {
 
 .main-panel {
   width: 100%;
+  max-width: 300px;
+  overflow-y: hidden;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -469,7 +471,6 @@ hr {
 .direct-messages__conversations {
   width: 100%;
   height: 100%;
-  overflow-y: auto;
   padding: 0 6px;
   box-sizing: border-box;
 }

@@ -8,7 +8,7 @@ import Header from "../../components/app/Header.vue";
     <HamburgerMenu />
   </Header>
 
-  <div class="content">
+  <div class="home">
     <div class="buttons">
       <button>Explore communities</button>
       <button>Lorem Ipsum</button>
@@ -36,20 +36,14 @@ import Header from "../../components/app/Header.vue";
 </template>
 
 <style scoped>
-main {
-  width: 100vw;
-  min-height: 100vh;
-  background-color: #313338;
-  user-select: none;
-  display: flex;
-  flex-direction: column;
-}
-
-.content {
+.home {
   padding: 10px 10px;
+  min-height: calc(100% - 20px);
   margin: auto;
   max-width: 400px;
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
   gap: 30px;
 }
