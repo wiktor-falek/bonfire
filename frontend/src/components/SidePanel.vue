@@ -536,7 +536,7 @@ hr {
 .user-card {
   display: flex;
   align-items: center;
-  background-color: #232325;
+  background-color: rgb(39, 39, 44);
   min-height: 48px;
 }
 
