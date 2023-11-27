@@ -6,7 +6,7 @@ import { type Message } from "../../../entities/message.js";
 class MockChannelModel implements IChannelModel {
   constructor(db: Db) {}
 
-  sendDirectMessage(channelId: string, recipientId: string, message: Message) {
+  saveDirectMessage(channelId: string, recipientId: string, message: Message) {
     return Promise.resolve(Ok(message));
   }
 
@@ -33,7 +33,7 @@ class MockChannelModel implements IChannelModel {
 
   addParticipantToChannel(userId: string, channelId: string) {}
 
-  removeParticipantFromChannel(userId: string, channelId: string) {}
+  deleteParticipantFromChannel(userId: string, channelId: string) {}
 }
 
 export default MockChannelModel;

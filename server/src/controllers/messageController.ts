@@ -24,14 +24,14 @@ export async function getMessages(
   return res.status(200).json(result.val);
 }
 
-export async function sendDirectMessage(
+export async function saveDirectMessage(
   req: ValidatedRequest<typeof postMessageSchema>,
   res: Response
 ) {
   const { id: senderId } = res.locals.user;
   const { recipientId, content } = req.body;
 
-  const result = await messageService.sendDirectMessage(
+  const result = await messageService.saveDirectMessage(
     senderId,
     recipientId,
     content

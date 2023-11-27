@@ -18,7 +18,7 @@ class SessionStore {
     try {
       await this.client.hSet("userSessions", sessionId, JSON.stringify(data));
       return Ok(sessionId);
-    } catch (error) {
+    } catch (_) {
       return Err("Failed to create a session");
     }
   }
@@ -38,7 +38,7 @@ class SessionStore {
 
       const sessionData = JSON.parse(data) as SessionData;
       return Ok(sessionData);
-    } catch (error) {
+    } catch (_) {
       return Err("Failed to retrieve session");
     }
   }

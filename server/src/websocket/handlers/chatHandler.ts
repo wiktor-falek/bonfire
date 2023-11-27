@@ -3,7 +3,7 @@ import { z } from "zod";
 import type WsClient from "../wsClient.js";
 import type { ServerToClientEvents } from "../types.js";
 
-const sendDirectMessageSchema = z
+const saveDirectMessageSchema = z
   .object({
     recipientId: z.string(),
     content: z.string(),
@@ -16,14 +16,14 @@ async function directMessage(
   userId: string
 ) {
   // TODO: find a cleaner solution
-  const validation = sendDirectMessageSchema.safeParse(data);
+  const validation = saveDirectMessageSchema.safeParse(data);
   if (!validation.success) {
     return client.send("error", { reason: "Invalid Schema" });
   }
 
   const { recipientId, content } = validation.data;
 
-  const result = await messageService.sendDirectMessage(
+  const result = await messageService.saveDirectMessage(
     userId,
     recipientId,
     content

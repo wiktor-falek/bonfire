@@ -9,9 +9,9 @@ class MessageService {
   constructor(private channelModel: ChannelModel) {}
 
   /**
-   * Sends a message to a channel between two users.
+   * Appends a message to a channel between two users.
    */
-  async sendDirectMessage(
+  async saveDirectMessage(
     senderId: string,
     recipientId: string,
     content: string
@@ -27,7 +27,7 @@ class MessageService {
       return Err("Schema validation failed");
     }
 
-    return this.channelModel.sendDirectMessage(channelId, recipientId, message);
+    return this.channelModel.saveDirectMessage(channelId, recipientId, message);
   }
 
   /**

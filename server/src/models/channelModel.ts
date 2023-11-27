@@ -21,7 +21,7 @@ class ChannelModel implements IChannelModel {
     this.collection = this.db.collection<ChannelType>("channels");
   }
 
-  async sendDirectMessage(
+  async saveDirectMessage(
     channelId: string,
     recipientId: string,
     message: Message
@@ -124,7 +124,7 @@ class ChannelModel implements IChannelModel {
       const channelIds = channels.map((channel) => channel.id);
 
       return channelIds;
-    } catch (error) {
+    } catch (_) {
       return [];
     }
   }
@@ -133,7 +133,7 @@ class ChannelModel implements IChannelModel {
     // TODO: { $addToSet: { participants: userId } }
   }
 
-  async removeParticipantFromChannel(userId: string, channelId: string) {
+  async deleteParticipantFromChannel(userId: string, channelId: string) {
     // TODO: { $pull: { participants: userId } }
   }
 }

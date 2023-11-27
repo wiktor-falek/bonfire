@@ -49,8 +49,8 @@ class UserModel implements IUserModel {
         return Err("Failed to create a user");
       }
 
-      return Ok(1);
-    } catch (error) {
+      return Ok();
+    } catch (_) {
       return Err("Failed to create a user");
     }
   }

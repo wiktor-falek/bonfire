@@ -9,7 +9,7 @@ export type ChannelType = {
 };
 
 export type IChannelModel = {
-  sendDirectMessage(
+  saveDirectMessage(
     channelId: string,
     recipientId: string,
     message: Message
@@ -22,5 +22,5 @@ export type IChannelModel = {
   findChannelById(id: string): Promise<Result<ChannelType, string>>;
   findAllChannelIdsByUserId(userId: string): Promise<string[]>;
   addParticipantToChannel(userId: string, channelId: string): void;
-  removeParticipantFromChannel(userId: string, channelId: string): void;
+  deleteParticipantFromChannel(userId: string, channelId: string): void;
 };

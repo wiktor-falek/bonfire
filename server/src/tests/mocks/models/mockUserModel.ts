@@ -8,7 +8,7 @@ class MockUserModel implements IUserModel {
   }
 
   createUser(user: User) {
-    return Promise.resolve(Ok(1));
+    return Promise.resolve(Ok());
   }
 
   findByEmail(email: string) {
