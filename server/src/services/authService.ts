@@ -23,7 +23,7 @@ class AuthService {
       return Err("Email is already in use");
     }
 
-    const hash = await bcrypt.hash(password, 10);
+    const hash = await bcrypt.hash(password, 12);
 
     const user = createUser({ email, username, displayName, hash });
 
