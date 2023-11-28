@@ -1,6 +1,6 @@
-import { mongoDb } from "../instances.js";
+import type { Db } from "mongodb";
 
-async function createIndexes() {
+async function createIndexes(mongoDb: Db) {
   try {
     await Promise.all([
       mongoDb.collection("users").dropIndexes(),
@@ -11,6 +11,14 @@ async function createIndexes() {
       mongoDb.collection("users").createIndexes([
         {
           key: { id: 1 },
+          unique: true,
+        },
+        {
+          key: { "account.username": 1 },
+          unique: true,
+        },
+        {
+          key: { "account.email": 1 },
           unique: true,
         },
       ]),
