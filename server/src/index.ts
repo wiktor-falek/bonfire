@@ -1,14 +1,14 @@
 import app from "./app.js";
 import cron from "node-cron";
 import createIndexes from "./helpers/createIndexes.js";
-import { sessionStore } from "./instances.js";
+import { mongoDb, sessionStore } from "./instances.js";
 import { createServer } from "http";
 import { WebSocketServer } from "ws";
 import registerWebSocketServer from "./websocket/index.js";
 import config from "./config.js";
 
 if (config.NODE_ENV === "development") {
-  await createIndexes()
+  await createIndexes(mongoDb)
     .then(() => {
       console.log("Successfully created indexes");
     })
