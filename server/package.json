@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsc-watch --onSuccess \"node .\" ",
+    "test": "vitest",
     "build": "tsc",
     "start": "node ."
   },
@@ -24,7 +25,8 @@
     "@types/uuid": "^9.0.3",
     "@types/ws": "^8.5.6",
     "tsc-watch": "^6.0.4",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.6"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -35,6 +37,7 @@
     "express-rate-limit": "^6.10.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.0.0",
+    "mongodb-memory-server": "^9.1.1",
     "morgan": "^1.10.0",
     "node-cron": "^3.0.2",
     "redis": "^4.6.10",

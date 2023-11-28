@@ -2,18 +2,19 @@ import { Ok, Err } from "resultat";
 import { type Collection, type Db } from "mongodb";
 import type { FriendRelation } from "src/entities/friendRelation.js";
 
-class FriendRelationModel {
+class RelationModel {
   private db: Db;
   private collection: Collection<FriendRelation>;
 
   constructor(db: Db) {
     this.db = db;
-    this.collection = this.db.collection<FriendRelation>("friendInvites");
+    this.collection = this.db.collection<FriendRelation>("relations");
   }
 
   async createRelation(friendRelation: FriendRelation) {
     try {
       const writeResult = await this.collection.insertOne(friendRelation);
+      console.log({ writeResult });
       if (!writeResult.acknowledged) {
         return Err("Failed to create relation");
       }
@@ -41,4 +42,4 @@ class FriendRelationModel {
   }
 }
 
-export default FriendRelationModel;
+export default RelationModel;

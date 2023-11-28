@@ -1,7 +1,4 @@
-import {
-  createFriendInvite,
-  type FriendInvite,
-} from "../entities/friendInvite.js";
+import { type FriendInvite } from "../entities/friendInvite.js";
 import { Ok, Err } from "resultat";
 import { type Collection, type Db } from "mongodb";
 
@@ -50,11 +47,11 @@ class FriendInviteModel {
         $or: [
           {
             senderId: friendInvite.senderId,
-            recipient: friendInvite.recipientId,
+            recipientId: friendInvite.recipientId,
           },
           {
             senderId: friendInvite.recipientId,
-            recipient: friendInvite.senderId,
+            recipientId: friendInvite.senderId,
           },
         ],
       });
@@ -63,8 +60,6 @@ class FriendInviteModel {
         if (existingInvite.recipientId == friendInvite.recipientId) {
           return Ok("Invite Already Sent" as const);
         }
-
-        // Recipient already invited the sender, recipient can be added as a friend later
         return Ok("Recipient Already Invited Sender" as const);
       }
     } catch (_) {
