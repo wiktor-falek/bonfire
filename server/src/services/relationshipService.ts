@@ -19,14 +19,14 @@ class RelationshipService {
     }
 
     if (result.val === "Recipient Already Invited Sender") {
-      // Recipient invited the sender, add them as friends
+      // The invite was not created, but relationship will be created because both users invited each other.
       const friendRelation = createFriendRelation(senderId, recipientId);
       const createRelationResult = await this.relationModel.createRelation(
         friendRelation
       );
 
       if (createRelationResult.ok) {
-        // TODO: Invite from A to B and B to A exist now, they need to be deleted
+        // TODO: Invite from the recipient to sender still exists after accepting the invite, needs to be deleted
       }
     }
 

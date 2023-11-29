@@ -58,27 +58,27 @@ class FriendInviteModel {
 
       if (existingInvite !== null) {
         if (existingInvite.recipientId == friendInvite.recipientId) {
-          return Ok("Invite Already Sent" as const);
+          return Err("Invite Already Sent" as const);
         }
         return Ok("Recipient Already Invited Sender" as const);
       }
     } catch (_) {
-      return Err("Network Error");
+      return Err("Network Error" as const);
     }
 
     try {
       const writeResult = await this.collection.insertOne(friendInvite);
       if (!writeResult.acknowledged) {
-        return Err("Failed to create friend invite");
+        return Err("Failed to create friend invite" as const);
       }
     } catch (_) {
-      return Err("Network error");
+      return Err("Network error" as const);
     }
 
     return Ok("Created Invite" as const);
   }
 
-  async deleteInvite(inviteId: string) {
+  async deleteInviteById(inviteId: string) {
     try {
       const deleteResult = await this.collection.deleteOne({ _id: inviteId });
       if (!deleteResult.acknowledged) {
