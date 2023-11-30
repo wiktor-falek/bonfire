@@ -3,42 +3,48 @@ import {
   postMessageSchema,
   getMessageSchema,
 } from "../validators/messageValidators.js";
-import { messageService } from "../instances.js";
 import type { ValidatedRequest } from "../types.js";
+import type MessageService from "src/services/messageService.js";
 
-export async function getMessages(
-  req: Request & ValidatedRequest<typeof getMessageSchema>,
-  res: Response
-) {
-  const { channelId, lastMessageId } = req.query;
+class MessageController {
+  constructor(private messageService: MessageService) {}
 
-  const result = await messageService.getMessagesFromChannel(channelId, {
-    lastMessageId,
-  });
+  async getMessages(
+    req: Request & ValidatedRequest<typeof getMessageSchema>,
+    res: Response
+  ) {
+    const { channelId, lastMessageId } = req.query;
 
-  if (!result.ok) {
-    return res.status(500).json({ error: result.err });
+    const result = await this.messageService.getMessagesFromChannel(channelId, {
+      lastMessageId,
+    });
+
+    if (!result.ok) {
+      return res.status(500).json({ error: result.err });
+    }
+
+    return res.status(200).json(result.val);
   }
 
-  return res.status(200).json(result.val);
-}
+  async saveDirectMessage(
+    req: ValidatedRequest<typeof postMessageSchema>,
+    res: Response
+  ) {
+    const { id: senderId } = res.locals.user;
+    const { recipientId, content } = req.body;
 
-export async function saveDirectMessage(
-  req: ValidatedRequest<typeof postMessageSchema>,
-  res: Response
-) {
-  const { id: senderId } = res.locals.user;
-  const { recipientId, content } = req.body;
+    const result = await this.messageService.saveDirectMessage(
+      senderId,
+      recipientId,
+      content
+    );
 
-  const result = await messageService.saveDirectMessage(
-    senderId,
-    recipientId,
-    content
-  );
+    if (!result.ok) {
+      return res.status(500).json({ error: result.err });
+    }
 
-  if (!result.ok) {
-    return res.status(500).json({ error: result.err });
+    return res.status(200).json(result.val);
   }
-
-  return res.status(200).json(result.val);
 }
+
+export default MessageController;

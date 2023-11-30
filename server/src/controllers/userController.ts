@@ -1,35 +1,41 @@
 import type { ValidatedRequest } from "../types.js";
 import type { Request, Response } from "express";
-import { userService } from "../instances.js";
 import type { getUserProfileByIdSchema } from "../validators/userValidators.js";
+import type UserService from "src/services/userService.js";
 
-export async function getCurrentUserProfileInfo(req: Request, res: Response) {
-  const userId = res.locals.user.id;
+class UserController {
+  constructor(private userService: UserService) {}
 
-  const result = await userService.getUserProfileInfo(userId);
+  async getCurrentUserProfileInfo(req: Request, res: Response) {
+    const userId = res.locals.user.id;
 
-  if (!result.ok) {
-    return res.status(400).json({ error: result.err });
+    const result = await this.userService.getUserProfileInfo(userId);
+
+    if (!result.ok) {
+      return res.status(400).json({ error: result.err });
+    }
+
+    const profileInfo = result.val;
+
+    return res.status(200).json(profileInfo);
   }
 
-  const profileInfo = result.val;
+  async getUserProfileInfoById(
+    req: ValidatedRequest<typeof getUserProfileByIdSchema>,
+    res: Response
+  ) {
+    const { userId } = req.params;
 
-  return res.status(200).json(profileInfo);
-}
+    const result = await this.userService.getUserProfileInfo(userId);
 
-export async function getUserProfileInfoById(
-  req: ValidatedRequest<typeof getUserProfileByIdSchema>,
-  res: Response
-) {
-  const { userId } = req.params;
+    if (!result.ok) {
+      return res.status(400).json({ error: result.err });
+    }
 
-  const result = await userService.getUserProfileInfo(userId);
+    const profileInfo = result.val;
 
-  if (!result.ok) {
-    return res.status(400).json({ error: result.err });
+    return res.status(200).json(profileInfo);
   }
-
-  const profileInfo = result.val;
-
-  return res.status(200).json(profileInfo);
 }
+
+export default UserController;
