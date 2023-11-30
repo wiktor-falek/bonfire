@@ -34,6 +34,8 @@ function registerWebSocketServer(wss: WebSocketServer) {
     // by using client.to(`user_${userId}`).send(...)
     client.subscribe(`user_${userId}`);
 
+    
+
     ws.on("close", () => {
       socketClientManager.deleteClient(client);
       console.log(`User ${userId} disconnected`);

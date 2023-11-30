@@ -3,11 +3,13 @@ import { createFriendInvite } from "../entities/friendInvite.js";
 import { createFriendRelation } from "../entities/friendRelation.js";
 import type FriendInviteModel from "../models/friendInviteModel.js";
 import type RelationModel from "../models/relationModel.js";
+import type NotificationService from "./notificationService.js";
 
 class RelationshipService {
   constructor(
     private friendInviteModel: FriendInviteModel,
-    private relationModel: RelationModel
+    private relationModel: RelationModel,
+    private notificationService: NotificationService
   ) {}
 
   async sendFriendInvite(senderId: string, recipientId: string) {
@@ -25,10 +27,16 @@ class RelationshipService {
         friendRelation
       );
 
-      if (createRelationResult.ok) {
-        // TODO: Invite from the recipient to sender still exists after accepting the invite, needs to be deleted
+      if (!createRelationResult.ok) {
+        return Err("Failed to create relationship");
       }
+
+      // TODO: Invite from the recipient to sender still exists after accepting the invite, needs to be deleted
     }
+
+    this.notificationService.notify(recipientId, "friend-invite", {
+      from: senderId,
+    });
 
     return Ok();
   }

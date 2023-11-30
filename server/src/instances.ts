@@ -9,9 +9,10 @@ import UserService from "./services/userService.js";
 import FriendInviteModel from "./models/friendInviteModel.js";
 import RelationModel from "./models/relationModel.js";
 import RelationshipService from "./services/relationshipService.js";
+import NotificationService from "./services/notificationService.js";
 
 // Db
-export const [redisClient, mongoClient] = await Promise.all([
+const [redisClient, mongoClient] = await Promise.all([
   new Redis().connect(),
   new Mongo("mongodb://localhost:27017").connect(),
 ]);
@@ -27,10 +28,12 @@ export const friendInviteModel = new FriendInviteModel(mongoDb);
 export const relationModel = new RelationModel(mongoDb);
 
 // Services
+export const notificationService = new NotificationService();
 export const authService = new AuthService(userModel, sessionStore);
 export const messageService = new MessageService(channelModel);
 export const userService = new UserService(userModel);
 export const relationshipService = new RelationshipService(
   friendInviteModel,
-  relationModel
+  relationModel,
+  notificationService
 );
