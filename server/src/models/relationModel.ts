@@ -1,6 +1,6 @@
 import { Ok, Err } from "resultat";
 import { type Collection, type Db } from "mongodb";
-import type { FriendRelation } from "src/entities/friendRelation.js";
+import type { FriendRelation } from "../entities/friendRelation.js";
 
 class RelationModel {
   private db: Db;

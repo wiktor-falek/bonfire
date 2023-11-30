@@ -1,7 +1,7 @@
 import type { ValidatedRequest } from "../types.js";
 import type { Request, Response } from "express";
 import type { getUserProfileByIdSchema } from "../validators/userValidators.js";
-import type UserService from "src/services/userService.js";
+import type UserService from "../services/userService.js";
 
 class UserController {
   constructor(private userService: UserService) {}

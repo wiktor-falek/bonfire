@@ -4,7 +4,7 @@ import {
   getMessageSchema,
 } from "../validators/messageValidators.js";
 import type { ValidatedRequest } from "../types.js";
-import type MessageService from "src/services/messageService.js";
+import type MessageService from "../services/messageService.js";
 
 class MessageController {
   constructor(private messageService: MessageService) {}

@@ -33,6 +33,7 @@ export const authService = new AuthService(userModel, sessionStore);
 export const messageService = new MessageService(channelModel);
 export const userService = new UserService(userModel);
 export const relationshipService = new RelationshipService(
+  userModel,
   friendInviteModel,
   relationModel,
   notificationService

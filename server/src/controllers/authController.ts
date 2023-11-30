@@ -4,7 +4,7 @@ import type {
   postLoginSchema,
   postRegisterSchema,
 } from "../validators/userValidators.js";
-import type AuthService from "src/services/authService.js";
+import type AuthService from "../services/authService.js";
 
 class AuthController {
   constructor(private authService: AuthService) {}

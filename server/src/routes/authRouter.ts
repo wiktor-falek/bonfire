@@ -5,7 +5,7 @@ import {
   postLoginSchema,
   postRegisterSchema,
 } from "../validators/userValidators.js";
-import { authService } from "src/instances.js";
+import { authService } from "../instances.js";
 
 const controller = new AuthController(authService);
 

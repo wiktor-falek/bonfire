@@ -4,13 +4,28 @@ import { createFriendRelation } from "../entities/friendRelation.js";
 import type FriendInviteModel from "../models/friendInviteModel.js";
 import type RelationModel from "../models/relationModel.js";
 import type NotificationService from "./notificationService.js";
+import type UserModel from "../models/userModel.js";
 
 class RelationshipService {
   constructor(
+    private userModel: UserModel,
     private friendInviteModel: FriendInviteModel,
     private relationModel: RelationModel,
     private notificationService: NotificationService
   ) {}
+
+  async sendFriendRequestByUsername(
+    senderId: string,
+    recipientUsername: string
+  ) {
+    const recipient = await this.userModel.findByUsername(recipientUsername);
+
+    if (recipient === null) {
+      return Err("Incorrect username");
+    }
+
+    return this.sendFriendInvite(senderId, recipient.id);
+  }
 
   async sendFriendInvite(senderId: string, recipientId: string) {
     const friendInvite = createFriendInvite(senderId, recipientId);
@@ -19,6 +34,8 @@ class RelationshipService {
     if (!result.ok) {
       return result;
     }
+
+    // TODO: handle users already being friends
 
     if (result.val === "Recipient Already Invited Sender") {
       // The invite was not created, but relationship will be created because both users invited each other.
@@ -36,6 +53,7 @@ class RelationshipService {
       return Ok({ friendRelation });
     }
 
+    // TODO: only if recipient did not block the sender
     this.notificationService.notify(recipientId, "friend-invite", {
       from: senderId,
     });

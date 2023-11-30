@@ -3,7 +3,7 @@ import validate from "../middlewares/validate.js";
 import UserController from "../controllers/userController.js";
 import authGuard from "../middlewares/authGuard.js";
 import { getUserProfileByIdSchema } from "../validators/userValidators.js";
-import { userService } from "src/instances.js";
+import { userService } from "../instances.js";
 
 const controller = new UserController(userService);
 

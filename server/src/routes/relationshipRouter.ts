@@ -9,6 +9,7 @@ import {
   postRejectFriendInviteSchema,
   postUnblockUserSchema,
   postBlockUserSchema,
+  sendFriendRequestByUsernameSchema,
 } from "../validators/relationshipValidators.js";
 
 const controller = new RelationshipController(relationshipService);
@@ -17,6 +18,11 @@ const router = Router();
 
 router.use(authGuard);
 
+router.post(
+  "/relationships/send-friend-request-by-username",
+  validate(sendFriendRequestByUsernameSchema),
+  controller.sendFriendRequestByUsername
+);
 router.post(
   "/relationships/send-friend-invite",
   validate(postSendFriendInviteSchema),

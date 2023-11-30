@@ -1,7 +1,8 @@
 import type { Response } from "express";
 import type { ValidatedRequest } from "../types.js";
-import type RelationshipService from "src/services/relationshipService.js";
+import type RelationshipService from "../services/relationshipService.js";
 import {
+  sendFriendRequestByUsernameSchema,
   postSendFriendInviteSchema,
   postAcceptFriendInviteSchema,
   postRejectFriendInviteSchema,
@@ -11,6 +12,25 @@ import {
 
 class RelationshipController {
   constructor(private relationshipService: RelationshipService) {}
+
+  async sendFriendRequestByUsername(
+    req: ValidatedRequest<typeof sendFriendRequestByUsernameSchema>,
+    res: Response
+  ) {
+    const senderId = res.locals.user.id;
+    const recipientUsername = req.body.username;
+
+    const result = await this.relationshipService.sendFriendRequestByUsername(
+      senderId,
+      recipientUsername
+    );
+
+    if (!result.ok) {
+      return res.status(400).json({ error: result.err });
+    }
+
+    return res.status(200).json({});
+  }
 
   async postSendFriendInvite(
     req: ValidatedRequest<typeof postSendFriendInviteSchema>,

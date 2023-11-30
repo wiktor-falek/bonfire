@@ -6,7 +6,7 @@ import {
 } from "../validators/messageValidators.js";
 import MessageController from "../controllers/messageController.js";
 import authGuard from "../middlewares/authGuard.js";
-import { messageService } from "src/instances.js";
+import { messageService } from "../instances.js";
 
 const controller = new MessageController(messageService);
 
