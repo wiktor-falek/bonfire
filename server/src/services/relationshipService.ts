@@ -32,13 +32,15 @@ class RelationshipService {
       }
 
       // TODO: Invite from the recipient to sender still exists after accepting the invite, needs to be deleted
+
+      return Ok({ friendRelation });
     }
 
     this.notificationService.notify(recipientId, "friend-invite", {
       from: senderId,
     });
 
-    return Ok();
+    return Ok({ friendInvite });
   }
 
   async acceptFriendInvite(userId: string, inviteId: string) {
@@ -70,11 +72,17 @@ class RelationshipService {
     return this.relationModel.createRelation(relation);
   }
 
-  rejectFriendInvite(friendInviteId: string) {}
+  async rejectFriendInvite(userId: string, inviteId: string) {
+    return Err("Not Implemented");
+  }
 
-  blockUser(blockingUserId: string, blockedUserId: string) {}
+  async blockUser(blockingUserId: string, blockedUserId: string) {
+    return Err("Not Implemented");
+  }
 
-  unblockUser(blockingUserId: string, blockedUserId: string) {}
+  async unblockUser(blockingUserId: string, blockedUserId: string) {
+    return Err("Not Implemented");
+  }
 }
 
 export default RelationshipService;

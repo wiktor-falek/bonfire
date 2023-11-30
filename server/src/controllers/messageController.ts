@@ -4,11 +4,10 @@ import {
   getMessageSchema,
 } from "../validators/messageValidators.js";
 import { messageService } from "../instances.js";
-import type { z } from "zod";
 import type { ValidatedRequest } from "../types.js";
 
 export async function getMessages(
-  req: Request & z.infer<typeof getMessageSchema>,
+  req: Request & ValidatedRequest<typeof getMessageSchema>,
   res: Response
 ) {
   const { channelId, lastMessageId } = req.query;
