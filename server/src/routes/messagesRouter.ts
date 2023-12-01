@@ -14,7 +14,7 @@ const router = Router();
 
 router.use(authGuard);
 
-router.get("/", validate(getMessageSchema), controller.getMessages);
-router.post("/", validate(postMessageSchema), controller.saveDirectMessage);
+router.get("/", validate(getMessageSchema), controller.getMessages.bind(controller));
+router.post("/", validate(postMessageSchema), controller.saveDirectMessage.bind(controller));
 
 export default router;

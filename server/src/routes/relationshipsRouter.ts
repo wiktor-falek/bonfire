@@ -19,34 +19,34 @@ const router = Router();
 router.use(authGuard);
 
 router.post(
-  "/relationships/send-friend-request-by-username",
+  "/send-friend-request-by-username",
   validate(sendFriendRequestByUsernameSchema),
-  controller.sendFriendRequestByUsername
+  controller.sendFriendRequestByUsername.bind(controller)
 );
 router.post(
-  "/relationships/send-friend-invite",
+  "/send-friend-invite",
   validate(postSendFriendInviteSchema),
-  controller.postSendFriendInvite
+  controller.postSendFriendInvite.bind(controller)
 );
 router.post(
-  "/relationships/accept-friend-invite",
+  "/accept-friend-invite",
   validate(postAcceptFriendInviteSchema),
-  controller.postAcceptFriendInvite
+  controller.postAcceptFriendInvite.bind(controller)
 );
 router.post(
-  "/relationships/reject-friend-invite",
+  "/reject-friend-invite",
   validate(postRejectFriendInviteSchema),
-  controller.postRejectFriendInvite
+  controller.postRejectFriendInvite.bind(controller)
 );
 router.post(
-  "/relationships/block-user",
+  "/block-user",
   validate(postBlockUserSchema),
-  controller.postBlockUser
+  controller.postBlockUser.bind(controller)
 );
 router.post(
-  "/relationships/unblock-user",
+  "/unblock-user",
   validate(postUnblockUserSchema),
-  controller.postUnblockUser
+  controller.postUnblockUser.bind(controller)
 );
 
 export default router;

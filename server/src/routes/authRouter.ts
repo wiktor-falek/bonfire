@@ -11,7 +11,15 @@ const controller = new AuthController(authService);
 
 const router = Router();
 
-router.post("/login", validate(postLoginSchema), controller.login);
-router.post("/register", validate(postRegisterSchema), controller.register);
+router.post(
+  "/login",
+  validate(postLoginSchema),
+  controller.login.bind(controller)
+);
+router.post(
+  "/register",
+  validate(postRegisterSchema),
+  controller.register.bind(controller)
+);
 
 export default router;

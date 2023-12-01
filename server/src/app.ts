@@ -5,6 +5,7 @@ import morgan from "morgan";
 import authRouter from "./routes/authRouter.js";
 import messagesRouter from "./routes/messagesRouter.js";
 import usersRouter from "./routes/usersRouter.js";
+import relationshipsRouter from "./routes/relationshipsRouter.js";
 
 const app = express();
 
@@ -24,5 +25,6 @@ app.use(morgan(":status :method :url :response-time[2] ms"));
 app.use("/auth", authRouter);
 app.use("/api/messages", messagesRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/relationships", relationshipsRouter);
 
 export default app;

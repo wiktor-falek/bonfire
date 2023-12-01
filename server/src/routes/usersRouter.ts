@@ -11,11 +11,14 @@ const router = Router();
 
 router.use(authGuard);
 
-router.get("/profile/me", controller.getCurrentUserProfileInfo);
+router.get(
+  "/profile/me",
+  controller.getCurrentUserProfileInfo.bind(controller)
+);
 router.get(
   "/profile/:userId",
   validate(getUserProfileByIdSchema),
-  controller.getUserProfileInfoById
+  controller.getUserProfileInfoById.bind(controller)
 );
 
 export default router;

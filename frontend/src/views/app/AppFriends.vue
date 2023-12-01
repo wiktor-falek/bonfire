@@ -3,6 +3,8 @@ import { computed, ref } from "vue";
 import HamburgerMenu from "../../components/HamburgerMenu.vue";
 import Header from "../../components/app/Header.vue";
 import type { UserProfile } from "../../api/users/getUserProfileById";
+import sendFriendRequestByUsername from "../../api/relationships/sendFriendRequestByUsername";
+import { AxiosError } from "axios";
 
 type FilterOption = "online" | "offline" | "pending" | "blocked";
 type MenuOption = FilterOption | "add-friend";
@@ -31,6 +33,18 @@ const statusTextMap: Record<Status, string> = {
 
 function selectMenuOption(option: MenuOption) {
   selectedMenuOption.value = option;
+}
+
+const inviteUsernameInput = ref("");
+async function handleSendFriendRequest(username: string) {
+  const result = await sendFriendRequestByUsername(username);
+  if (!result.ok) {
+    const { error } = result.err;
+    // TODO: display error
+    return;
+  }
+
+  // TODO: display success
 }
 </script>
 
@@ -101,7 +115,13 @@ function selectMenuOption(option: MenuOption) {
     <div class="left">
       <div v-if="selectedMenuOption === 'add-friend'">
         <h1>Add Friend</h1>
-        <input type="text" />
+        <input maxlength="32" v-model="inviteUsernameInput" type="text" />
+        <button
+          :disabled="inviteUsernameInput.length === 0"
+          @click="handleSendFriendRequest(inviteUsernameInput)"
+        >
+          Send Friend Request
+        </button>
       </div>
 
       <div v-else class="user-friends-section">
