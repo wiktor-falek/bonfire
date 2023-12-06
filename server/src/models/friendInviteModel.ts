@@ -17,6 +17,17 @@ class FriendInviteModel {
       if (result === null) {
         return Err("Invite does not exist");
       }
+
+      return Ok(result);
+    } catch (_) {
+      return Err("Network Error");
+    }
+  }
+
+  async findAllInvitesByUserId(userId: string) {
+    try {
+      const result = await this.collection.find<FriendInvite[]>({ senderId: userId }).toArray();
+
       return Ok(result);
     } catch (_) {
       return Err("Network Error");
