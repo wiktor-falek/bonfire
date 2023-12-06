@@ -1,6 +1,6 @@
 import { Err, Ok } from "resultat";
 import { createFriendInvite } from "../entities/friendInvite.js";
-import { createFriendRelation } from "../entities/friendRelation.js";
+import { createFriendRelation } from "../entities/relations.js";
 import type FriendInviteModel from "../models/friendInviteModel.js";
 import type RelationModel from "../models/relationModel.js";
 import type NotificationService from "./notificationService.js";
@@ -14,7 +14,23 @@ class RelationshipService {
     private notificationService: NotificationService
   ) {}
 
-  async sendFriendRequestByUsername(
+  async getAllUserRelations(userId: string) {
+    const [friendRelationsResult, blockRelationsResult] = await Promise.all([
+      this.relationModel.findAllFriendRelations(userId),
+      this.relationModel.findAllBlockRelationsByUser(userId),
+    ] as const);
+
+    if (!friendRelationsResult.ok || !blockRelationsResult.ok) {
+      return Err("Failed to get relations");
+    }
+
+    const friends = friendRelationsResult.val;
+    const blocked = blockRelationsResult.val;
+
+    return Ok({ friends, blocked });
+  }
+
+  async sendFriendInviteByUsername(
     senderId: string,
     recipientUsername: string
   ) {

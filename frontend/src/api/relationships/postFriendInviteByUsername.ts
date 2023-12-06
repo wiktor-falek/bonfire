@@ -2,7 +2,7 @@ import { AxiosError } from "axios";
 import api from "../configs/axiosConfig";
 import { Err, Ok } from "resultat";
 
-async function sendFriendRequestByUsername(username: string) {
+async function postFriendInviteByUsername(username: string) {
   try {
     const response = await api.post<{}>(
       "/api/relationships/send-friend-request-by-username",
@@ -17,4 +17,4 @@ async function sendFriendRequestByUsername(username: string) {
   }
 }
 
-export default sendFriendRequestByUsername;
+export default postFriendInviteByUsername;

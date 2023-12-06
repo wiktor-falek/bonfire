@@ -3,8 +3,7 @@ import { computed, ref } from "vue";
 import HamburgerMenu from "../../components/HamburgerMenu.vue";
 import Header from "../../components/app/Header.vue";
 import type { UserProfile } from "../../api/users/getUserProfileById";
-import sendFriendRequestByUsername from "../../api/relationships/sendFriendRequestByUsername";
-import { AxiosError } from "axios";
+import postFriendInviteByUsername from "../../api/relationships/postFriendInviteByUsername";
 
 type FilterOption = "online" | "offline" | "pending" | "blocked";
 type MenuOption = FilterOption | "add-friend";
@@ -36,8 +35,8 @@ function selectMenuOption(option: MenuOption) {
 }
 
 const inviteUsernameInput = ref("");
-async function handleSendFriendRequest(username: string) {
-  const result = await sendFriendRequestByUsername(username);
+async function handleSendFriendInvite(username: string) {
+  const result = await postFriendInviteByUsername(username);
   if (!result.ok) {
     const { error } = result.err;
     // TODO: display error
@@ -118,7 +117,7 @@ async function handleSendFriendRequest(username: string) {
         <input maxlength="32" v-model="inviteUsernameInput" type="text" />
         <button
           :disabled="inviteUsernameInput.length === 0"
-          @click="handleSendFriendRequest(inviteUsernameInput)"
+          @click="handleSendFriendInvite(inviteUsernameInput)"
         >
           Send Friend Request
         </button>

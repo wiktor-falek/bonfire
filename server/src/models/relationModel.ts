@@ -1,19 +1,19 @@
 import { Ok, Err } from "resultat";
 import { type Collection, type Db } from "mongodb";
-import type { FriendRelation } from "../entities/friendRelation.js";
+import type { BlockRelation, FriendRelation, Relation } from "../entities/relations.js";
 
 class RelationModel {
   private db: Db;
-  private collection: Collection<FriendRelation>;
+  private collection: Collection<Relation>;
 
   constructor(db: Db) {
     this.db = db;
-    this.collection = this.db.collection<FriendRelation>("relations");
+    this.collection = this.db.collection<Relation>("relations");
   }
 
-  async createRelation(friendRelation: FriendRelation) {
+  async createRelation(relation: Relation) {
     try {
-      const writeResult = await this.collection.insertOne(friendRelation);
+      const writeResult = await this.collection.insertOne(relation);
       console.log({ writeResult });
       if (!writeResult.acknowledged) {
         return Err("Failed to create relation");
@@ -25,7 +25,42 @@ class RelationModel {
     }
   }
 
-  findRelationById(relationId: string) {}
+  async findRelationById(relationId: string) {
+    try {
+      const relation = await this.collection.findOne({ _id: relationId });
+      if (relation === null) {
+        return Err("Relationship does not exist");
+      }
+
+      return Ok(relation);
+    } catch (_) {
+      return Err("Network Error");
+    }
+  }
+
+  async findAllFriendRelations(userId: string) {
+    try {
+      const relations = await this.collection
+        .find<FriendRelation>({ kind: "friend", firstUserId: userId })
+        .toArray();
+
+      return Ok(relations);
+    } catch (_) {
+      return Err("Network Error");
+    }
+  }
+
+  async findAllBlockRelationsByUser(userId: string) {
+    try {
+      const relations = await this.collection
+        .find<BlockRelation>({ kind: "block", firstUserId: userId })
+        .toArray();
+
+      return Ok(relations);
+    } catch (_) {
+      return Err("Network Error");
+    }
+  }
 
   async relationExists(relationId: string) {
     try {
