@@ -26,7 +26,7 @@ class FriendInviteModel {
 
   async findAllInvitesByUserId(userId: string) {
     try {
-      const result = await this.collection.find<FriendInvite[]>({ senderId: userId }).toArray();
+      const result = await this.collection.find<FriendInvite>({ senderId: userId }).toArray();
 
       return Ok(result);
     } catch (_) {

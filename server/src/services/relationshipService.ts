@@ -15,22 +15,21 @@ class RelationshipService {
   ) {}
 
   async getAllUserRelations(userId: string) {
-    const [friendsResult, blockedResult, pendingFriendsResult] =
-      await Promise.all([
+    try {
+      const results = await Promise.all([
         this.relationModel.findAllFriendRelations(userId),
         this.relationModel.findAllBlockRelationsByUser(userId),
         this.friendInviteModel.findAllInvitesByUserId(userId),
-      ] as const);
+      ]);
 
-    if (!friendsResult.ok || !blockedResult.ok || !pendingFriendsResult.ok) {
+      const friends = results[0].unwrap();
+      const blocked = results[1].unwrap();
+      const pending = results[2].unwrap();
+
+      return Ok({ friends, pending, blocked });
+    } catch (_) {
       return Err("Failed to get relations");
     }
-
-    const friends = friendsResult.val;
-    const blocked = blockedResult.val;
-    const pending = pendingFriendsResult.val;
-
-    return Ok({ friends, pending, blocked });
   }
 
   async sendFriendInviteByUsername(
