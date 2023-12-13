@@ -38,7 +38,7 @@ class RelationModel {
     }
   }
 
-  async findAllFriendRelations(userId: string) {
+  async findAllUserFriendRelations(userId: string) {
     try {
       const relations = await this.collection
         .find<FriendRelation>({ kind: "friend", firstUserId: userId })
@@ -50,7 +50,7 @@ class RelationModel {
     }
   }
 
-  async findAllBlockRelationsByUser(userId: string) {
+  async findAllUserBlockRelations(userId: string) {
     try {
       const relations = await this.collection
         .find<BlockRelation>({ kind: "block", firstUserId: userId })

@@ -12,14 +12,14 @@ class RelationshipService {
     private friendInviteModel: FriendInviteModel,
     private relationModel: RelationModel,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   async getAllUserRelations(userId: string) {
     try {
       const results = await Promise.all([
-        this.relationModel.findAllFriendRelations(userId),
-        this.relationModel.findAllBlockRelationsByUser(userId),
-        this.friendInviteModel.findAllInvitesByUserId(userId),
+        this.relationModel.findAllUserFriendRelations(userId),
+        this.relationModel.findAllUserBlockRelations(userId),
+        this.friendInviteModel.findAllInvitesSentByUser(userId),
       ]);
 
       const friends = results[0].unwrap();
