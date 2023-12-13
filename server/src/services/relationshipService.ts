@@ -64,6 +64,9 @@ class RelationshipService {
   }
 
   async sendFriendInvite(senderId: string, recipientId: string) {
+    if (senderId === recipientId) {
+      return Err("Cannot invite yourself");
+    }
     const friendInvite = createFriendInvite(senderId, recipientId);
     const result = await this.friendInviteModel.createInvite(friendInvite);
 

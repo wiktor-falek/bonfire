@@ -4,8 +4,11 @@ import HamburgerMenu from "../../components/HamburgerMenu.vue";
 import Header from "../../components/app/Header.vue";
 import type { UserProfile } from "../../api/relationships/getRelationships";
 import postFriendInviteByUsername from "../../api/relationships/postFriendInviteByUsername";
-import useRelationshipsStore from "../../stores/relationshipsStore";
+import { useRelationshipsStore } from "../../stores/relationshipsStore";
+import { useUserStore } from "../../stores/userStore";
+import { getDirectMessageChannelId } from "../../utils/id";
 
+const userStore = useUserStore();
 const relationshipsStore = useRelationshipsStore();
 
 type FilterOption = "online" | "offline" | "pending" | "blocked";
@@ -54,6 +57,19 @@ async function handleSendFriendInvite(username: string) {
 
   // TODO: display success
   // TODO: dispatch new pending friend invite to relationshipsStore
+}
+
+function getChannelRoute(targetUserId: string) {
+  if (!userStore.userProfile) {
+    throw new Error("Current user profile does not exist");
+  }
+
+  const channelId = getDirectMessageChannelId(
+    userStore.userProfile.id,
+    targetUserId
+  );
+
+  return `/app/channel/${channelId}`;
 }
 </script>
 
@@ -143,7 +159,7 @@ async function handleSendFriendInvite(username: string) {
         <div class="profiles" v-for="profile in userProfiles">
           <hr class="profile__separator" />
           <!-- <div class="separator"></div> -->
-          <div class="profile">
+          <RouterLink :to="getChannelRoute(profile.id)" class="profile">
             <div class="profile__image">
               <img src="" />
             </div>
@@ -161,7 +177,7 @@ async function handleSendFriendInvite(username: string) {
                 <!-- {{ statusTextMap[profile.status] }} -->
               </p>
             </div>
-          </div>
+          </RouterLink>
         </div>
       </div>
     </div>
@@ -288,6 +304,7 @@ async function handleSendFriendInvite(username: string) {
 }
 
 .profile {
+  all: unset;
   display: flex;
   flex-direction: row;
   align-items: center;

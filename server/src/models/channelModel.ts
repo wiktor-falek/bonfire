@@ -56,7 +56,7 @@ class ChannelModel implements IChannelModel {
       (await this.collection.countDocuments({ id: channelId })) !== 0;
 
     if (!channelExists) {
-      return Err("Channel does not exist");
+      return Ok([]);
     }
 
     const pipeline: Document[] = [

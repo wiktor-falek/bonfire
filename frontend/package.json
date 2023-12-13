@@ -13,10 +13,12 @@
     "mitt": "^3.0.1",
     "pinia": "^2.1.6",
     "resultat": "^1.0.10",
+    "sjcl": "^1.0.8",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4"
   },
   "devDependencies": {
+    "@types/sjcl": "^1.0.34",
     "@vitejs/plugin-vue": "^4.2.3",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",

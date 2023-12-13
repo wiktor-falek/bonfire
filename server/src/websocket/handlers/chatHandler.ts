@@ -35,6 +35,8 @@ async function directMessage(
 
   const message = result.val;
 
+  console.log({ message })
+
   // TODO: client.send("ACK_chat:message", null);
   client.send("chat:message", message);
 

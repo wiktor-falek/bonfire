@@ -3,11 +3,17 @@ import { onBeforeMount } from "vue";
 import Bonfire from "../../components/Bonfire.vue";
 import SidePanel from "../../components/SidePanel.vue";
 import getRelationships from "../../api/relationships/getRelationships";
-import useRelationshipsStore from "../../stores/relationshipsStore";
+import { useUserStore } from "../../stores/userStore";
+import { useRelationshipsStore } from "../../stores/relationshipsStore";
+import getCurrentProfile from "../../api/users/getCurrentProfile";
 
+const userStore = useUserStore();
 const relationshipsStore = useRelationshipsStore();
 
 onBeforeMount(async () => {
+  getCurrentProfile().then((profile) => {
+    userStore.setUserProfile(profile);
+  });
   getRelationships().then((result) => {
     if (result.ok) {
       const relationships = result.val;

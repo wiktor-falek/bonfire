@@ -9,24 +9,26 @@ import socket, { socketEmitter } from "../../socket";
 import getUserProfileById, {
   type UserProfile,
 } from "../../api/users/getUserProfileById";
-import getCurrentProfile from "../../api/users/getCurrentProfile";
+import { useUserStore } from "../../stores/userStore";
+
+socketEmitter.on("chat:message", (message) => {
+  messages.value?.push(message);
+});
 
 const props = defineProps<{ channelId: string }>();
 
+const userStore = useUserStore();
+
 const messages = ref<Message[]>();
-
-const currentUserProfile = ref<UserProfile>(); // TODO: move to store
 const otherUserProfile = ref<UserProfile>();
-
 const messagesDiv = ref<HTMLElement>();
-
 const content = ref("");
 
 function handleSendMessage() {
   const trimmedContent = content.value.trimEnd();
   if (
     trimmedContent === "" ||
-    !currentUserProfile.value ||
+    !userStore?.userProfile ||
     !otherUserProfile.value
   )
     return;
@@ -44,36 +46,27 @@ function handleSendMessage() {
   content.value = "";
 }
 
-socketEmitter.on("chat:message", (message) => {
-  messages.value?.push(message);
-});
-
 function loadMessagess(channelId: string) {
   getMessages(channelId).then((_messages) => {
     messages.value = _messages;
   });
 }
 
-// TODO: unhardcode userId
-function loadUser(userId: string = "755308752261532161188") {
-  // TODO: move to store
-  getCurrentProfile().then((profile) => {
-    currentUserProfile.value = profile;
-  });
-
+function loadUser(userId: string) {
   getUserProfileById(userId).then((profile) => {
     otherUserProfile.value = profile;
   });
 }
 
 function load() {
-  loadUser();
   loadMessagess(props.channelId);
+  // loadUser(???)
 }
 
 load();
 
 watch(props, () => {
+  // refetch profile and messages whenever the channelId changes
   otherUserProfile.value = undefined;
   messages.value = [];
   load();

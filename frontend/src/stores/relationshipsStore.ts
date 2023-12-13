@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { Relationships } from "../api/relationships/getRelationships";
 import { ref } from "vue";
 
-const useRelationshipsStore = defineStore("relationships", () => {
+export const useRelationshipsStore = defineStore("relationships", () => {
   const relationships = ref<Relationships>({ friends: [], pending: [], blocked: [] });
 
   const setRelationships = (newRelationships: Relationships) => {
@@ -12,5 +12,3 @@ const useRelationshipsStore = defineStore("relationships", () => {
 
   return { relationships, setRelationships }
 })
-
-export default useRelationshipsStore;

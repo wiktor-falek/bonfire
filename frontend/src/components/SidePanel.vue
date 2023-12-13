@@ -4,9 +4,11 @@ import Bonfire from "./Bonfire.vue";
 import router from "./../router";
 import Modal from "./Modal.vue";
 import emitter from "../emitter";
-import getCurrentProfile from "../api/users/getCurrentProfile";
 import { UserProfile } from "../api/users/getUserProfileById";
 import { getDirectMessageChannelId } from "../utils/id";
+import { useUserStore } from "../stores/userStore";
+
+const userStore = useUserStore();
 
 emitter.on("openSidePanel", () => {
   isOpenOnMobile.value = true;
@@ -17,14 +19,6 @@ emitter.on("closeSidePanel", () => {
 });
 
 const isOpenOnMobile = ref(false);
-
-const userProfile = ref<UserProfile>();
-
-async function fetchUserProfile() {
-  userProfile.value = await getCurrentProfile();
-}
-
-fetchUserProfile();
 
 type Server = {
   name: string;
@@ -161,11 +155,11 @@ function handleConversationClose(index: number) {
 }
 
 async function handleConversationClick(profileId: string) {
-  if (!userProfile.value?.id) return;
+  if (!userStore.userProfile?.id) return;
 
   isOpenOnMobile.value = false;
 
-  const userId = userProfile.value.id;
+  const userId = userStore.userProfile.id;
   const channelId = await getDirectMessageChannelId(userId, profileId);
   router.push(`/app/channel/${channelId}`);
 }
@@ -321,10 +315,10 @@ function handleCloseCreateConversationModal() {
           <div class="user-card__profile__image"></div>
           <div class="user-card__profile__text">
             <p class="user-card__profile__text__display-name">
-              {{ userProfile?.displayName }}
+              {{ userStore.userProfile?.displayName }}
             </p>
             <p class="user-card__profile__text__username">
-              @{{ userProfile?.username }}
+              @{{ userStore.userProfile?.username }}
             </p>
           </div>
         </div>

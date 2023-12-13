@@ -16,11 +16,9 @@ class MessageService {
     recipientId: string,
     content: string
   ) {
-    // const channelId = "213742069213742069420";
-    const channelId = await getDirectMessageChannelId(senderId, recipientId);
+    const channelId = getDirectMessageChannelId(senderId, recipientId);
     const message = createMessage(senderId, content);
 
-    console.log(message);
     const validation = messageEntitySchema.safeParse(message);
 
     if (!validation.success) {
