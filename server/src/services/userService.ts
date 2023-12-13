@@ -1,5 +1,6 @@
 import { Err, Ok } from "resultat";
 import type UserModel from "../models/userModel.js";
+import type { User } from "../entities/user.js";
 
 type UserProfile = {
   id: string;
@@ -9,7 +10,15 @@ type UserProfile = {
 };
 
 class UserService {
-  constructor(private userModel: UserModel) {}
+  constructor(private userModel: UserModel) { }
+
+  private userToProfile(user: User): UserProfile {
+    return {
+      id: user.id,
+      username: user.account.username,
+      displayName: user.account.displayName,
+    };
+  }
 
   async getUserProfileInfo(userId: string) {
     const user = await this.userModel.findById(userId);
@@ -18,11 +27,23 @@ class UserService {
       return Err("Failed to get user profile");
     }
 
-    return Ok({
-      id: user.id,
-      username: user.account.username,
-      displayName: user.account.displayName,
-    } as UserProfile);
+    const profile = this.userToProfile(user);
+
+    return Ok(profile);
+  }
+
+  async getUserProfilesByIds(ids: string[]) {
+    const result = await this.userModel.findAllByIds(ids);
+
+    if (!result.ok) {
+      return result;
+    }
+
+    const users = result.val;
+
+    const profiles = users.map((user) => this.userToProfile(user));
+
+    return Ok(profiles);
   }
 }
 

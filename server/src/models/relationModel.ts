@@ -14,7 +14,7 @@ class RelationModel {
   async createRelation(relation: Relation) {
     try {
       const writeResult = await this.collection.insertOne(relation);
-      console.log({ writeResult });
+
       if (!writeResult.acknowledged) {
         return Err("Failed to create relation");
       }
@@ -41,7 +41,10 @@ class RelationModel {
   async findAllUserFriendRelations(userId: string) {
     try {
       const relations = await this.collection
-        .find<FriendRelation>({ kind: "friend", firstUserId: userId })
+        .find<FriendRelation>({
+          kind: "friend",
+          $or: [{ firstUserId: userId }, { secondUserId: userId }]
+        })
         .toArray();
 
       return Ok(relations);

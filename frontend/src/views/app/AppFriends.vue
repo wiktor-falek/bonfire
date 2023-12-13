@@ -2,26 +2,35 @@
 import { computed, ref } from "vue";
 import HamburgerMenu from "../../components/HamburgerMenu.vue";
 import Header from "../../components/app/Header.vue";
-import type { UserProfile } from "../../api/users/getUserProfileById";
+import type { UserProfile } from "../../api/relationships/getRelationships";
 import postFriendInviteByUsername from "../../api/relationships/postFriendInviteByUsername";
+import useRelationshipsStore from "../../stores/relationshipsStore";
+
+const relationshipsStore = useRelationshipsStore();
 
 type FilterOption = "online" | "offline" | "pending" | "blocked";
 type MenuOption = FilterOption | "add-friend";
 
 type Status = "online" | "away" | "dnd" | "offline";
-type UserProfileWithStatus = UserProfile & { status: Status };
 
 const selectedMenuOption = ref<MenuOption>("online");
 
-const userProfiles = ref<UserProfileWithStatus[]>([
-  { displayName: "mock", username: "mockerson", id: "123", status: "offline" },
-  { displayName: "mock", username: "mockerson", id: "123", status: "offline" },
-  { displayName: "mock", username: "mockerson", id: "123", status: "offline" },
-]);
-
-const filteredUserProfiles = computed(() =>
-  userProfiles.value.filter((p) => p.status === selectedMenuOption.value)
-);
+const userProfiles = computed<UserProfile[]>(() => {
+  switch (selectedMenuOption.value) {
+    case "online":
+      // TODO: filter out "offline" Status
+      return relationshipsStore.relationships.friends;
+    case "offline":
+      // TODO: filter out not "offline" Status
+      return relationshipsStore.relationships.friends;
+    case "pending":
+      return relationshipsStore.relationships.pending;
+    case "blocked":
+      return relationshipsStore.relationships.blocked;
+    default:
+      return [];
+  }
+});
 
 const statusTextMap: Record<Status, string> = {
   online: "Online",
@@ -44,6 +53,7 @@ async function handleSendFriendInvite(username: string) {
   }
 
   // TODO: display success
+  // TODO: dispatch new pending friend invite to relationshipsStore
 }
 </script>
 
@@ -127,10 +137,10 @@ async function handleSendFriendInvite(username: string) {
         <input type="text" name="" id="" class="search" placeholder="Search" />
 
         <p class="user-count">
-          {{ selectedMenuOption }} - {{ filteredUserProfiles.length }}
+          {{ selectedMenuOption }} - {{ userProfiles.length }}
         </p>
 
-        <div class="profiles" v-for="profile in filteredUserProfiles">
+        <div class="profiles" v-for="profile in userProfiles">
           <hr class="profile__separator" />
           <!-- <div class="separator"></div> -->
           <div class="profile">
@@ -139,15 +149,16 @@ async function handleSendFriendInvite(username: string) {
             </div>
             <div class="profile__text">
               <p class="profile__names">
-                <span class="profile__names__display-name"
-                  >{{ profile.displayName }}&nbsp;</span
-                >
-                <span class="profile__names__username">{{
-                  profile.username
-                }}</span>
+                <span class="profile__names__display-name">
+                  {{ profile.displayName }}&nbsp;
+                </span>
+                <span class="profile__names__username">
+                  {{ profile.username }}
+                </span>
               </p>
               <p class="profile__status">
-                {{ statusTextMap[profile.status] }}
+                Offline
+                <!-- {{ statusTextMap[profile.status] }} -->
               </p>
             </div>
           </div>
@@ -322,5 +333,9 @@ async function handleSendFriendInvite(username: string) {
   .profile__status {
     display: block;
   }
+}
+
+.profile__names__username {
+  color: gray;
 }
 </style>

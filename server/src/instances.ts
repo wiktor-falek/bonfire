@@ -36,5 +36,6 @@ export const relationshipService = new RelationshipService(
   userModel,
   friendInviteModel,
   relationModel,
+  userService,
   notificationService
 );

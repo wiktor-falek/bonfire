@@ -5,26 +5,40 @@ import type FriendInviteModel from "../models/friendInviteModel.js";
 import type RelationModel from "../models/relationModel.js";
 import type NotificationService from "./notificationService.js";
 import type UserModel from "../models/userModel.js";
+import type UserService from "./userService.js";
 
 class RelationshipService {
   constructor(
     private userModel: UserModel,
     private friendInviteModel: FriendInviteModel,
     private relationModel: RelationModel,
+    private userService: UserService,
     private notificationService: NotificationService
   ) { }
 
-  async getAllUserRelations(userId: string) {
+  async getAllRelatedUserProfiles(userId: string) {
+    // TODO: handle individual profiles not being loaded successfully
+
     try {
-      const results = await Promise.all([
+      const relations = await Promise.all([
         this.relationModel.findAllUserFriendRelations(userId),
         this.relationModel.findAllUserBlockRelations(userId),
-        this.friendInviteModel.findAllInvitesSentByUser(userId),
+        this.friendInviteModel.findAllInvitesSentToUser(userId),
       ]);
 
-      const friends = results[0].unwrap();
-      const blocked = results[1].unwrap();
-      const pending = results[2].unwrap();
+      const friendRelationsIds = relations[0].unwrap().map(e => userId === e.firstUserId ? e.secondUserId : e.firstUserId);
+      const blockedRelationsIds = relations[1].unwrap().map(e => e.secondUserId);
+      const pendingRelationsIds = relations[2].unwrap().map(e => e.recipientId);
+
+      const profiles = await Promise.all([
+        this.userService.getUserProfilesByIds(friendRelationsIds),
+        this.userService.getUserProfilesByIds(blockedRelationsIds),
+        this.userService.getUserProfilesByIds(pendingRelationsIds),
+      ]);
+
+      const friends = profiles[0].unwrap();
+      const blocked = profiles[1].unwrap();
+      const pending = profiles[2].unwrap();
 
       return Ok({ friends, pending, blocked });
     } catch (_) {

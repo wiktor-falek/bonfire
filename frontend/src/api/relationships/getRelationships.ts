@@ -2,17 +2,17 @@ import { AxiosError } from "axios";
 import api from "../configs/axiosConfig";
 import { Err, Ok } from "resultat";
 
-type Relation = {
-  _id: string;
-  firstUserId: string;
-  secondUserId: string;
-  kind: "friend" | "block";
-  since: number;
-};
+export type UserProfile = {
+  id: string;
+  username: string;
+  displayName: string;
+  imgSrc: string;
+}
 
-type Relationships = {
-  friends: Relation[];
-  blocked: Relation[];
+export type Relationships = {
+  friends: UserProfile[];
+  pending: UserProfile[];
+  blocked: UserProfile[];
 };
 
 async function getRelationships() {

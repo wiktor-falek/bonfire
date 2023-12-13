@@ -11,16 +11,20 @@ import {
 } from "../validators/relationshipValidators.js";
 
 class RelationshipController {
-  constructor(private relationshipService: RelationshipService) {}
+  constructor(private relationshipService: RelationshipService) { }
 
   async getAllUserRelations(req: Request, res: Response) {
     const userId = res.locals.user.id;
 
-    const result = await this.relationshipService.getAllUserRelations(userId);
+    const result = await this.relationshipService.getAllRelatedUserProfiles(userId);
 
     if (!result.ok) {
       return res.status(400).json({ error: result.err });
     }
+
+    const relationships = result.val;
+
+    return res.status(200).json(relationships);
   }
 
   async postFriendInviteByUsername(

@@ -1,6 +1,20 @@
 <script setup lang="ts">
+import { onBeforeMount } from "vue";
 import Bonfire from "../../components/Bonfire.vue";
 import SidePanel from "../../components/SidePanel.vue";
+import getRelationships from "../../api/relationships/getRelationships";
+import useRelationshipsStore from "../../stores/relationshipsStore";
+
+const relationshipsStore = useRelationshipsStore();
+
+onBeforeMount(async () => {
+  getRelationships().then((result) => {
+    if (result.ok) {
+      const relationships = result.val;
+      relationshipsStore.setRelationships(relationships);
+    }
+  });
+});
 </script>
 
 <template>
@@ -34,7 +48,6 @@ main {
 .loading {
   width: 100vw;
   height: 100vh;
-  /* background-color: #2b2d31; */
   display: flex;
   flex-direction: column;
   align-items: center;

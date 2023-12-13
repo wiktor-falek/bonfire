@@ -34,6 +34,16 @@ class FriendInviteModel {
     }
   }
 
+  async findAllInvitesSentToUser(userId: string) {
+    try {
+      const result = await this.collection.find<FriendInvite>({ recipientId: userId }).toArray();
+
+      return Ok(result);
+    } catch (_) {
+      return Err("Network Error");
+    }
+  }
+
   async inviteExists(inviteId: string) {
     try {
       const count = await this.collection.countDocuments(

@@ -12,6 +12,8 @@ class UserModel implements IUserModel {
     this.collection = this.db.collection<User>("users");
   }
 
+  // TODO: try catch every query
+
   async findByUsername(username: string) {
     return this.collection.findOne<User>({
       "account.username": username,
@@ -28,6 +30,19 @@ class UserModel implements IUserModel {
     return this.collection.findOne<User>({
       id,
     });
+  }
+
+  async findAllByIds(ids: string[]) {
+    try {
+      const result = await this.collection.find<User>({
+        id: { $in: ids }
+      }).toArray()
+
+      return Ok(result);
+    }
+    catch (_) {
+      return Err("Network Error");
+    }
   }
 
   async emailExists(email: string) {
