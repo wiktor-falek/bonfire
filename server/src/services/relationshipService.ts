@@ -56,6 +56,10 @@ class RelationshipService {
       return Err("Incorrect username");
     }
 
+    if (recipient.id === senderId) {
+      return Err("Cannot invite yourself");
+    }
+
     return this.sendFriendInvite(senderId, recipient.id);
   }
 
