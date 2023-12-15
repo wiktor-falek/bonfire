@@ -17,7 +17,13 @@ class AuthService {
     username: string,
     displayName: string
   ) {
-    const emailIsInUse = await this.userModel.emailExists(email);
+    const emailExistsResult = await this.userModel.emailExists(email);
+
+    if (!emailExistsResult.ok) {
+      return emailExistsResult;
+    }
+
+    const emailIsInUse = emailExistsResult.val;
 
     if (emailIsInUse) {
       return Err("Email is already in use");

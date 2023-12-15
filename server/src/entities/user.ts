@@ -1,6 +1,6 @@
 import { generateNumericId } from "../utils/id.js";
 
-export type UserStatus = "online" | "dnd" | "brb" | "offline";
+export type UserStatus = "online" | "away" | "dnd" | "offline";
 
 export type User = {
   id: string;

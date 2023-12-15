@@ -34,7 +34,7 @@ function registerWebSocketServer(wss: WebSocketServer) {
     // by using client.to(`user_${userId}`).send(...)
     client.subscribe(`user_${userId}`);
 
-    
+
 
     ws.on("close", () => {
       socketClientManager.deleteClient(client);
@@ -52,6 +52,8 @@ function registerWebSocketServer(wss: WebSocketServer) {
       if (event === null) {
         return console.error("Invalid data format");
       }
+
+      console.log({ event })
 
       switch (event.type) {
         // TODO: schema validation, pass inferred type of data to the handler
