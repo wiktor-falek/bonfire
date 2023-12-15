@@ -1,6 +1,6 @@
 import { generateNumericId } from "../utils/id.js";
 
-export type UserStatus = "online" | "dnd" | "brb" | "invisible";
+export type UserStatus = "online" | "dnd" | "brb" | "offline";
 
 export type User = {
   id: string;
@@ -26,6 +26,6 @@ export function createUser(input: {
       ...input,
       registrationTimestamp: Date.now(),
     },
-    status: "online"
+    status: "offline"
   };
 }

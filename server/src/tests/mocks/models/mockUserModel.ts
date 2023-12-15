@@ -1,8 +1,12 @@
-import { Ok } from "resultat";
-import { createUser, type User } from "../../../entities/user.js";
+import { Ok, type Result } from "resultat";
+import { createUser, type User, type UserStatus } from "../../../entities/user.js";
 import type { IUserModel } from "../../../interfaces/userModelInterface.js";
 
 class MockUserModel implements IUserModel {
+  createUser(user: User) {
+    return Promise.resolve(Ok());
+  }
+
   findByUsername(username: string) {
     return Promise.resolve(
       Ok(createUser({ username: "", displayName: "", email: "", hash: "" }))
@@ -34,8 +38,8 @@ class MockUserModel implements IUserModel {
     return Promise.resolve(Ok(true));
   }
 
-  createUser(user: User) {
-    return Promise.resolve(Ok());
+  updateStatus(userId: string, status: UserStatus) {
+    return Promise.resolve(Ok())
   }
 }
 

@@ -1,58 +1,20 @@
-import { Err, Ok } from "resultat";
 import type UserModel from "../models/userModel.js";
-import type { User, UserStatus } from "../entities/user.js";
+import type { UserStatus } from "../entities/user.js";
 
-type UserProfile = {
-  id: string;
-  username: string;
-  displayName: string;
-  status: UserStatus;
-  imgSrc?: string;
-};
-
-class UserService {
+class StatusService {
   constructor(private userModel: UserModel) { }
 
-  private userToProfile(user: User): UserProfile {
-    return {
-      id: user.id,
-      username: user.account.username,
-      displayName: user.account.displayName,
-      status: user.status
-    };
-  }
-
-  async getUserProfileInfo(userId: string) {
-    const findUserResult = await this.userModel.findById(userId);
-
-    if (!findUserResult.ok) {
-      return findUserResult;
-    }
-
-    const user = findUserResult.val;
-
-    if (user === null) {
-      return Err("Failed to get user profile");
-    }
-
-    const profile = this.userToProfile(user);
-
-    return Ok(profile);
-  }
-
-  async getUserProfilesByIds(ids: string[]) {
-    const result = await this.userModel.findAllByIds(ids);
+  async setStatus(userId: string, status: UserStatus) {
+    const result = await this.userModel.updateStatus(userId, status);
 
     if (!result.ok) {
       return result;
     }
 
-    const users = result.val;
+    // TODO: notify listeners
 
-    const profiles = users.map((user) => this.userToProfile(user));
-
-    return Ok(profiles);
+    return result;
   }
 }
 
-export default UserService;
+export default StatusService;

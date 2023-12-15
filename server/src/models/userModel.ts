@@ -1,6 +1,6 @@
-import { Ok, Err } from "resultat";
+import { Ok, Err, type Result } from "resultat";
 import type { Collection, Db } from "mongodb";
-import type { User } from "../entities/user.js";
+import type { User, UserStatus } from "../entities/user.js";
 import type { IUserModel } from "../interfaces/userModelInterface.js";
 
 class UserModel implements IUserModel {
@@ -10,6 +10,20 @@ class UserModel implements IUserModel {
   constructor(db: Db) {
     this.db = db;
     this.collection = this.db.collection<User>("users");
+  }
+
+  async createUser(user: User) {
+    try {
+      const result = await this.collection.insertOne(user);
+
+      if (!result.acknowledged) {
+        return Err("Failed to create a user");
+      }
+
+      return Ok();
+    } catch (_) {
+      return Err("Failed to create a user");
+    }
   }
 
   async findByUsername(username: string) {
@@ -79,20 +93,23 @@ class UserModel implements IUserModel {
     catch (_) {
       return Err("Network Error");
     }
-
   }
 
-  async createUser(user: User) {
+  async updateStatus(userId: string, status: UserStatus) {
     try {
-      const result = await this.collection.insertOne(user);
+      const updateResult = await this.collection.updateOne(
+        { id: userId },
+        { $set: { status } }
+      )
 
-      if (!result.acknowledged) {
-        return Err("Failed to create a user");
+      if (!updateResult.acknowledged) {
+        return Err("Failed to update status")
       }
 
       return Ok();
-    } catch (_) {
-      return Err("Failed to create a user");
+    }
+    catch (_) {
+      return Err("Network Error");
     }
   }
 }
