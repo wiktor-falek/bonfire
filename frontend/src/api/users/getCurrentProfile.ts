@@ -4,7 +4,7 @@ export type UserProfile = {
   id: string;
   username: string;
   displayName: string;
-  status: "online" | "brb" | "dnd" | "offline";
+  status: "online" | "away" | "dnd" | "offline";
   imgSrc?: string;
 }
 

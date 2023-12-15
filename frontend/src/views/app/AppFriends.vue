@@ -13,7 +13,6 @@ const relationshipsStore = useRelationshipsStore();
 
 type FilterOption = "online" | "offline" | "pending" | "blocked";
 type MenuOption = FilterOption | "add-friend";
-
 type Status = "online" | "away" | "dnd" | "offline";
 
 const selectedMenuOption = ref<MenuOption>("online");
@@ -21,11 +20,13 @@ const selectedMenuOption = ref<MenuOption>("online");
 const userProfiles = computed<UserProfile[]>(() => {
   switch (selectedMenuOption.value) {
     case "online":
-      // TODO: filter out "offline" Status
-      return relationshipsStore.relationships.friends;
+      return relationshipsStore.relationships.friends.filter(
+        (e) => e.status !== "offline"
+      );
     case "offline":
-      // TODO: filter out not "offline" Status
-      return relationshipsStore.relationships.friends;
+      return relationshipsStore.relationships.friends.filter(
+        (e) => e.status === "offline"
+      );
     case "pending":
       return relationshipsStore.relationships.pending;
     case "blocked":
@@ -173,8 +174,7 @@ function getChannelRoute(targetUserId: string) {
                 </span>
               </p>
               <p class="profile__status">
-                Offline
-                <!-- {{ statusTextMap[profile.status] }} -->
+                {{ statusTextMap[profile.status] }}
               </p>
             </div>
           </RouterLink>

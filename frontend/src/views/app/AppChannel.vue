@@ -6,7 +6,6 @@ import Footer from "../../components/app/Footer.vue";
 import getMessages, { type Message } from "../../api/messages/getMessages";
 import formatTimestamp from "../../utils/formatTimestamp";
 import socket, { socketEmitter } from "../../socket";
-import { useUserStore } from "../../stores/userStore";
 import getUserProfileById from "../../api/users/getUserProfileById";
 import type { UserProfile } from "../../api/users/getCurrentProfile";
 
@@ -16,8 +15,6 @@ socketEmitter.on("chat:message", (message) => {
 
 const props = defineProps<{ channelId: string }>();
 
-const userStore = useUserStore();
-
 const messages = ref<Message[]>([]);
 const otherUserProfile = ref<UserProfile>();
 const messagesDiv = ref<HTMLElement>();
@@ -25,12 +22,7 @@ const content = ref("");
 
 function handleSendMessage() {
   const trimmedContent = content.value.trimEnd();
-  if (
-    trimmedContent === "" ||
-    !userStore?.userProfile ||
-    !otherUserProfile.value
-  )
-    return;
+  if (trimmedContent === "" || !otherUserProfile.value) return;
 
   socket.send(
     JSON.stringify({
@@ -59,6 +51,7 @@ function loadUser(userId: string) {
 
 function load() {
   loadMessagess(props.channelId);
+  // how to obtain the user id?
   // loadUser(???)
 }
 

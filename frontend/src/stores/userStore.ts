@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { UserProfile } from "../api/users/getUserProfileById";
+import { type UserProfile } from "../api/users/getCurrentProfile";
 
 export const useUserStore = defineStore("user", () => {
   const userProfile = ref<UserProfile>();

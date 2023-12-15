@@ -4,7 +4,7 @@ import Bonfire from "./Bonfire.vue";
 import router from "./../router";
 import Modal from "./Modal.vue";
 import emitter from "../emitter";
-import { UserProfile } from "../api/users/getUserProfileById";
+import { type UserProfile } from "../api/users/getCurrentProfile";
 import { getDirectMessageChannelId } from "../utils/id";
 import { useUserStore } from "../stores/userStore";
 
@@ -37,118 +37,9 @@ const servers: Server[] = [
   {
     name: "test server 4",
   },
-  {
-    name: "test server 1",
-  },
-  {
-    name: "test server 2",
-  },
-  {
-    name: "test server 3",
-  },
-  {
-    name: "test server 4",
-  },
-  {
-    name: "test server 1",
-  },
-  {
-    name: "test server 2",
-  },
-  {
-    name: "test server 3",
-  },
-  {
-    name: "test server 4",
-  },
-  {
-    name: "test server 1",
-  },
-  {
-    name: "test server 2",
-  },
-  {
-    name: "test server 3",
-  },
-  {
-    name: "test server 4",
-  },
 ];
 
-const userProfiles = ref<UserProfile[]>([
-  {
-    id: "755308752261532161188",
-    username: "qbibubi",
-    displayName: "Qbi",
-    imgSrc: "",
-  },
-  {
-    id: "755308752261532142069",
-    username: "mockerson",
-    displayName: "verylongmockerson",
-    imgSrc: "",
-  },
-  {
-    id: "755308752261532142069",
-    username: "mockerson",
-    displayName: "mock",
-    imgSrc: "",
-  },
-  {
-    id: "755308752261532142069",
-    username: "mockerson",
-    displayName: "mock",
-    imgSrc: "",
-  },
-  {
-    id: "755308752261532142069",
-    username: "mockerson",
-    displayName: "mock",
-    imgSrc: "",
-  },
-  {
-    id: "755308752261532142069",
-    username: "mockerson",
-    displayName: "mock",
-    imgSrc: "",
-  },
-  {
-    id: "755308752261532142069",
-    username: "mockerson",
-    displayName: "mock",
-    imgSrc: "",
-  },
-  {
-    id: "755308752261532142069",
-    username: "mockerson",
-    displayName: "mock",
-    imgSrc: "",
-  },
-  {
-    id: "755308752261532142069",
-    username: "mockerson",
-    displayName: "mock",
-    imgSrc: "",
-  },
-  {
-    id: "755308752261532142069",
-    username: "mockerson",
-    displayName: "mock",
-    imgSrc: "",
-  },
-  {
-    id: "755308752261532142069",
-    username: "mockerson",
-    displayName: "mock",
-    imgSrc: "",
-  },
-  {
-    id: "755308752261532142069",
-    username: "mockerson",
-    displayName: "mock",
-    imgSrc: "",
-  },
-]);
+const userProfiles = ref<UserProfile[]>([]);
 
 function handleConversationClose(index: number) {
   userProfiles.value.splice(index, 1);
