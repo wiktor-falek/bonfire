@@ -1,11 +1,5 @@
 import api from "../configs/axiosConfig";
-
-export type UserProfile = {
-  id: string;
-  username: string;
-  displayName: string;
-  imgSrc?: string;
-};
+import type { UserProfile } from "./getCurrentProfile";
 
 async function getUserProfileById(userId: string) {
   const response = await api.get<UserProfile>(`/api/users/profile/${userId}`);

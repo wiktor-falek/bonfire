@@ -8,7 +8,7 @@ type UserProfile = {
   displayName: string;
   status: UserStatus;
   imgSrc?: string;
-}
+};
 
 class UserService {
   constructor(private userModel: UserModel) { }

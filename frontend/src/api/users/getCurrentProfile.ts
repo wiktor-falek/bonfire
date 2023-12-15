@@ -1,11 +1,12 @@
 import api from "../configs/axiosConfig";
 
-type UserProfile = {
+export type UserProfile = {
   id: string;
   username: string;
   displayName: string;
-  imgSrc: string;
-};
+  status: "online" | "brb" | "dnd" | "offline";
+  imgSrc?: string;
+}
 
 async function getCurrentProfile() {
   const response = await api.get<UserProfile>("/api/users/profile/me");

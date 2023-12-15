@@ -1,13 +1,7 @@
 import { AxiosError } from "axios";
 import api from "../configs/axiosConfig";
 import { Err, Ok } from "resultat";
-
-export type UserProfile = {
-  id: string;
-  username: string;
-  displayName: string;
-  imgSrc: string;
-}
+import type { UserProfile } from "../users/getCurrentProfile";
 
 export type Relationships = {
   friends: UserProfile[];

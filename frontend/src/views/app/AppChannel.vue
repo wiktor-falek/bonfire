@@ -6,10 +6,9 @@ import Footer from "../../components/app/Footer.vue";
 import getMessages, { type Message } from "../../api/messages/getMessages";
 import formatTimestamp from "../../utils/formatTimestamp";
 import socket, { socketEmitter } from "../../socket";
-import getUserProfileById, {
-  type UserProfile,
-} from "../../api/users/getUserProfileById";
 import { useUserStore } from "../../stores/userStore";
+import getUserProfileById from "../../api/users/getUserProfileById";
+import type { UserProfile } from "../../api/users/getCurrentProfile";
 
 socketEmitter.on("chat:message", (message) => {
   messages.value.push(message);
