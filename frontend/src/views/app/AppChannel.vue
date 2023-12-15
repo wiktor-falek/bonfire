@@ -8,6 +8,9 @@ import formatTimestamp from "../../utils/formatTimestamp";
 import socket, { socketEmitter } from "../../socket";
 import getUserProfileById from "../../api/users/getUserProfileById";
 import type { UserProfile } from "../../api/users/getCurrentProfile";
+import { useUserProfilesStore } from "../../stores/userProfilesStore";
+
+const userProfilesStore = useUserProfilesStore();
 
 socketEmitter.on("chat:message", (message) => {
   messages.value.push(message);
@@ -43,16 +46,22 @@ function loadMessagess(channelId: string) {
   });
 }
 
-function loadUser(userId: string) {
-  getUserProfileById(userId).then((profile) => {
-    otherUserProfile.value = profile;
-  });
+function loadUser(channelId: string) {
+  let profile = userProfilesStore.directMessageChannelProfiles.get(channelId);
+  if (profile === undefined) {
+    // TODO: fetch the profile and set for this channel
+    // NOTE: probably need to fetch all the channel participants
+  }
+
+  otherUserProfile.value = profile;
+  // getUserProfileById(userId).then((profile) => {
+  // otherUserProfile.value = profile;
+  // });
 }
 
 function load() {
   loadMessagess(props.channelId);
-  // how to obtain the user id?
-  // loadUser(???)
+  loadUser(props.channelId);
 }
 
 load();

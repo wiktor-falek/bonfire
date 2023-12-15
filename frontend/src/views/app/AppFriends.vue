@@ -7,9 +7,12 @@ import postFriendInviteByUsername from "../../api/relationships/postFriendInvite
 import { useRelationshipsStore } from "../../stores/relationshipsStore";
 import { useUserStore } from "../../stores/userStore";
 import { getDirectMessageChannelId } from "../../utils/id";
+import router from "../../router";
+import { useUserProfilesStore } from "../../stores/userProfilesStore";
 
 const userStore = useUserStore();
 const relationshipsStore = useRelationshipsStore();
+const userProfilesStore = useUserProfilesStore();
 
 type FilterOption = "online" | "offline" | "pending" | "blocked";
 type MenuOption = FilterOption | "add-friend";
@@ -60,17 +63,19 @@ async function handleSendFriendInvite(username: string) {
   // TODO: dispatch new pending friend invite to relationshipsStore
 }
 
-function getChannelRoute(targetUserId: string) {
+function handleProfileClick(profile: UserProfile) {
   if (!userStore.userProfile) {
     throw new Error("Current user profile does not exist");
   }
 
   const channelId = getDirectMessageChannelId(
     userStore.userProfile.id,
-    targetUserId
+    profile.id
   );
 
-  return `/app/channel/${channelId}`;
+  userProfilesStore.setDirectMessageChannelProfiles(channelId, profile);
+
+  router.push(`/app/channel/${channelId}`);
 }
 </script>
 
@@ -160,7 +165,7 @@ function getChannelRoute(targetUserId: string) {
         <div class="profiles" v-for="profile in userProfiles">
           <hr class="profile__separator" />
           <!-- <div class="separator"></div> -->
-          <RouterLink :to="getChannelRoute(profile.id)" class="profile">
+          <div @click="handleProfileClick(profile)" class="profile">
             <div class="profile__image">
               <img src="" />
             </div>
@@ -177,7 +182,7 @@ function getChannelRoute(targetUserId: string) {
                 {{ statusTextMap[profile.status] }}
               </p>
             </div>
-          </RouterLink>
+          </div>
         </div>
       </div>
     </div>
@@ -304,7 +309,6 @@ function getChannelRoute(targetUserId: string) {
 }
 
 .profile {
-  all: unset;
   display: flex;
   flex-direction: row;
   align-items: center;

@@ -5,10 +5,12 @@ import SidePanel from "../../components/SidePanel.vue";
 import getRelationships from "../../api/relationships/getRelationships";
 import { useUserStore } from "../../stores/userStore";
 import { useRelationshipsStore } from "../../stores/relationshipsStore";
+import { useUserProfilesStore } from "../../stores/userProfilesStore";
 import getCurrentProfile from "../../api/users/getCurrentProfile";
 
 const userStore = useUserStore();
 const relationshipsStore = useRelationshipsStore();
+const profilesStore = useUserProfilesStore();
 
 onBeforeMount(async () => {
   getCurrentProfile().then((profile) => {
@@ -18,6 +20,10 @@ onBeforeMount(async () => {
     if (result.ok) {
       const relationships = result.val;
       relationshipsStore.setRelationships(relationships);
+
+      const { friends, pending, blocked } = relationships;
+      const profiles = [...friends, ...pending, ...blocked];
+      profilesStore.setUserProfiles(profiles);
     }
   });
 });

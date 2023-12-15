@@ -7,7 +7,7 @@ export const useUserStore = defineStore("user", () => {
 
   const setUserProfile = (newUserProfile: UserProfile) => {
     userProfile.value = newUserProfile;
-  }
+  };
 
-  return { userProfile, setUserProfile }
-})
+  return { userProfile, setUserProfile };
+});

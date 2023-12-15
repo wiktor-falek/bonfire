@@ -7,8 +7,10 @@ import emitter from "../emitter";
 import { type UserProfile } from "../api/users/getCurrentProfile";
 import { getDirectMessageChannelId } from "../utils/id";
 import { useUserStore } from "../stores/userStore";
+import { useUserProfilesStore } from "../stores/userProfilesStore";
 
 const userStore = useUserStore();
+const userProfilesStore = useUserProfilesStore();
 
 emitter.on("openSidePanel", () => {
   isOpenOnMobile.value = true;
@@ -45,13 +47,15 @@ function handleConversationClose(index: number) {
   userProfiles.value.splice(index, 1);
 }
 
-async function handleConversationClick(profileId: string) {
+function handleConversationClick(profile: UserProfile) {
   if (!userStore.userProfile?.id) return;
 
-  isOpenOnMobile.value = false;
-
   const userId = userStore.userProfile.id;
-  const channelId = await getDirectMessageChannelId(userId, profileId);
+  const channelId = getDirectMessageChannelId(userId, profile.id);
+
+  userProfilesStore.setDirectMessageChannelProfiles(channelId, profile);
+
+  isOpenOnMobile.value = false;
   router.push(`/app/channel/${channelId}`);
 }
 
@@ -173,7 +177,7 @@ function handleCloseCreateConversationModal() {
             class="direct-messages__conversations__conversation"
             v-for="(profile, index) in userProfiles"
             :key="profile.username"
-            @click="handleConversationClick(profile.id)"
+            @click="handleConversationClick(profile)"
           >
             <div
               class="direct-messages__conversations__conversation__image"
