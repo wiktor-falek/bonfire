@@ -9,7 +9,7 @@ class AuthService {
   constructor(
     private userModel: UserModel,
     private sessionStore: SessionStore
-  ) {}
+  ) { }
 
   async register(
     email: string,
@@ -31,7 +31,13 @@ class AuthService {
   }
 
   async login(email: string, password: string) {
-    const user = await this.userModel.findByEmail(email);
+    const findUserResult = await this.userModel.findByEmail(email);
+
+    if (!findUserResult.ok) {
+      return findUserResult;
+    }
+
+    const user = findUserResult.val
 
     if (user === null) {
       return Err("Incorrect email or password");

@@ -44,13 +44,13 @@ describe("user operations", async () => {
   });
 
   it("finds the existing user", async () => {
-    const userByUsername = await userModel.findByUsername("username");
+    const userByUsername = (await userModel.findByUsername("username")).unwrap();
     assert(userByUsername !== null);
 
-    const userByEmail = await userModel.findByEmail("test@email.com");
+    const userByEmail = (await userModel.findByEmail("test@email.com")).unwrap();
     assert(userByEmail !== null);
 
-    const userById = await userModel.findById(userByUsername.id);
+    const userById = (await userModel.findById(userByUsername.id)).unwrap();
     assert(userById !== null);
   });
 });

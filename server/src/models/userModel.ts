@@ -12,24 +12,44 @@ class UserModel implements IUserModel {
     this.collection = this.db.collection<User>("users");
   }
 
-  // TODO: try catch every query
-
   async findByUsername(username: string) {
-    return this.collection.findOne<User>({
-      "account.username": username,
-    });
+    try {
+      const result = await this.collection.findOne<User>({
+        "account.username": username,
+      });
+
+      return Ok(result);
+    }
+    catch (_) {
+      return Err("Network Error");
+    }
+
   }
 
   async findByEmail(email: string) {
-    return this.collection.findOne<User>({
-      "account.email": email,
-    });
+    try {
+      const result = await this.collection.findOne<User>({
+        "account.email": email,
+      });
+
+      return Ok(result);
+    }
+    catch (_) {
+      return Err("Network Error");
+    }
   }
 
   async findById(id: string) {
-    return this.collection.findOne<User>({
-      id,
-    });
+    try {
+
+      const result = await this.collection.findOne<User>({
+        id,
+      });
+      return Ok(result);
+    }
+    catch (_) {
+      return Err("Network Error");
+    }
   }
 
   async findAllByIds(ids: string[]) {
@@ -46,14 +66,20 @@ class UserModel implements IUserModel {
   }
 
   async emailExists(email: string) {
-    const count = await this.collection.countDocuments(
-      {
-        "account.email": email,
-      },
-      { limit: 1 }
-    );
+    try {
+      const count = await this.collection.countDocuments(
+        {
+          "account.email": email,
+        },
+        { limit: 1 }
+      );
 
-    return Boolean(count);
+      return Ok(Boolean(count));
+    }
+    catch (_) {
+      return Err("Network Error");
+    }
+
   }
 
   async createUser(user: User) {

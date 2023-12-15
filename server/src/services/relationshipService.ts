@@ -50,7 +50,13 @@ class RelationshipService {
     senderId: string,
     recipientUsername: string
   ) {
-    const recipient = await this.userModel.findByUsername(recipientUsername);
+    const findUserResult = await this.userModel.findByUsername(recipientUsername);
+
+    if (!findUserResult.ok) {
+      return findUserResult;
+    }
+
+    const recipient = findUserResult.val;
 
     if (recipient === null) {
       return Err("Incorrect username");

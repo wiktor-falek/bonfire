@@ -3,28 +3,39 @@ import { createUser, type User } from "../../../entities/user.js";
 import type { IUserModel } from "../../../interfaces/userModelInterface.js";
 
 class MockUserModel implements IUserModel {
-  createIndexes() {
-    return Promise.resolve([]);
-  }
-
-  createUser(user: User) {
-    return Promise.resolve(Ok());
+  findByUsername(username: string) {
+    return Promise.resolve(
+      Ok(createUser({ username: "", displayName: "", email: "", hash: "" }))
+    );
   }
 
   findByEmail(email: string) {
     return Promise.resolve(
-      createUser({ username: "", displayName: "", email, hash: "" })
+      Ok(createUser({ username: "", displayName: "", email, hash: "" }))
     );
   }
 
-  findByUsername(username: string) {
+  findById(id: string) {
     return Promise.resolve(
-      createUser({ username: "", displayName: "", email: "", hash: "" })
+      Ok(createUser({ username: "", displayName: "", email: "", hash: "" }))
     );
+  }
+
+  findAllByIds(ids: string[]) {
+    return Promise.resolve(
+      Ok([
+        createUser({ username: "", displayName: "", email: "", hash: "" }),
+        createUser({ username: "", displayName: "", email: "", hash: "" })
+      ])
+    )
   }
 
   emailExists(email: string) {
-    return Promise.resolve(true);
+    return Promise.resolve(Ok(true));
+  }
+
+  createUser(user: User) {
+    return Promise.resolve(Ok());
   }
 }
 

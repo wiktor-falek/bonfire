@@ -30,7 +30,6 @@ socket.addEventListener("message", (messageEvent) => {
   console.log(event);
   switch (event.type) {
     case "chat:message":
-      // TODO: emit event
       socketEmitter.emit("chat:message", event.data);
       break;
     default:

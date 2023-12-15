@@ -12,14 +12,14 @@ import getUserProfileById, {
 import { useUserStore } from "../../stores/userStore";
 
 socketEmitter.on("chat:message", (message) => {
-  messages.value?.push(message);
+  messages.value.push(message);
 });
 
 const props = defineProps<{ channelId: string }>();
 
 const userStore = useUserStore();
 
-const messages = ref<Message[]>();
+const messages = ref<Message[]>([]);
 const otherUserProfile = ref<UserProfile>();
 const messagesDiv = ref<HTMLElement>();
 const content = ref("");
