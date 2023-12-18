@@ -4,7 +4,7 @@ import Login from "./views/Login.vue";
 import Register from "./views/Register.vue";
 import App from "./views/app/App.vue";
 import AppHome from "./views/app/AppHome.vue";
-import AppChannel from "./views/app/AppChannel.vue";
+import AppDirectMessageChannel from "./views/app/AppDirectMessageChannel.vue";
 import AppFriends from "./views/app/AppFriends.vue";
 
 const router = createRouter({
@@ -55,8 +55,8 @@ const router = createRouter({
           component: AppHome,
         },
         {
-          path: "channel/:channelId",
-          component: AppChannel,
+          path: "channel/@me/:channelId",
+          component: AppDirectMessageChannel,
           props: true,
         },
       ],

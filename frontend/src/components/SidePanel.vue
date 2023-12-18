@@ -56,7 +56,7 @@ function handleConversationClick(profile: UserProfile) {
   userProfilesStore.setDirectMessageChannelProfiles(channelId, profile);
 
   isOpenOnMobile.value = false;
-  router.push(`/app/channel/${channelId}`);
+  router.push(`/app/channel/@me/${channelId}`);
 }
 
 const createConversationModalIsOpen = ref(false);

@@ -8,17 +8,17 @@ type UserProfile = {
   displayName: string;
   status: UserStatus;
   imgSrc?: string;
-}
+};
 
 class UserService {
-  constructor(private userModel: UserModel) { }
+  constructor(private userModel: UserModel) {}
 
   private userToProfile(user: User): UserProfile {
     return {
       id: user.id,
       username: user.account.username,
       displayName: user.account.displayName,
-      status: user.status
+      status: user.status,
     };
   }
 

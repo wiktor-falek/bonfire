@@ -3,8 +3,9 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import morgan from "morgan";
 import authRouter from "./routes/authRouter.js";
-import messagesRouter from "./routes/messagesRouter.js";
 import usersRouter from "./routes/usersRouter.js";
+import messagesRouter from "./routes/messagesRouter.js";
+import channelsRouter from "./routes/channelsRouter.js";
 import relationshipsRouter from "./routes/relationshipsRouter.js";
 
 const app = express();
@@ -23,8 +24,9 @@ app.use(morgan(":status :method :url :response-time[2] ms"));
 
 // Routers
 app.use("/auth", authRouter);
-app.use("/api/messages", messagesRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/messages", messagesRouter);
+app.use("/api/channels", channelsRouter);
 app.use("/api/relationships", relationshipsRouter);
 
 export default app;

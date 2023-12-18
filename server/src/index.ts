@@ -8,13 +8,8 @@ import registerWebSocketServer from "./websocket/index.js";
 import config from "./config.js";
 
 if (config.NODE_ENV === "development") {
-  await createIndexes(mongoDb)
-    .then(() => {
-      console.log("Successfully created indexes");
-    })
-    .catch((err) => {
-      throw new Error(err);
-    });
+  await createIndexes(mongoDb);
+  console.log("Successfully created indexes");
 }
 
 const server = createServer(app);

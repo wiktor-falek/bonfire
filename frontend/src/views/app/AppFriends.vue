@@ -75,7 +75,7 @@ function handleProfileClick(profile: UserProfile) {
 
   userProfilesStore.setDirectMessageChannelProfiles(channelId, profile);
 
-  router.push(`/app/channel/${channelId}`);
+  router.push(`/app/channel/@me/${channelId}`);
 }
 </script>
 

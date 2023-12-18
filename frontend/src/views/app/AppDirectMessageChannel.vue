@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { onBeforeMount, ref, watch } from "vue";
 import HamburgerMenu from "../../components/HamburgerMenu.vue";
 import Header from "../../components/app/Header.vue";
 import Footer from "../../components/app/Footer.vue";
 import getMessages, { type Message } from "../../api/messages/getMessages";
 import formatTimestamp from "../../utils/formatTimestamp";
 import socket, { socketEmitter } from "../../socket";
-import getUserProfileById from "../../api/users/getUserProfileById";
 import type { UserProfile } from "../../api/users/getCurrentProfile";
 import { useUserProfilesStore } from "../../stores/userProfilesStore";
+import getOtherParticipantProfileInDirectMessageChannel from "../../api/channels/getOtherParticipantProfileInDirectMessageChannel";
 
 const userProfilesStore = useUserProfilesStore();
 
@@ -46,31 +46,36 @@ function loadMessagess(channelId: string) {
   });
 }
 
-function loadUser(channelId: string) {
+async function loadUser(channelId: string) {
   let profile = userProfilesStore.directMessageChannelProfiles.get(channelId);
   if (profile === undefined) {
-    // TODO: fetch the profile and set for this channel
-    // NOTE: probably need to fetch all the channel participants
+    const result = await getOtherParticipantProfileInDirectMessageChannel(
+      channelId
+    );
+    if (result.ok) {
+      const fetchedProfile = result.val;
+      profile = fetchedProfile;
+      userProfilesStore.setUserProfile(fetchedProfile);
+    }
   }
 
   otherUserProfile.value = profile;
-  // getUserProfileById(userId).then((profile) => {
-  // otherUserProfile.value = profile;
-  // });
 }
 
-function load() {
+async function load() {
   loadMessagess(props.channelId);
-  loadUser(props.channelId);
+  await loadUser(props.channelId);
 }
 
-load();
+onBeforeMount(async () => {
+  await load();
+});
 
-watch(props, () => {
+watch(props, async () => {
   // refetch profile and messages whenever the channelId changes
   otherUserProfile.value = undefined;
   messages.value = [];
-  load();
+  await load();
 });
 </script>
 

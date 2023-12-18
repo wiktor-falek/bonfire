@@ -136,6 +136,23 @@ class ChannelModel implements IChannelModel {
   async deleteParticipantFromChannel(userId: string, channelId: string) {
     // TODO: { $pull: { participants: userId } }
   }
+
+  async findParticipantsInChannel(channelId: string) {
+    try {
+      const result = await this.collection.findOne<{ participants: string[] }>(
+        { id: channelId },
+        { projection: { participants: 1 } }
+      );
+
+      if (result === null) {
+        return Err("");
+      }
+
+      return Ok(result.participants);
+    } catch (_) {
+      return Err("Network Error");
+    }
+  }
 }
 
 export default ChannelModel;
