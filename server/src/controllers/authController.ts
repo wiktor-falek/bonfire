@@ -36,18 +36,37 @@ class AuthController {
   ) {
     const { email, password, username, displayName } = req.body;
 
-    const result = await this.authService.register(
+    const registerResult = await this.authService.register(
       email,
       password,
       username,
       displayName ?? ""
     );
 
-    if (!result.ok) {
-      return res.status(401).json({ error: result.err });
+    if (!registerResult.ok) {
+      return res.status(401).json({ error: registerResult.err });
     }
 
-    return res.status(200).json({ success: true });
+    // Automatically log the user in
+    const loginResult = await this.authService.login(email, password);
+
+    if (!loginResult.ok) {
+      console.error(loginResult.err);
+      return res.status(401).json({ error: loginResult.err });
+    }
+
+    const { user, sessionId } = loginResult.val;
+
+    res.cookie("sessionId", sessionId, {
+      httpOnly: true,
+      maxAge: 30 * 60 * 60 * 24 * 1000, // one month
+    });
+
+    return res.status(200).json({
+      username: user.account.username,
+      displayName: user.account.displayName,
+      email: user.account.email,
+    });
   }
 }
 

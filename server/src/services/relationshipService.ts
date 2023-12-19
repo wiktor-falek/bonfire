@@ -14,7 +14,7 @@ class RelationshipService {
     private relationModel: RelationModel,
     private userService: UserService,
     private notificationService: NotificationService
-  ) { }
+  ) {}
 
   async getAllRelatedUserProfiles(userId: string) {
     // TODO: handle individual profiles not being loaded successfully
@@ -26,9 +26,17 @@ class RelationshipService {
         this.friendInviteModel.findAllInvitesSentToUser(userId),
       ]);
 
-      const friendRelationsIds = relations[0].unwrap().map(e => userId === e.firstUserId ? e.secondUserId : e.firstUserId);
-      const blockedRelationsIds = relations[1].unwrap().map(e => e.secondUserId);
-      const pendingRelationsIds = relations[2].unwrap().map(e => e.recipientId);
+      const friendRelationsIds = relations[0]
+        .unwrap()
+        .map((e) =>
+          userId === e.firstUserId ? e.secondUserId : e.firstUserId
+        );
+
+      const blockedRelationsIds = relations[1]
+        .unwrap()
+        .map((e) => e.secondUserId);
+
+      const pendingRelationsIds = relations[2].unwrap().map((e) => e.senderId);
 
       const profiles = await Promise.all([
         this.userService.getUserProfilesByIds(friendRelationsIds),
@@ -50,7 +58,9 @@ class RelationshipService {
     senderId: string,
     recipientUsername: string
   ) {
-    const findUserResult = await this.userModel.findByUsername(recipientUsername);
+    const findUserResult = await this.userModel.findByUsername(
+      recipientUsername
+    );
 
     if (!findUserResult.ok) {
       return findUserResult;
