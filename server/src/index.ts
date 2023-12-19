@@ -18,7 +18,7 @@ const wss = new WebSocketServer({ server });
 registerWebSocketServer(wss);
 
 server.listen(3000, () => {
-  console.log(`HTTP server Listening on http://localhost:3000`);
+  console.log(`HTTP server listening on http://localhost:3000`);
 });
 
 cron.schedule("0 0 * * *", () => {
