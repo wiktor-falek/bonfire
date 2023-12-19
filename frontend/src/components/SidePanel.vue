@@ -8,6 +8,7 @@ import { type UserProfile } from "../api/users/getCurrentProfile";
 import { getDirectMessageChannelId } from "../utils/id";
 import { useUserStore } from "../stores/userStore";
 import { useUserProfilesStore } from "../stores/userProfilesStore";
+import capitalizeEachWord from "../utils/capitalizeEachWord";
 
 const userStore = useUserStore();
 const userProfilesStore = useUserProfilesStore();
@@ -212,9 +213,16 @@ function handleCloseCreateConversationModal() {
             <p class="user-card__profile__text__display-name">
               {{ userStore.userProfile?.displayName }}
             </p>
-            <p class="user-card__profile__text__username">
-              @{{ userStore.userProfile?.username }}
-            </p>
+
+            <div class="container user-card__profile__text__bottom-text">
+              <p class="paragraph1">
+                {{ capitalizeEachWord(userStore.userProfile?.status ?? "") }}
+              </p>
+
+              <p class="paragraph2">
+                {{ userStore.userProfile?.username }}
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -472,23 +480,50 @@ hr {
   display: flex;
   align-items: center;
   background-color: rgb(39, 39, 44);
-  min-height: 48px;
+  height: 52px;
+  box-sizing: border-box;
+  padding: 5px 8px;
 }
 
 .user-card__profile {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   height: 100%;
 }
+
 .user-card__profile__image {
-  height: 36px;
+  height: 32px;
   aspect-ratio: 1 / 1;
   background-color: #47484b;
   border-radius: 50%;
 }
 
+.user-card__profile__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
 .user-card__profile__text > * {
-  line-height: 1.1;
+  line-height: 1;
+  font-size: 0.9rem;
+}
+
+.user-card__profile__text__bottom-text {
+  color: rgb(187, 187, 187);
+}
+
+.container {
+  height: 1rem;
+  overflow: hidden;
+}
+
+.container:hover > p:first-child {
+  display: none;
+}
+
+.container > p {
+  font-size: 0.9rem;
+  line-height: 0.9rem;
 }
 </style>
