@@ -482,7 +482,7 @@ hr {
   background-color: rgb(39, 39, 44);
   height: 52px;
   box-sizing: border-box;
-  padding: 5px 8px;
+  padding: 5px 6px;
 }
 
 .user-card__profile {
@@ -490,6 +490,18 @@ hr {
   align-items: center;
   gap: 6px;
   height: 100%;
+  width: 128px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  padding: 2px;
+}
+
+.user-card__profile:hover {
+  background-color: #404146;
+}
+
+.user-card__profile:hover .paragraph1 {
+  display: none;
 }
 
 .user-card__profile__image {
@@ -516,10 +528,6 @@ hr {
 .container {
   height: 1rem;
   overflow: hidden;
-}
-
-.container:hover > p:first-child {
-  display: none;
 }
 
 .container > p {
