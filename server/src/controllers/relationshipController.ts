@@ -11,12 +11,14 @@ import {
 } from "../validators/relationshipValidators.js";
 
 class RelationshipController {
-  constructor(private relationshipService: RelationshipService) { }
+  constructor(private relationshipService: RelationshipService) {}
 
   async getAllUserRelations(req: Request, res: Response) {
     const userId = res.locals.user.id;
 
-    const result = await this.relationshipService.getAllRelatedUserProfiles(userId);
+    const result = await this.relationshipService.getAllRelatedUserProfiles(
+      userId
+    );
 
     if (!result.ok) {
       return res.status(400).json({ error: result.err });
@@ -53,7 +55,7 @@ class RelationshipController {
     const senderId = res.locals.user.id;
     const recipientId = req.body.userId;
 
-    const result = await this.relationshipService.sendFriendInvite(
+    const result = await this.relationshipService.sendFriendInviteById(
       senderId,
       recipientId
     );

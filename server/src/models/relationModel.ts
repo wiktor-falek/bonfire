@@ -1,6 +1,10 @@
 import { Ok, Err } from "resultat";
 import { type Collection, type Db } from "mongodb";
-import type { BlockRelation, FriendRelation, Relation } from "../entities/relations.js";
+import type {
+  BlockRelation,
+  FriendRelation,
+  Relation,
+} from "../entities/relations.js";
 
 class RelationModel {
   private db: Db;
@@ -43,7 +47,7 @@ class RelationModel {
       const relations = await this.collection
         .find<FriendRelation>({
           kind: "friend",
-          $or: [{ firstUserId: userId }, { secondUserId: userId }]
+          $or: [{ firstUserId: userId }, { secondUserId: userId }],
         })
         .toArray();
 
@@ -76,6 +80,23 @@ class RelationModel {
       return Ok(exists);
     } catch (_) {
       return Err("Network Error");
+    }
+  }
+
+  async findFriendRelationByUserIds(firstUserId: string, secondUserId: string) {
+    try {
+      const friendRelation = await this.collection.findOne<FriendRelation>({
+        kind: "friend",
+        $or: [{ firstUserId }, { secondUserId }],
+      });
+
+      if (friendRelation === null) {
+        return Err("Relation does not exist" as const);
+      }
+
+      return Ok(friendRelation);
+    } catch (_) {
+      return Err("Network error" as const);
     }
   }
 }

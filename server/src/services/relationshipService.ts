@@ -72,17 +72,28 @@ class RelationshipService {
       return Err("Incorrect username");
     }
 
-    if (recipient.id === senderId) {
-      return Err("Cannot invite yourself");
-    }
-
-    return this.sendFriendInvite(senderId, recipient.id);
+    return this.sendFriendInviteById(senderId, recipient.id);
   }
 
-  async sendFriendInvite(senderId: string, recipientId: string) {
+  async sendFriendInviteById(senderId: string, recipientId: string) {
     if (senderId === recipientId) {
       return Err("Cannot invite yourself");
     }
+
+    const findRelationResult =
+      await this.relationModel.findFriendRelationByUserIds(
+        senderId,
+        recipientId
+      );
+
+    if (findRelationResult.ok) {
+      return Err("Friend relation already exists");
+    } else {
+      if (findRelationResult.err === "Network error") {
+        return findRelationResult;
+      }
+    }
+
     const friendInvite = createFriendInvite(senderId, recipientId);
     const result = await this.friendInviteModel.createInvite(friendInvite);
 
@@ -90,10 +101,8 @@ class RelationshipService {
       return result;
     }
 
-    // TODO: handle users already being friends
-
     if (result.val === "Recipient Already Invited Sender") {
-      // The invite was not created, but relationship will be created because both users invited each other.
+      // Create relationship instead of an invite because now both users invited each other.
       const friendRelation = createFriendRelation(senderId, recipientId);
       const createRelationResult = await this.relationModel.createRelation(
         friendRelation
