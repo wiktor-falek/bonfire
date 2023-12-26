@@ -3,25 +3,17 @@ import { z } from "zod";
 import type WsClient from "../wsClient.js";
 import type { ServerToClientEvents } from "../types.js";
 
-const saveDirectMessageSchema = z
-  .object({
-    recipientId: z.string(),
-    content: z.string(),
-  })
-  .strict();
+const directMessageSchema = z.strictObject({
+  recipientId: z.string(),
+  content: z.string(),
+});
 
-async function directMessage(
+async function directMessageHandler(
   client: WsClient<ServerToClientEvents>,
-  data: any,
+  data: z.infer<typeof directMessageSchema>,
   userId: string
 ) {
-  // TODO: find a cleaner solution
-  const validation = saveDirectMessageSchema.safeParse(data);
-  if (!validation.success) {
-    return client.send("error", { reason: "Invalid Schema" });
-  }
-
-  const { recipientId, content } = validation.data;
+  const { recipientId, content } = data;
 
   const result = await messageService.saveDirectMessage(
     userId,
@@ -35,7 +27,7 @@ async function directMessage(
 
   const message = result.val;
 
-  console.log({ message })
+  console.log({ message });
 
   // TODO: client.send("ACK_chat:message", null);
   client.send("chat:message", message);
@@ -45,5 +37,8 @@ async function directMessage(
 }
 
 export default {
-  directMessage,
+  directMessage: {
+    handler: directMessageHandler,
+    schema: directMessageSchema,
+  },
 };

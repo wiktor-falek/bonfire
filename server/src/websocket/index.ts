@@ -1,10 +1,14 @@
 import { WebSocket, type WebSocketServer } from "ws";
+import type { ServerToClientEvents } from "./types.js";
 import SocketClientManager from "./socketClientManager.js";
 import getCookie from "../utils/getCookie.js";
 import { sessionStore } from "../instances.js";
 import { deserialize } from "./serialization.js";
 import chatHandler from "./handlers/chatHandler.js";
-import type { ServerToClientEvents } from "./types.js";
+
+const handlers = {
+  "chat:direct-message": chatHandler.directMessage,
+};
 
 function registerWebSocketServer(wss: WebSocketServer) {
   const socketClientManager = new SocketClientManager<ServerToClientEvents>();
@@ -34,8 +38,6 @@ function registerWebSocketServer(wss: WebSocketServer) {
     // by using client.to(`user_${userId}`).send(...)
     client.subscribe(`user_${userId}`);
 
-
-
     ws.on("close", () => {
       socketClientManager.deleteClient(client);
       console.log(`User ${userId} disconnected`);
@@ -53,17 +55,24 @@ function registerWebSocketServer(wss: WebSocketServer) {
         return console.error("Invalid data format");
       }
 
-      console.log({ event })
-
-      switch (event.type) {
-        // TODO: schema validation, pass inferred type of data to the handler
-        case "chat:direct-message":
-          chatHandler.directMessage(client, event.data, userId);
-          break;
-
-        default:
-          console.error("Unknown event type:", event.type);
+      if (!Object.keys(handlers).includes(event.type)) {
+        return client.send("error", {
+          reason: `Unknown event type: ${event.type}`,
+        });
       }
+
+      const eventType = event.type as keyof typeof handlers;
+      const { handler, schema } = handlers[eventType];
+
+      const validation = schema.safeParse(event.data);
+
+      if (!validation.success) {
+        return client.send("error", { reason: "Invalid Schema" });
+      }
+
+      const validatedEventData = validation.data;
+
+      handler(client, validatedEventData, userId);
     });
   });
 }
