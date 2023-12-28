@@ -14,7 +14,7 @@ const userStore = useUserStore();
 const relationshipsStore = useRelationshipsStore();
 const userProfilesStore = useUserProfilesStore();
 
-type FilterOption = "online" | "offline" | "pending" | "blocked";
+type FilterOption = "online" | "all" | "pending" | "blocked";
 type MenuOption = FilterOption | "add-friend";
 type Status = "online" | "away" | "dnd" | "offline";
 
@@ -26,10 +26,8 @@ const userProfiles = computed<UserProfile[]>(() => {
       return relationshipsStore.relationships.friends.filter(
         (e) => e.status !== "offline"
       );
-    case "offline":
-      return relationshipsStore.relationships.friends.filter(
-        (e) => e.status === "offline"
-      );
+    case "all":
+      return relationshipsStore.relationships.friends;
     case "pending":
       return relationshipsStore.relationships.pending;
     case "blocked":
@@ -97,14 +95,13 @@ function handleProfileClick(profile: UserProfile) {
         Online
       </button>
       <button
-        @click="selectMenuOption('offline')"
+        @click="selectMenuOption('all')"
         class="navigation__menu__option"
         :class="{
-          'navigation__menu__option--selected':
-            selectedMenuOption === 'offline',
+          'navigation__menu__option--selected': selectedMenuOption === 'all',
         }"
       >
-        Offline
+        All
       </button>
       <button
         @click="selectMenuOption('pending')"
@@ -159,7 +156,9 @@ function handleProfileClick(profile: UserProfile) {
         <input type="text" name="" id="" class="search" placeholder="Search" />
 
         <p class="user-count">
-          {{ selectedMenuOption }} - {{ userProfiles.length }}
+          {{ selectedMenuOption != "all" ? selectedMenuOption : "All Friends" }}
+          -
+          {{ userProfiles.length }}
         </p>
 
         <div class="profiles" v-for="profile in userProfiles">
@@ -260,6 +259,7 @@ function handleProfileClick(profile: UserProfile) {
 .navigation__menu__option--selected {
   color: white !important;
   background-color: #4d4d50;
+  cursor: default;
 }
 
 #add-friend {
