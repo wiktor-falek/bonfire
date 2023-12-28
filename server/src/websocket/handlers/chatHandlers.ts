@@ -1,7 +1,8 @@
-import { messageService } from "../../instances.js";
 import { z } from "zod";
 import type WsClient from "../wsClient.js";
 import type { ServerToClientEvents } from "../types.js";
+import type { Handlers } from "./types.js";
+import { messageService } from "../../instances.js";
 
 const directMessageSchema = z.strictObject({
   recipientId: z.string(),
@@ -29,16 +30,18 @@ async function directMessageHandler(
 
   console.log({ message });
 
-  // TODO: client.send("ACK_chat:message", null);
+  // TODO: implement ACK
   client.send("chat:message", message);
 
   const userClientsNamespace = `user_${recipientId}`;
   client.to(userClientsNamespace).send("chat:message", message);
 }
 
-export default {
+const handlers = {
   directMessage: {
-    handler: directMessageHandler,
+    cb: directMessageHandler,
     schema: directMessageSchema,
   },
-};
+} satisfies Handlers;
+
+export default handlers;

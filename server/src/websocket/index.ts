@@ -4,10 +4,10 @@ import SocketClientManager from "./socketClientManager.js";
 import getCookie from "../utils/getCookie.js";
 import { sessionStore } from "../instances.js";
 import { deserialize } from "./serialization.js";
-import chatHandler from "./handlers/chatHandler.js";
+import chatHandlers from "./handlers/chatHandlers.js";
 
 const handlers = {
-  "chat:direct-message": chatHandler.directMessage,
+  "chat:direct-message": chatHandlers.directMessage,
 };
 
 function registerWebSocketServer(wss: WebSocketServer) {
@@ -64,7 +64,7 @@ function registerWebSocketServer(wss: WebSocketServer) {
       }
 
       const eventType = event.type as keyof typeof handlers;
-      const { handler, schema } = handlers[eventType];
+      const { cb, schema } = handlers[eventType];
 
       const validation = schema.safeParse(event.data);
 
@@ -72,9 +72,7 @@ function registerWebSocketServer(wss: WebSocketServer) {
         return client.send("error", { reason: "Invalid Schema" });
       }
 
-      const validatedEventData = validation.data;
-
-      handler(client, validatedEventData, userId);
+      cb(client, validation.data, userId);
     });
   });
 }
