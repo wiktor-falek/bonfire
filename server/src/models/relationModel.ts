@@ -87,7 +87,10 @@ class RelationModel {
     try {
       const friendRelation = await this.collection.findOne<FriendRelation>({
         kind: "friend",
-        $or: [{ firstUserId }, { secondUserId }],
+        $or: [
+          { firstUserId, secondUserId },
+          { firstUserId: secondUserId, secondUserId: firstUserId },
+        ],
       });
 
       if (friendRelation === null) {
