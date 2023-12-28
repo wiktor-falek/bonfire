@@ -65,6 +65,10 @@ async function loadUser(channelId: string) {
 async function load() {
   loadMessagess(props.channelId);
   await loadUser(props.channelId);
+  const username = otherUserProfile.value?.username;
+  if (username) {
+    document.title = `Bonfire | @${username}`;
+  }
 }
 
 onBeforeMount(async () => {

@@ -45,14 +45,23 @@ const router = createRouter({
         {
           path: "home",
           component: AppHome,
+          meta: {
+            title: "Home",
+          },
         },
         {
           path: "friends",
           component: AppFriends,
+          meta: {
+            title: "Friends",
+          },
         },
         {
           path: "stuff",
           component: AppHome,
+          meta: {
+            title: "Stuff",
+          },
         },
         {
           path: "channel/@me/:channelId",
@@ -74,6 +83,10 @@ router.beforeEach((to, from, next) => {
   if (!authenticated && !to.meta.skipAuth) {
     return next({ name: "login" });
   }
+
+  const title = to.meta?.title as string | undefined;
+
+  document.title = title ? `Bonfire | ${title}` : "Bonfire";
 
   return next();
 });
