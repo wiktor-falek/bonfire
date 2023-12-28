@@ -494,6 +494,7 @@ hr {
   border-radius: 4px;
   box-sizing: border-box;
   padding: 2px;
+  cursor: pointer;
 }
 
 .user-card__profile:hover {
