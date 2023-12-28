@@ -52,7 +52,9 @@ function registerWebSocketServer(wss: WebSocketServer) {
 
       const event = deserialize(data);
       if (event === null) {
-        return console.error("Invalid data format");
+        return client.send("error", {
+          reason: "Invalid data format",
+        });
       }
 
       if (!Object.keys(handlers).includes(event.type)) {
