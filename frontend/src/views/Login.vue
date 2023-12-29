@@ -1,16 +1,21 @@
 <script lang="ts" setup>
 import { computed, ref } from "vue";
-import login from "../api/auth/login";
+import { login } from "../api/auth";
+import router from "../router";
 
 const urlParams = new URLSearchParams(window.location.search);
 
 const email = ref(urlParams.get("email") ?? "");
 const password = ref("");
 
-function handleSubmit(e: Event) {
+async function handleSubmit(e: Event) {
   e.preventDefault();
 
-  login({ email: email.value, password: password.value });
+  const result = await login({ email: email.value, password: password.value });
+  if (result.ok) {
+    localStorage.setItem("authenticated", "true");
+    router.push("/app/home");
+  }
 }
 
 function handlePasswordRecovery(e: MouseEvent) {
@@ -18,7 +23,6 @@ function handlePasswordRecovery(e: MouseEvent) {
 }
 
 const registrationRoute = computed(() => {
-  // Adds the email as a query parameter to auto-fill the field if it's provided.
   return email.value === ""
     ? "/register"
     : `/register?email=${encodeURIComponent(email.value)}`;
@@ -29,9 +33,7 @@ const registrationRoute = computed(() => {
   <main>
     <div class="auth-form">
       <h1>Welcome Back!</h1>
-      <!-- <h2>Find your place in our bonfire circle!</h2> -->
-      <!-- <h2>Come closer to the warmth of the bonfire!</h2> -->
-      <h2>Take a spot around the bonfire with us!</h2>
+      <h2>Take a seat around the bonfire with us!</h2>
 
       <form @submit="handleSubmit($event)">
         <label for="email" class="label-required">Email</label>

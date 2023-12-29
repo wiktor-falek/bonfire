@@ -2,7 +2,7 @@
 import { onBeforeMount } from "vue";
 import Bonfire from "../../components/Bonfire.vue";
 import SidePanel from "../../components/SidePanel.vue";
-import getRelationships from "../../api/relationships/getRelationships";
+import { getRelationships } from "../../api/relationships";
 import { useUserStore } from "../../stores/userStore";
 import { useRelationshipsStore } from "../../stores/relationshipsStore";
 import { useUserProfilesStore } from "../../stores/userProfilesStore";

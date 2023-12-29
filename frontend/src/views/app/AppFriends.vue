@@ -3,7 +3,7 @@ import { computed, ref } from "vue";
 import HamburgerMenu from "../../components/HamburgerMenu.vue";
 import Header from "../../components/app/Header.vue";
 import type { UserProfile } from "../../api/users/getCurrentProfile";
-import postFriendInviteByUsername from "../../api/relationships/postFriendInviteByUsername";
+import { postFriendInviteByUsername } from "../../api/relationships";
 import { useRelationshipsStore } from "../../stores/relationshipsStore";
 import { useUserStore } from "../../stores/userStore";
 import { getDirectMessageChannelId } from "../../utils/id";
@@ -52,7 +52,7 @@ const inviteUsernameInput = ref("");
 async function handleSendFriendInvite(username: string) {
   const result = await postFriendInviteByUsername(username);
   if (!result.ok) {
-    const { error } = result.err;
+    const error = result.err;
     // TODO: display error
     return;
   }

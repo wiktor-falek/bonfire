@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import register from "../api/auth/register";
+import { register } from "../api/auth";
+import router from "../router";
 
 const urlParams = new URLSearchParams(window.location.search);
 
@@ -9,19 +10,23 @@ const displayName = ref("");
 const username = ref("");
 const password = ref("");
 
-function handleSubmit(e: Event) {
+async function handleSubmit(e: Event) {
   e.preventDefault();
 
-  register({
+  const result = await register({
     email: email.value,
     displayName: displayName.value,
     username: username.value,
     password: password.value,
   });
+
+  if (result.ok) {
+    localStorage.setItem("authenticated", "true");
+    router.push("/app/home");
+  }
 }
 
 const loginRoute = computed(() => {
-  // Adds the email as a query parameter to auto-fill the field if it's provided.
   return email.value === ""
     ? "/login"
     : `/login?email=${encodeURIComponent(email.value)}`;
