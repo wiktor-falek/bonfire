@@ -3,12 +3,12 @@ import { onBeforeMount, ref, watch } from "vue";
 import HamburgerMenu from "../../components/HamburgerMenu.vue";
 import Header from "../../components/app/Header.vue";
 import Footer from "../../components/app/Footer.vue";
-import getMessages, { type Message } from "../../api/messages/getMessages";
+import { getMessages, type Message } from "../../api/messages";
 import formatTimestamp from "../../utils/formatTimestamp";
 import socket, { socketEmitter } from "../../socket";
 import type { UserProfile } from "../../api/users/getCurrentProfile";
 import { useUserProfilesStore } from "../../stores/userProfilesStore";
-import getOtherParticipantProfileInDirectMessageChannel from "../../api/channels/getOtherParticipantProfileInDirectMessageChannel";
+import { getOtherParticipantProfileInDirectMessageChannel } from "../../api/channels";
 
 const userProfilesStore = useUserProfilesStore();
 
@@ -40,10 +40,11 @@ function handleSendMessage() {
   content.value = "";
 }
 
-function loadMessagess(channelId: string) {
-  getMessages(channelId).then((_messages) => {
-    messages.value = _messages;
-  });
+async function loadMessagess(channelId: string) {
+  const result = await getMessages(channelId);
+  if (result.ok) {
+    messages.value = result.val;
+  }
 }
 
 async function loadUser(channelId: string) {

@@ -6,26 +6,26 @@ import { getRelationships } from "../../api/relationships";
 import { useUserStore } from "../../stores/userStore";
 import { useRelationshipsStore } from "../../stores/relationshipsStore";
 import { useUserProfilesStore } from "../../stores/userProfilesStore";
-import getCurrentProfile from "../../api/users/getCurrentProfile";
+import { getCurrentProfile } from "../../api/users";
 
 const userStore = useUserStore();
 const relationshipsStore = useRelationshipsStore();
 const profilesStore = useUserProfilesStore();
 
 onBeforeMount(async () => {
-  getCurrentProfile().then((profile) => {
+  const getCurrentProfileResult = await getCurrentProfile();
+  if (getCurrentProfileResult.ok) {
+    const profile = getCurrentProfileResult.val;
     userStore.setUserProfile(profile);
-  });
-  getRelationships().then((result) => {
-    if (result.ok) {
-      const relationships = result.val;
-      relationshipsStore.setRelationships(relationships);
+  }
 
-      const { friends, pending, blocked } = relationships;
-      const profiles = [...friends, ...pending, ...blocked];
-      profilesStore.setUserProfiles(profiles);
-    }
-  });
+  const getRelationshipsResult = await getRelationships();
+  if (getRelationshipsResult.ok) {
+    const relationships = getRelationshipsResult.val;
+    const { friends, pending, blocked } = relationships;
+    relationshipsStore.setRelationships(relationships);
+    profilesStore.setUserProfiles([...friends, ...pending, ...blocked]);
+  }
 });
 </script>
 
