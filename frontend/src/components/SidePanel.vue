@@ -360,13 +360,17 @@ hr {
 }
 
 .menu__option:hover:not(.menu__option--selected) {
-  background-color: #38383a;
+  color: #cec7c7;
+  background-color: #3a3a3d;
 }
-
 .menu__option--selected {
   color: #cec7c7;
-  background-color: #404146;
-  transition: background-color 0.2s ease-out;
+  background-color: #414144;
+}
+
+.menu__option:active {
+  color: #e6dddd;
+  background-color: #46464b !important;
 }
 
 .direct-messages {
