@@ -350,7 +350,7 @@ hr {
 .menu__option {
   all: unset;
   font-weight: bold;
-  color: #bdbcbc;
+  color: #9b9696;
   height: 42px;
   display: flex;
   align-items: center;
@@ -364,6 +364,7 @@ hr {
 }
 
 .menu__option--selected {
+  color: #cec7c7;
   background-color: #404146;
   transition: background-color 0.2s ease-out;
 }
@@ -379,6 +380,10 @@ hr {
   text-transform: uppercase;
   font-size: 0.8rem;
   letter-spacing: 0.04em;
+}
+
+.direct-messages__heading:hover {
+  color: rgb(214, 211, 211);
 }
 
 .menu__search {
