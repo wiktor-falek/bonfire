@@ -2,7 +2,7 @@
 import { computed, ref } from "vue";
 import HamburgerMenu from "../../components/HamburgerMenu.vue";
 import Header from "../../components/app/Header.vue";
-import type { UserProfile } from "../../api/users/getCurrentProfile";
+import type { UserProfile } from "../../api/users";
 import { postFriendInviteByUsername } from "../../api/relationships";
 import { useRelationshipsStore } from "../../stores/relationshipsStore";
 import { useUserStore } from "../../stores/userStore";

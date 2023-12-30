@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { type UserProfile } from "../api/users/getCurrentProfile";
+import type { UserProfile } from "../api/users";
 
 export const useUserProfilesStore = defineStore("userProfiles", () => {
   // userId to UserProfile mapping

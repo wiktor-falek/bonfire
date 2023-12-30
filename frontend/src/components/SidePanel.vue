@@ -4,7 +4,7 @@ import Bonfire from "./Bonfire.vue";
 import router from "./../router";
 import Modal from "./Modal.vue";
 import emitter from "../emitter";
-import { type UserProfile } from "../api/users/getCurrentProfile";
+import type { UserProfile } from "../api/users";
 import { getDirectMessageChannelId } from "../utils/id";
 import { useUserStore } from "../stores/userStore";
 import { useUserProfilesStore } from "../stores/userProfilesStore";
