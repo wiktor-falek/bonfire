@@ -21,12 +21,12 @@ router.use(authGuard);
 router.get("/", controller.getAllUserRelations.bind(controller));
 
 router.post(
-  "/send-friend-request-by-username",
+  "/send-friend-invite-by-username",
   validate(postFriendInviteByUsernameSchema),
   controller.postFriendInviteByUsername.bind(controller)
 );
 router.post(
-  "/send-friend-invite",
+  "/send-friend-invite-by-id",
   validate(postSendFriendInviteSchema),
   controller.postSendFriendInvite.bind(controller)
 );
