@@ -18,7 +18,9 @@ type FilterOption = "online" | "all" | "pending" | "blocked";
 type MenuOption = FilterOption | "add-friend";
 type Status = "online" | "away" | "dnd" | "offline";
 
-const selectedMenuOption = ref<MenuOption>("online");
+const selectedMenuOption = ref<MenuOption>(
+  (localStorage.getItem("selectedMenuOption") as MenuOption) ?? "online"
+);
 
 const userProfiles = computed<UserProfile[]>(() => {
   switch (selectedMenuOption.value) {
@@ -46,6 +48,7 @@ const statusTextMap: Record<Status, string> = {
 
 function selectMenuOption(option: MenuOption) {
   selectedMenuOption.value = option;
+  localStorage.setItem("selectedMenuOption", option);
 }
 
 const inviteUsernameInput = ref("");
@@ -75,6 +78,9 @@ function handleProfileClick(profile: UserProfile) {
 
   router.push(`/app/channel/@me/${channelId}`);
 }
+
+function handleAcceptInvite() {}
+function handleDeclineInvite() {}
 </script>
 
 <template>
@@ -163,7 +169,6 @@ function handleProfileClick(profile: UserProfile) {
 
         <div class="profiles" v-for="profile in userProfiles">
           <hr class="profile__separator" />
-          <!-- <div class="separator"></div> -->
           <div @click="handleProfileClick(profile)" class="profile">
             <div class="profile__image">
               <img src="" />
@@ -180,6 +185,17 @@ function handleProfileClick(profile: UserProfile) {
               <p class="profile__status">
                 {{ statusTextMap[profile.status] }}
               </p>
+            </div>
+            <div
+              class="profile__navigation"
+              v-if="selectedMenuOption == 'pending'"
+            >
+              <button @click.stop="handleAcceptInvite">Accept</button>
+              <button @click.stop="handleDeclineInvite">Decline</button>
+            </div>
+            <div class="profile__navigation" v-else>
+              <button @click="handleProfileClick(profile)">Message</button>
+              <button @click.stop="() => {}">More</button>
             </div>
           </div>
         </div>
@@ -348,6 +364,10 @@ function handleProfileClick(profile: UserProfile) {
 
 .profile__status {
   display: none;
+}
+
+.profile__navigation {
+  margin-left: auto;
 }
 
 @media (min-width: 820px) {
