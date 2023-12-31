@@ -71,12 +71,12 @@ class RelationshipController {
     req: ValidatedRequest<typeof postAcceptFriendInviteSchema>,
     res: Response
   ) {
-    const senderId = res.locals.user.id;
-    const inviteId = req.body.inviteId;
+    const userId = res.locals.user.id;
+    const { senderId } = req.body;
 
     const result = await this.relationshipService.acceptFriendInvite(
-      senderId,
-      inviteId
+      userId,
+      senderId
     );
 
     if (!result.ok) {
@@ -90,12 +90,12 @@ class RelationshipController {
     req: ValidatedRequest<typeof postRejectFriendInviteSchema>,
     res: Response
   ) {
-    const senderId = res.locals.user.id;
-    const inviteId = req.body.inviteId;
+    const userId = res.locals.user.id;
+    const { senderId } = req.body;
 
     const result = await this.relationshipService.rejectFriendInvite(
-      senderId,
-      inviteId
+      userId,
+      senderId
     );
 
     if (!result.ok) {

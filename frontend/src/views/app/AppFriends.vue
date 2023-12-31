@@ -3,7 +3,7 @@ import { computed, ref } from "vue";
 import HamburgerMenu from "../../components/HamburgerMenu.vue";
 import Header from "../../components/app/Header.vue";
 import type { UserProfile } from "../../api/users";
-import { postFriendInviteByUsername } from "../../api/relationships";
+import { postAcceptFriendInvite, postFriendInviteByUsername } from "../../api/relationships";
 import { useRelationshipsStore } from "../../stores/relationshipsStore";
 import { useUserStore } from "../../stores/userStore";
 import { getDirectMessageChannelId } from "../../utils/id";
@@ -79,8 +79,14 @@ function handleProfileClick(profile: UserProfile) {
   router.push(`/app/channel/@me/${channelId}`);
 }
 
-function handleAcceptInvite() {}
-function handleDeclineInvite() {}
+function handleAcceptInvite() {
+  // 
+  postAcceptFriendInvite()
+}
+
+function handleDeclineInvite() {
+
+}
 </script>
 
 <template>

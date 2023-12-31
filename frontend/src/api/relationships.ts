@@ -24,14 +24,14 @@ export const postFriendInviteById = (userId: string) =>
     api.post<{}>("/api/relationships/send-friend-invite-by-id", { userId })
   );
 
-export const postAccentFriendInvite = (inviteId: string) =>
+export const postAcceptFriendInvite = (senderId: string) =>
   wrapAxiosResult(() =>
-    api.post<{}>("/api/relationships/accept-friend-invite", { inviteId })
+    api.post<{}>("/api/relationships/accept-friend-invite", { senderId })
   );
 
-export const postRejectFriendInvite = (inviteId: string) =>
+export const postRejectFriendInvite = (senderId: string) =>
   wrapAxiosResult(() =>
-    api.post<{}>("/api/relationships/reject-friend-invite", { inviteId })
+    api.post<{}>("/api/relationships/reject-friend-invite", { senderId })
   );
 
 export const postBlockUser = (userId: string) =>

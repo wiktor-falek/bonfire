@@ -83,6 +83,21 @@ class RelationModel {
     }
   }
 
+  async findRelationBetweenUsers(firstUserId: string, secondUserId: string) {
+    try {
+      const relation = await this.collection.findOne({
+        $or: [
+          { firstUserId, secondUserId },
+          { firstUserId: secondUserId, secondUserId: firstUserId },
+        ],
+      });
+
+      return Ok(relation);
+    } catch (_) {
+      return Err("Network Error" as const);
+    }
+  }
+
   async findFriendRelationByUserIds(firstUserId: string, secondUserId: string) {
     try {
       const friendRelation = await this.collection.findOne<FriendRelation>({

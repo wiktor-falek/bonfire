@@ -24,9 +24,21 @@ class FriendInviteModel {
     }
   }
 
+  async findInviteBySenderAndRecipient(senderId: string, recipientId: string) {
+    try {
+      const result = await this.collection.findOne({ senderId, recipientId });
+
+      return Ok(result);
+    } catch (_) {
+      return Err("Network Error");
+    }
+  }
+
   async findAllInvitesSentByUser(userId: string) {
     try {
-      const result = await this.collection.find<FriendInvite>({ senderId: userId }).toArray();
+      const result = await this.collection
+        .find<FriendInvite>({ senderId: userId })
+        .toArray();
 
       return Ok(result);
     } catch (_) {
@@ -36,7 +48,9 @@ class FriendInviteModel {
 
   async findAllInvitesSentToUser(userId: string) {
     try {
-      const result = await this.collection.find<FriendInvite>({ recipientId: userId }).toArray();
+      const result = await this.collection
+        .find<FriendInvite>({ recipientId: userId })
+        .toArray();
 
       return Ok(result);
     } catch (_) {

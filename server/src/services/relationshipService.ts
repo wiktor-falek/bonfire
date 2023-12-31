@@ -125,44 +125,48 @@ class RelationshipService {
     return Ok({ friendInvite });
   }
 
-  async acceptFriendInvite(userId: string, inviteId: string) {
-    const findInviteResult = await this.friendInviteModel.findInviteById(
-      inviteId
-    );
+  async acceptFriendInvite(userId: string, senderId: string) {
+    const findInviteResult =
+      await this.friendInviteModel.findInviteBySenderAndRecipient(
+        senderId,
+        userId
+      );
 
     if (!findInviteResult.ok) {
       return findInviteResult;
     }
 
     const invite = findInviteResult.val;
-
-    const relationExistsResult = await this.relationModel.relationExists(
-      inviteId
-    );
-
-    if (!relationExistsResult.ok) {
-      return relationExistsResult;
+    if (invite === null) {
+      return Err("Invite does not exist");
     }
 
-    const relationExists = relationExistsResult.val;
+    const findRelationResult =
+      await this.relationModel.findRelationBetweenUsers(userId, senderId);
 
-    if (relationExists) {
+    if (!findRelationResult.ok) {
+      return findRelationResult;
+    }
+
+    const existingRelation = findRelationResult.val;
+
+    if (existingRelation !== null) {
       return Err("Already a friend");
     }
 
-    const relation = createFriendRelation(userId, invite.senderId);
+    const relation = createFriendRelation(userId, senderId);
     return this.relationModel.createRelation(relation);
   }
 
-  async rejectFriendInvite(userId: string, inviteId: string) {
+  async rejectFriendInvite(userId: string, senderId: string) {
     return Err("Not Implemented");
   }
 
-  async blockUser(blockingUserId: string, blockedUserId: string) {
+  async blockUser(userId: string, targetUserId: string) {
     return Err("Not Implemented");
   }
 
-  async unblockUser(blockingUserId: string, blockedUserId: string) {
+  async unblockUser(userId: string, targetUserId: string) {
     return Err("Not Implemented");
   }
 }

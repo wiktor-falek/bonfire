@@ -1,8 +1,6 @@
 import { z } from "zod";
 import { username, userId } from "./userValidators.js";
 
-const inviteId = z.string().length(21);
-
 export const postFriendInviteByUsernameSchema = z.object({
   body: z.object({
     username,
@@ -17,13 +15,13 @@ export const postSendFriendInviteSchema = z.object({
 
 export const postAcceptFriendInviteSchema = z.object({
   body: z.object({
-    inviteId,
+    senderId: userId,
   }),
 });
 
 export const postRejectFriendInviteSchema = z.object({
   body: z.object({
-    inviteId,
+    senderId: userId,
   }),
 });
 
