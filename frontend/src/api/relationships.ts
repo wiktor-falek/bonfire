@@ -22,24 +22,24 @@ export const postFriendInviteByUsername = (username: string) =>
 export const postFriendInviteById = (userId: string) =>
   wrapAxiosResult(() =>
     api.post<{}>("/api/relationships/send-friend-invite-by-id", { userId })
-  );
+  )();
 
 export const postAcceptFriendInvite = (senderId: string) =>
   wrapAxiosResult(() =>
     api.post<{}>("/api/relationships/accept-friend-invite", { senderId })
-  );
+  )();
 
 export const postRejectFriendInvite = (senderId: string) =>
   wrapAxiosResult(() =>
     api.post<{}>("/api/relationships/reject-friend-invite", { senderId })
-  );
+  )();
 
 export const postBlockUser = (userId: string) =>
   wrapAxiosResult(() =>
     api.post<{}>("/api/relationships/block-user", { userId })
-  );
+  )();
 
 export const postUnblockUser = (userId: string) =>
   wrapAxiosResult(() =>
     api.post<{}>("/api/relationships/unblock-user", { userId })
-  );
+  )();

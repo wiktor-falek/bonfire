@@ -10,7 +10,6 @@ export const useRelationshipsStore = defineStore("relationships", () => {
   });
 
   const setRelationships = (newRelationships: Relationships) => {
-    console.log(relationships);
     relationships.value = newRelationships;
   };
 

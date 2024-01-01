@@ -3,7 +3,11 @@ import { computed, ref } from "vue";
 import HamburgerMenu from "../../components/HamburgerMenu.vue";
 import Header from "../../components/app/Header.vue";
 import type { UserProfile } from "../../api/users";
-import { postAcceptFriendInvite, postFriendInviteByUsername } from "../../api/relationships";
+import {
+  postAcceptFriendInvite,
+  postFriendInviteByUsername,
+  postRejectFriendInvite,
+} from "../../api/relationships";
 import { useRelationshipsStore } from "../../stores/relationshipsStore";
 import { useUserStore } from "../../stores/userStore";
 import { getDirectMessageChannelId } from "../../utils/id";
@@ -79,13 +83,39 @@ function handleProfileClick(profile: UserProfile) {
   router.push(`/app/channel/@me/${channelId}`);
 }
 
-function handleAcceptInvite() {
-  // 
-  postAcceptFriendInvite()
+async function handleAcceptInvite(profile: UserProfile) {
+  const result = await postAcceptFriendInvite(profile.id);
+
+  if (result.ok) {
+    const { friends, pending } = relationshipsStore.relationships;
+
+    const idx = pending.findIndex((e) => e.id === profile.id);
+
+    const targetProfile = pending[idx];
+
+    if (!targetProfile) {
+      return;
+    }
+
+    pending.splice(idx, 1);
+    friends.push(targetProfile);
+  } else {
+    // TODO: handle error
+  }
 }
 
-function handleDeclineInvite() {
+async function handleDeclineInvite(profile: UserProfile) {
+  const result = await postRejectFriendInvite(profile.id);
 
+  if (result.ok) {
+    const { pending } = relationshipsStore.relationships;
+
+    const idx = pending.findIndex((e) => e.id === profile.id);
+
+    pending.splice(idx, 1);
+  } else {
+    // TODO: handle error
+  }
 }
 </script>
 
@@ -193,14 +223,16 @@ function handleDeclineInvite() {
               </p>
             </div>
             <div
-              class="profile__navigation"
+              class="profile__actions"
               v-if="selectedMenuOption == 'pending'"
             >
-              <button @click.stop="handleAcceptInvite">Accept</button>
-              <button @click.stop="handleDeclineInvite">Decline</button>
+              <button @click.stop="handleAcceptInvite(profile)">Accept</button>
+              <button @click.stop="handleDeclineInvite(profile)">
+                Decline
+              </button>
             </div>
-            <div class="profile__navigation" v-else>
-              <button @click="handleProfileClick(profile)">Message</button>
+            <div class="profile__actions" v-else>
+              <button>Message</button>
               <button @click.stop="() => {}">More</button>
             </div>
           </div>
@@ -372,7 +404,7 @@ function handleDeclineInvite() {
   display: none;
 }
 
-.profile__navigation {
+.profile__actions {
   margin-left: auto;
 }
 
