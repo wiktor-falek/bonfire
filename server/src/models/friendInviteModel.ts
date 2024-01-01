@@ -117,7 +117,26 @@ class FriendInviteModel {
     try {
       const deleteResult = await this.collection.deleteOne({ _id: inviteId });
       if (!deleteResult.acknowledged) {
-        return Err("Failed to delete");
+        return Err("Failed to delete the invite");
+      }
+
+      return Ok();
+    } catch (_) {
+      return Err("Network Error");
+    }
+  }
+
+  async deleteInviteBySenderAndRecipient(
+    senderId: string,
+    recipientId: string
+  ) {
+    try {
+      const deleteResult = await this.collection.deleteOne({
+        senderId,
+        recipientId,
+      });
+      if (!deleteResult.acknowledged) {
+        return Err("Failed to delete the invite");
       }
 
       return Ok();

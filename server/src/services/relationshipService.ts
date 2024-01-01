@@ -18,7 +18,6 @@ class RelationshipService {
 
   async getAllRelatedUserProfiles(userId: string) {
     // TODO: handle individual profiles not being loaded successfully
-
     try {
       const relations = await Promise.all([
         this.relationModel.findAllUserFriendRelations(userId),
@@ -94,8 +93,8 @@ class RelationshipService {
       }
     }
 
-    const friendInvite = createFriendInvite(senderId, recipientId);
-    const result = await this.friendInviteModel.createInvite(friendInvite);
+    const invite = createFriendInvite(senderId, recipientId);
+    const result = await this.friendInviteModel.createInvite(invite);
 
     if (!result.ok) {
       return result;
@@ -112,7 +111,15 @@ class RelationshipService {
         return Err("Failed to create relationship");
       }
 
-      // TODO: Invite from the recipient to sender still exists after accepting the invite, needs to be deleted
+      // TODO: why dis dont work? also ugly code duplication
+      this.friendInviteModel.deleteInviteById(invite._id).then((result) => {
+        if (!result.ok) {
+          // TODO: handle this scenario
+          console.error(
+            "Failed to delete the invite after accepting friend invite"
+          );
+        }
+      });
 
       return Ok({ friendRelation });
     }
@@ -122,7 +129,7 @@ class RelationshipService {
       from: senderId,
     });
 
-    return Ok({ friendInvite });
+    return Ok({ invite });
   }
 
   async acceptFriendInvite(userId: string, senderId: string) {
@@ -137,6 +144,7 @@ class RelationshipService {
     }
 
     const invite = findInviteResult.val;
+
     if (invite === null) {
       return Err("Invite does not exist");
     }
@@ -155,11 +163,24 @@ class RelationshipService {
     }
 
     const relation = createFriendRelation(userId, senderId);
+
+    this.friendInviteModel.deleteInviteById(invite._id).then((result) => {
+      if (!result.ok) {
+        // TODO: handle this scenario
+        console.error(
+          "Failed to delete the invite after accepting friend invite"
+        );
+      }
+    });
+
     return this.relationModel.createRelation(relation);
   }
 
   async rejectFriendInvite(userId: string, senderId: string) {
-    return Err("Not Implemented");
+    return this.friendInviteModel.deleteInviteBySenderAndRecipient(
+      senderId,
+      userId
+    );
   }
 
   async blockUser(userId: string, targetUserId: string) {
