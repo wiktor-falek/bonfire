@@ -6,11 +6,13 @@ import Footer from "../../components/app/Footer.vue";
 import { getMessages, type Message } from "../../api/messages";
 import formatTimestamp from "../../utils/formatTimestamp";
 import socket, { socketEmitter } from "../../socket";
-import type { UserProfile } from "../../api/users/getCurrentProfile";
+import type { UserProfile } from "../../api/users";
 import { useUserProfilesStore } from "../../stores/userProfilesStore";
 import { getOtherParticipantProfileInDirectMessageChannel } from "../../api/channels";
+import { useDirectMessagesStore } from "../../stores/directMessagesStore";
 
 const userProfilesStore = useUserProfilesStore();
+const directMessagesStore = useDirectMessagesStore();
 
 socketEmitter.on("chat:message", (message) => {
   messages.value.push(message);
@@ -66,6 +68,11 @@ async function loadUser(channelId: string) {
 async function load() {
   loadMessagess(props.channelId);
   await loadUser(props.channelId);
+
+  if (otherUserProfile.value) {
+    directMessagesStore.insertOrMoveUserProfile(otherUserProfile.value);
+  }
+
   const username = otherUserProfile.value?.username;
   if (username) {
     document.title = `Bonfire | @${username}`;

@@ -9,9 +9,11 @@ import { getDirectMessageChannelId } from "../utils/id";
 import { useUserStore } from "../stores/userStore";
 import { useUserProfilesStore } from "../stores/userProfilesStore";
 import capitalizeEachWord from "../utils/capitalizeEachWord";
+import { useDirectMessagesStore } from "../stores/directMessagesStore";
 
 const userStore = useUserStore();
 const userProfilesStore = useUserProfilesStore();
+const directMessagesStore = useDirectMessagesStore();
 
 emitter.on("openSidePanel", () => {
   isOpenOnMobile.value = true;
@@ -42,10 +44,8 @@ const servers: Server[] = [
   },
 ];
 
-const userProfiles = ref<UserProfile[]>([]);
-
-function handleConversationClose(index: number) {
-  userProfiles.value.splice(index, 1);
+function handleConversationClose(profile: UserProfile) {
+  directMessagesStore.deleteUserProfileById(profile.id);
 }
 
 function handleConversationClick(profile: UserProfile) {
@@ -176,7 +176,7 @@ function handleCloseCreateConversationModal() {
         <div class="direct-messages__conversations">
           <div
             class="direct-messages__conversations__conversation"
-            v-for="(profile, index) in userProfiles"
+            v-for="(profile, index) in directMessagesStore.userProfiles"
             :key="profile.username"
             @click="handleConversationClick(profile)"
           >
@@ -188,7 +188,7 @@ function handleCloseCreateConversationModal() {
             </p>
             <button
               class="direct-messages__conversations__conversation__close"
-              @click.stop="handleConversationClose(index)"
+              @click.stop="handleConversationClose(profile)"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

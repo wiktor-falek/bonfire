@@ -13,10 +13,12 @@ import { useUserStore } from "../../stores/userStore";
 import { getDirectMessageChannelId } from "../../utils/id";
 import router from "../../router";
 import { useUserProfilesStore } from "../../stores/userProfilesStore";
+import { useDirectMessagesStore } from "../../stores/directMessagesStore";
 
 const userStore = useUserStore();
 const relationshipsStore = useRelationshipsStore();
 const userProfilesStore = useUserProfilesStore();
+const directMessagesStore = useDirectMessagesStore();
 
 type FilterOption = "online" | "all" | "pending" | "blocked";
 type MenuOption = FilterOption | "add-friend";
@@ -79,6 +81,8 @@ function handleProfileClick(profile: UserProfile) {
   );
 
   userProfilesStore.setDirectMessageChannelProfiles(channelId, profile);
+
+  directMessagesStore.insertOrMoveUserProfile(profile);
 
   router.push(`/app/channel/@me/${channelId}`);
 }
