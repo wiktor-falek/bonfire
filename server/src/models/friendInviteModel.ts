@@ -132,8 +132,16 @@ class FriendInviteModel {
   ) {
     try {
       const deleteResult = await this.collection.deleteOne({
-        senderId,
-        recipientId,
+        $or: [
+          {
+            senderId: senderId,
+            recipientId: recipientId,
+          },
+          {
+            senderId: recipientId,
+            recipientId: senderId,
+          },
+        ],
       });
       if (!deleteResult.acknowledged) {
         return Err("Failed to delete the invite");

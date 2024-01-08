@@ -17,7 +17,6 @@ class RelationshipService {
   ) {}
 
   async getAllRelatedUserProfiles(userId: string) {
-    // TODO: handle individual profiles not being loaded successfully
     try {
       const relations = await Promise.all([
         this.relationModel.findAllUserFriendRelations(userId),
@@ -111,15 +110,16 @@ class RelationshipService {
         return Err("Failed to create relationship");
       }
 
-      // TODO: why dis dont work? also ugly code duplication
-      this.friendInviteModel.deleteInviteById(invite._id).then((result) => {
-        if (!result.ok) {
-          // TODO: handle this scenario
-          console.error(
-            "Failed to delete the invite after accepting friend invite"
-          );
-        }
-      });
+      this.friendInviteModel
+        .deleteInviteBySenderAndRecipient(senderId, recipientId)
+        .then((result) => {
+          if (!result.ok) {
+            // TODO: handle this scenario
+            console.error(
+              "Failed to delete the invite after accepting friend invite"
+            );
+          }
+        });
 
       return Ok({ friendRelation });
     }
