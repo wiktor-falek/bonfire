@@ -33,6 +33,7 @@ socket.addEventListener("message", (messageEvent) => {
       socketEmitter.emit("chat:message", event.data);
       break;
     default:
+      console.log("Unhandled socket event", event);
   }
 });
 

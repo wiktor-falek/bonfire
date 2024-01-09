@@ -10,12 +10,19 @@ import type { UserProfile } from "../../api/users";
 import { useUserProfilesStore } from "../../stores/userProfilesStore";
 import { getOtherParticipantProfileInDirectMessageChannel } from "../../api/channels";
 import { useDirectMessagesStore } from "../../stores/directMessagesStore";
+import { useUserStore } from "../../stores/userStore";
 
+const userStore = useUserStore();
 const userProfilesStore = useUserProfilesStore();
 const directMessagesStore = useDirectMessagesStore();
 
 socketEmitter.on("chat:message", (message) => {
-  messages.value.push(message);
+  if (
+    message.senderId === otherUserProfile.value?.id ||
+    message.senderId === userStore.userProfile?.id
+  ) {
+    messages.value.push(message);
+  }
 });
 
 const props = defineProps<{ channelId: string }>();
