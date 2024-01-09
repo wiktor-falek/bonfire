@@ -82,7 +82,7 @@ function handleProfileClick(profile: UserProfile) {
 
   userProfilesStore.setDirectMessageChannelProfiles(channelId, profile);
 
-  directMessagesStore.insertOrMoveUserProfile(profile);
+  directMessagesStore.prependUserProfile(profile);
 
   router.push(`/app/channel/@me/${channelId}`);
 }

@@ -7,6 +7,10 @@ export const useDirectMessagesStore = defineStore("directMessages", () => {
     JSON.parse(localStorage.getItem("directMessages") || "[]")
   );
 
+  const _persistUserProfiles = () => {
+    localStorage.setItem("directMessages", JSON.stringify(userProfiles.value));
+  };
+
   const prependUserProfile = (profile: UserProfile) => {
     const profileAlreadyExists = userProfiles.value.some(
       (p) => p.id === profile.id
@@ -18,7 +22,7 @@ export const useDirectMessagesStore = defineStore("directMessages", () => {
 
     userProfiles.value.unshift(profile);
 
-    localStorage.setItem("directMessages", JSON.stringify(userProfiles.value));
+    _persistUserProfiles();
   };
 
   const bringProfileToTop = (profile: UserProfile) => {
@@ -31,6 +35,8 @@ export const useDirectMessagesStore = defineStore("directMessages", () => {
 
     userProfiles.value.splice(idx, 1);
     userProfiles.value.unshift(profile);
+
+    _persistUserProfiles();
   };
 
   const deleteUserProfileById = (profileId: string) => {
@@ -39,10 +45,7 @@ export const useDirectMessagesStore = defineStore("directMessages", () => {
     );
     if (idx !== -1) {
       userProfiles.value.splice(idx, 1);
-      localStorage.setItem(
-        "directMessages",
-        JSON.stringify(userProfiles.value)
-      );
+      _persistUserProfiles();
     }
   };
 
