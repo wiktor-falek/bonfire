@@ -27,13 +27,16 @@ const content = ref("");
 
 function handleSendMessage() {
   const trimmedContent = content.value.trimEnd();
-  if (trimmedContent === "" || !otherUserProfile.value) return;
+  const profile = otherUserProfile.value;
+  if (trimmedContent === "" || profile === undefined) return;
+
+  directMessagesStore.bringProfileToTop(profile);
 
   socket.send(
     JSON.stringify({
       type: "chat:direct-message",
       data: {
-        recipientId: otherUserProfile.value.id,
+        recipientId: profile.id,
         content: trimmedContent,
       },
     })
@@ -70,7 +73,7 @@ async function load() {
   await loadUser(props.channelId);
 
   if (otherUserProfile.value) {
-    directMessagesStore.insertOrMoveUserProfile(otherUserProfile.value);
+    directMessagesStore.prependUserProfile(otherUserProfile.value);
   }
 
   const username = otherUserProfile.value?.username;
