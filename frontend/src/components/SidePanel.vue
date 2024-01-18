@@ -2,7 +2,8 @@
 import { ref } from "vue";
 import Bonfire from "./Bonfire.vue";
 import router from "./../router";
-import Modal from "./Modal.vue";
+import ModalOpaque from "./ModalOpaque.vue";
+import ModalTransparent from "./ModalTransparent.vue";
 import emitter from "../emitter";
 import type { UserProfile } from "../api/users";
 import { getDirectMessageChannelId } from "../utils/id";
@@ -68,6 +69,16 @@ function handleOpenCreateConversationModal() {
 
 function handleCloseCreateConversationModal() {
   createConversationModalIsOpen.value = false;
+}
+
+const profileSettingsModalIsOpen = ref(false);
+
+function handleOpenProfileSettingsModal() {
+  profileSettingsModalIsOpen.value = true;
+}
+
+function handleCloseProfileSettingsModal() {
+  profileSettingsModalIsOpen.value = false;
 }
 </script>
 
@@ -206,7 +217,7 @@ function handleCloseCreateConversationModal() {
         </div>
       </div>
 
-      <div class="user-card">
+      <div class="user-card" @click="handleOpenProfileSettingsModal">
         <div class="user-card__profile">
           <div class="user-card__profile__image"></div>
           <div class="user-card__profile__text">
@@ -228,7 +239,15 @@ function handleCloseCreateConversationModal() {
       </div>
     </div>
   </div>
-  <Modal
+
+  <!-- <Modal
+    :is-open="profileSettingsModalIsOpen"
+    @close="handleCloseProfileSettingsModal"
+  >
+    <h1>huj</h1>
+  </Modal> -->
+
+  <ModalTransparent
     :is-open="createConversationModalIsOpen"
     @close="handleCloseCreateConversationModal"
   >
@@ -236,7 +255,7 @@ function handleCloseCreateConversationModal() {
       <input type="text" placeholder="Search by username" />
       <button @click="">Start Conversation</button>
     </div>
-  </Modal>
+  </ModalTransparent>
 </template>
 
 <style scoped>
