@@ -2,7 +2,8 @@
 import { ref } from "vue";
 import Bonfire from "./Bonfire.vue";
 import router from "./../router";
-import Modal from "./Modal.vue";
+import RelativeModal from "./RelativeModal.vue";
+import OverlayModal from "./OverlayModal.vue";
 import emitter from "../emitter";
 import type { UserProfile } from "../api/users";
 import { getDirectMessageChannelId } from "../utils/id";
@@ -68,6 +69,16 @@ function handleOpenCreateConversationModal() {
 
 function handleCloseCreateConversationModal() {
   createConversationModalIsOpen.value = false;
+}
+
+const profileSettingsModalIsOpen = ref(false);
+
+function handleOpenProfileSettingsModal() {
+  profileSettingsModalIsOpen.value = true;
+}
+
+function handleCloseProfileSettingsModal() {
+  profileSettingsModalIsOpen.value = false;
 }
 </script>
 
@@ -207,7 +218,15 @@ function handleCloseCreateConversationModal() {
       </div>
 
       <div class="user-card">
-        <div class="user-card__profile">
+        <div class="user-card__profile" @click="handleOpenProfileSettingsModal">
+          <RelativeModal
+            :is-open="profileSettingsModalIsOpen"
+            @close="handleCloseProfileSettingsModal"
+            class="user-card__profile__modal"
+          >
+            <div class="user-card__profile__modal__settings"></div>
+          </RelativeModal>
+
           <div class="user-card__profile__image"></div>
           <div class="user-card__profile__text">
             <p class="user-card__profile__text__display-name">
@@ -228,7 +247,8 @@ function handleCloseCreateConversationModal() {
       </div>
     </div>
   </div>
-  <Modal
+
+  <OverlayModal
     :is-open="createConversationModalIsOpen"
     @close="handleCloseCreateConversationModal"
   >
@@ -236,7 +256,7 @@ function handleCloseCreateConversationModal() {
       <input type="text" placeholder="Search by username" />
       <button @click="">Start Conversation</button>
     </div>
-  </Modal>
+  </OverlayModal>
 </template>
 
 <style scoped>
@@ -263,9 +283,6 @@ function handleCloseCreateConversationModal() {
 
 @media (max-width: 819px) {
   .side-panel {
-    /* makes it work well with the overlay when in desktop view */
-    /* position: fixed; */
-
     box-shadow: 9px -4px 32px -6px rgba(20, 20, 20, 0.75);
     -webkit-box-shadow: 9px -4px 32px -6px rgba(20, 20, 20, 0.75);
     -moz-box-shadow: 9px -4px 32px -6px rgba(20, 20, 20, 0.75);
@@ -492,6 +509,20 @@ hr {
   height: 52px;
   box-sizing: border-box;
   padding: 5px 6px;
+}
+
+.user-card__profile__modal__settings {
+  height: 480px;
+  width: 320px;
+  background-color: #232428;
+  border-radius: 12px;
+}
+.user-card__profile__modal {
+  position: absolute;
+  z-index: 100;
+  left: 50px;
+  bottom: 540px;
+  cursor: default;
 }
 
 .user-card__profile {

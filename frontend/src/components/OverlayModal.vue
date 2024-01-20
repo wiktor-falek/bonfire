@@ -2,14 +2,14 @@
 defineProps<{ isOpen: boolean }>();
 const emit = defineEmits(["close"]);
 
-function handleClose() {
+function handleClose(e: Event) {
   emit("close");
 }
 </script>
 
 <template>
   <Teleport to="body">
-    <div class="overlay" @click="handleClose" v-show="isOpen">
+    <div class="overlay-modal" @click="handleClose" v-show="isOpen">
       <div @click.stop>
         <slot></slot>
       </div>
@@ -18,7 +18,7 @@ function handleClose() {
 </template>
 
 <style scoped>
-.overlay {
+.overlay-modal {
   position: absolute;
   left: 0;
   top: 0;
