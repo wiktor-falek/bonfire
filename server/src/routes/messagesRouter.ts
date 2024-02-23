@@ -4,17 +4,22 @@ import {
   getMessageSchema,
   postMessageSchema,
 } from "../validators/messageValidators.js";
-import MessageController from "../controllers/messageController.js";
 import authGuard from "../middlewares/authGuard.js";
-import { messageService } from "../instances.js";
-
-const controller = new MessageController(messageService);
+import { messageController } from "../instances.js";
 
 const router = Router();
 
 router.use(authGuard);
 
-router.get("/", validate(getMessageSchema), controller.getMessages.bind(controller));
-router.post("/", validate(postMessageSchema), controller.saveDirectMessage.bind(controller));
+router.get(
+  "/",
+  validate(getMessageSchema),
+  messageController.getMessages.bind(messageController)
+);
+router.post(
+  "/",
+  validate(postMessageSchema),
+  messageController.saveDirectMessage.bind(messageController)
+);
 
 export default router;

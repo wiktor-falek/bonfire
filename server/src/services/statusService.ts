@@ -1,8 +1,9 @@
 import type UserModel from "../models/userModel.js";
 import type { UserStatus } from "../entities/user.js";
+import { Ok } from "resultat";
 
 class StatusService {
-  constructor(private userModel: UserModel) { }
+  constructor(private userModel: UserModel) {}
 
   async setStatus(userId: string, status: UserStatus) {
     const result = await this.userModel.updateStatus(userId, status);
@@ -13,7 +14,7 @@ class StatusService {
 
     // TODO: notify listeners
 
-    return result;
+    return Ok(status);
   }
 }
 

@@ -5,7 +5,11 @@ import router from "./../router";
 import RelativeModal from "./RelativeModal.vue";
 import OverlayModal from "./OverlayModal.vue";
 import emitter from "../emitter";
-import type { UserProfile } from "../api/users";
+import {
+  patchUserStatus,
+  type UserProfile,
+  type UserStatus,
+} from "../api/users";
 import { getDirectMessageChannelId } from "../utils/id";
 import { useUserStore } from "../stores/userStore";
 import { useUserProfilesStore } from "../stores/userProfilesStore";
@@ -79,6 +83,10 @@ function handleOpenProfileSettingsModal() {
 
 function handleCloseProfileSettingsModal() {
   profileSettingsModalIsOpen.value = false;
+}
+
+function setStatus(status: UserStatus) {
+  patchUserStatus(status);
 }
 </script>
 

@@ -1,8 +1,6 @@
 import { Router } from "express";
 import validate from "../middlewares/validate.js";
 import authGuard from "../middlewares/authGuard.js";
-import RelationshipController from "../controllers/relationshipController.js";
-import { relationshipService } from "../instances.js";
 import {
   postSendFriendInviteSchema,
   postAcceptFriendInviteSchema,
@@ -11,44 +9,46 @@ import {
   postBlockUserSchema,
   postFriendInviteByUsernameSchema,
 } from "../validators/relationshipValidators.js";
-
-const controller = new RelationshipController(relationshipService);
+import { relationshipController } from "../instances.js";
 
 const router = Router();
 
 router.use(authGuard);
 
-router.get("/", controller.getAllUserRelations.bind(controller));
+router.get(
+  "/",
+  relationshipController.getAllUserRelations.bind(relationshipController)
+);
 
 router.post(
   "/send-friend-invite-by-username",
   validate(postFriendInviteByUsernameSchema),
-  controller.postFriendInviteByUsername.bind(controller)
+  relationshipController.postFriendInviteByUsername.bind(relationshipController)
 );
 router.post(
   "/send-friend-invite-by-id",
   validate(postSendFriendInviteSchema),
-  controller.postSendFriendInvite.bind(controller)
+  relationshipController.postSendFriendInvite.bind(relationshipController)
 );
 router.post(
   "/accept-friend-invite",
   validate(postAcceptFriendInviteSchema),
-  controller.postAcceptFriendInvite.bind(controller)
+  relationshipController.postAcceptFriendInvite.bind(relationshipController)
 );
 router.post(
   "/reject-friend-invite",
   validate(postRejectFriendInviteSchema),
-  controller.postRejectFriendInvite.bind(controller)
+  relationshipController.postRejectFriendInvite.bind(relationshipController)
 );
 router.post(
   "/block-user",
   validate(postBlockUserSchema),
-  controller.postBlockUser.bind(controller)
+  relationshipController.postBlockUser.bind(relationshipController)
 );
 router.post(
   "/unblock-user",
   validate(postUnblockUserSchema),
-  controller.postUnblockUser.bind(controller)
+  relationshipController.postUnblockUser.bind(relationshipController)
 );
 
 export default router;

@@ -1,25 +1,22 @@
 import { Router } from "express";
-import AuthController from "../controllers/authController.js";
 import validate from "../middlewares/validate.js";
 import {
   postLoginSchema,
   postRegisterSchema,
 } from "../validators/userValidators.js";
-import { authService } from "../instances.js";
-
-const controller = new AuthController(authService);
+import { authController } from "../instances.js";
 
 const router = Router();
 
 router.post(
   "/login",
   validate(postLoginSchema),
-  controller.login.bind(controller)
+  authController.login.bind(authController)
 );
 router.post(
   "/register",
   validate(postRegisterSchema),
-  controller.register.bind(controller)
+  authController.register.bind(authController)
 );
 
 export default router;
