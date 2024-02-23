@@ -1,4 +1,5 @@
 import axios, { type AxiosError } from "axios";
+import router from "../../router";
 
 const api = axios.create({
   withCredentials: true,
@@ -7,6 +8,12 @@ const api = axios.create({
 
 const errorHandler = (error: AxiosError) => {
   const statusCode = error.response?.status;
+
+  if (statusCode === 401) {
+    localStorage.setItem("authenticated", "false");
+    router.push("/login");
+  }
+
   return Promise.reject(error);
 };
 
