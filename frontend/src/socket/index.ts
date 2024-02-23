@@ -1,6 +1,7 @@
 import mitt from "mitt";
 
 type Events = {
+  error: { reason: string };
   "chat:message": {
     senderId: string;
     content: string;
@@ -8,7 +9,12 @@ type Events = {
   };
 };
 
-export const socketEmitter = mitt<Events>();
+type WebSocketEvent = {
+  type: keyof Events;
+  data: unknown;
+};
+
+const socketEmitter = mitt<Events>();
 
 const socket = new WebSocket("ws://localhost:3000");
 
@@ -20,21 +26,22 @@ socket.addEventListener("close", () => {
   console.log("socket close");
 });
 
-type WebSocketEvent = {
-  type: string;
-  data: any;
-};
-
 socket.addEventListener("message", (messageEvent) => {
   const event: WebSocketEvent = JSON.parse(messageEvent.data);
-  console.log(event);
+
   switch (event.type) {
     case "chat:message":
-      socketEmitter.emit("chat:message", event.data);
+      const chatMessageData = event.data as Events["chat:message"];
+      socketEmitter.emit("chat:message", chatMessageData);
+      break;
+    case "error":
+      const errorData = event.data as Events["error"];
+      socketEmitter.emit("error", errorData);
       break;
     default:
-      console.log("Unhandled socket event", event);
+      console.error("Unhandled socket event", event);
   }
 });
 
+export { socketEmitter };
 export default socket;
