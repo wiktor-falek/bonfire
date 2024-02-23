@@ -77,7 +77,7 @@ router.beforeEach((to, from, next) => {
   const authenticated = localStorage.getItem("authenticated") === "true";
 
   if (authenticated && to.meta.redirectToAppIfAuth) {
-    return next({ name: "app" });
+    return next({ path: "/app" });
   }
 
   if (!authenticated && !to.meta.skipAuth) {
