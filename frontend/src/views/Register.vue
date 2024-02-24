@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import { register } from "../api/auth";
 import router from "../router";
+import { AxiosError } from "axios";
 
 const urlParams = new URLSearchParams(window.location.search);
 
@@ -9,6 +10,7 @@ const email = ref(urlParams.get("email") ?? "");
 const displayName = ref("");
 const username = ref("");
 const password = ref("");
+const errorMessage = ref("");
 
 async function handleSubmit(e: Event) {
   e.preventDefault();
@@ -20,7 +22,13 @@ async function handleSubmit(e: Event) {
     password: password.value,
   });
 
-  if (result.ok) {
+  if (!result.ok) {
+    if (result.err instanceof AxiosError) {
+      errorMessage.value = "Something went wrong";
+    } else {
+      errorMessage.value = result.err.error;
+    }
+  } else {
     localStorage.setItem("authenticated", "true");
     router.push("/app/home");
   }
@@ -72,6 +80,8 @@ const loginRoute = computed(() => {
           max="100"
         />
 
+        <p class="error-message">{{ errorMessage }}</p>
+
         <button type="submit">Continue</button>
         <RouterLink :to="loginRoute" class="link"
           >Already got an account?</RouterLink
@@ -100,5 +110,9 @@ h1 {
 h2 {
   color: var(--font-gray-1);
   text-align: center;
+}
+
+.error-message {
+  color: #e65449;
 }
 </style>

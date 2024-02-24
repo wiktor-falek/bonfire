@@ -1,8 +1,8 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { Err, Ok } from "resultat";
 
-function wrapAxiosResult<T>(
-  axiosRequestCb: () => Promise<AxiosResponse<T, any>>
+function wrapAxiosResult<T, E>(
+  axiosRequestCb: () => Promise<AxiosResponse<T, E>>
 ) {
   return async () => {
     try {
@@ -12,7 +12,11 @@ function wrapAxiosResult<T>(
       if (!(error instanceof AxiosError)) {
         throw error;
       }
-      return Err(error);
+      if (!error.response) {
+        console.error(error);
+        return Err(error);
+      }
+      return Err(error.response.data as E);
     }
   };
 }

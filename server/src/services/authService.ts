@@ -9,7 +9,7 @@ class AuthService {
   constructor(
     private userModel: UserModel,
     private sessionStore: SessionStore
-  ) { }
+  ) {}
 
   async register(
     email: string,
@@ -17,16 +17,27 @@ class AuthService {
     username: string,
     displayName: string
   ) {
-    const emailExistsResult = await this.userModel.emailExists(email);
+    // Check for existing username or email before hashing passwords.
+    // This allows having distinctive error messages, and compared to
+    // relying on unique indexes this also avoids pre-emptive hashing.
+    const [usernameExistsResult, emailExistsResult] = await Promise.all([
+      this.userModel.usernameExists(username),
+      this.userModel.emailExists(email),
+    ]);
 
-    if (!emailExistsResult.ok) {
-      return emailExistsResult;
+    if (!emailExistsResult.ok || !usernameExistsResult.ok) {
+      return Err("Something went wrong");
     }
 
-    const emailIsInUse = emailExistsResult.val;
+    const emailIsTaken = emailExistsResult.val;
+    const usernameIsTaken = usernameExistsResult.val;
 
-    if (emailIsInUse) {
+    if (emailIsTaken) {
       return Err("Email is already in use");
+    }
+
+    if (usernameIsTaken) {
+      return Err("Username is already in use");
     }
 
     const hash = await bcrypt.hash(password, 12);
@@ -43,7 +54,7 @@ class AuthService {
       return findUserResult;
     }
 
-    const user = findUserResult.val
+    const user = findUserResult.val;
 
     if (user === null) {
       return Err("Incorrect email or password");

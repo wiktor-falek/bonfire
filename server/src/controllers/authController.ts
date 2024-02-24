@@ -44,14 +44,16 @@ class AuthController {
     );
 
     if (!registerResult.ok) {
-      return res.status(401).json({ error: registerResult.err });
+      return res.status(400).json({ error: registerResult.err });
     }
 
     // Automatically log the user in
     const loginResult = await this.authService.login(email, password);
 
     if (!loginResult.ok) {
-      console.error(loginResult.err);
+      console.error(
+        "User registered but automatic login failed, this should have not happened"
+      );
       return res.status(401).json({ error: loginResult.err });
     }
 

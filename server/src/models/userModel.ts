@@ -33,11 +33,9 @@ class UserModel implements IUserModel {
       });
 
       return Ok(result);
-    }
-    catch (_) {
+    } catch (_) {
       return Err("Network Error");
     }
-
   }
 
   async findByEmail(email: string) {
@@ -47,34 +45,32 @@ class UserModel implements IUserModel {
       });
 
       return Ok(result);
-    }
-    catch (_) {
+    } catch (_) {
       return Err("Network Error");
     }
   }
 
   async findById(id: string) {
     try {
-
       const result = await this.collection.findOne<User>({
         id,
       });
       return Ok(result);
-    }
-    catch (_) {
+    } catch (_) {
       return Err("Network Error");
     }
   }
 
   async findAllByIds(ids: string[]) {
     try {
-      const result = await this.collection.find<User>({
-        id: { $in: ids }
-      }).toArray()
+      const result = await this.collection
+        .find<User>({
+          id: { $in: ids },
+        })
+        .toArray();
 
       return Ok(result);
-    }
-    catch (_) {
+    } catch (_) {
       return Err("Network Error");
     }
   }
@@ -89,8 +85,22 @@ class UserModel implements IUserModel {
       );
 
       return Ok(Boolean(count));
+    } catch (_) {
+      return Err("Network Error");
     }
-    catch (_) {
+  }
+
+  async usernameExists(username: string) {
+    try {
+      const count = await this.collection.countDocuments(
+        {
+          "account.username": username,
+        },
+        { limit: 1 }
+      );
+
+      return Ok(Boolean(count));
+    } catch (_) {
       return Err("Network Error");
     }
   }
@@ -100,15 +110,14 @@ class UserModel implements IUserModel {
       const updateResult = await this.collection.updateOne(
         { id: userId },
         { $set: { status } }
-      )
+      );
 
       if (!updateResult.acknowledged) {
-        return Err("Failed to update status")
+        return Err("Failed to update status");
       }
 
       return Ok();
-    }
-    catch (_) {
+    } catch (_) {
       return Err("Network Error");
     }
   }
