@@ -18,10 +18,10 @@ import RelationshipController from "./controllers/relationshipController.js";
 import StatusController from "./controllers/statusController.js";
 import StatusService from "./services/statusService.js";
 
-// Connections
+// Database connections
 const [redisClient, mongoClient] = await Promise.all([
-  new Redis().connect(),
-  new Mongo("mongodb://localhost:27017").connect(),
+  new Redis("redis://localhost:6379").connectOrThrow(),
+  new Mongo("mongodb://localhost:27017").connectOrThrow(),
 ]);
 
 // Databases

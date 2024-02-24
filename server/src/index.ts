@@ -1,6 +1,6 @@
 import app from "./app.js";
 import cron from "node-cron";
-import createIndexes from "./helpers/createIndexes.js";
+import createIndexes from "./db/helpers/createIndexes.js";
 import { mongoDb, sessionStore } from "./instances.js";
 import { createServer } from "http";
 import { WebSocketServer } from "ws";

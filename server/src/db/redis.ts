@@ -2,15 +2,13 @@ import { createClient, type RedisClientType } from "redis";
 
 class Redis {
   private client: RedisClientType;
-  
-  constructor() {
-    this.client = createClient();
+
+  constructor(url: string) {
+    this.client = createClient({ url });
   }
 
-  async connect() {
-    return await this.client.connect().catch((err) => {
-      throw err;
-    });
+  connectOrThrow() {
+    return this.client.connect();
   }
 }
 

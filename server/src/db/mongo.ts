@@ -3,8 +3,8 @@ import { MongoClient, ServerApiVersion } from "mongodb";
 class Mongo {
   private client: MongoClient;
 
-  constructor(uri: string) {
-    this.client = new MongoClient(uri, {
+  constructor(url: string) {
+    this.client = new MongoClient(url, {
       serverApi: {
         version: ServerApiVersion.v1,
         strict: true,
@@ -13,11 +13,11 @@ class Mongo {
     });
   }
 
-  connect() {
+  connectOrThrow() {
     return this.client.connect();
   }
 
-  async close() {
+  close() {
     return this.client.close();
   }
 }
