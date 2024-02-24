@@ -7,18 +7,21 @@ const urlParams = new URLSearchParams(window.location.search);
 
 const email = ref(urlParams.get("email") ?? "");
 const password = ref("");
+const showCredentialsError = ref(false);
 
 async function handleSubmit(e: Event) {
   e.preventDefault();
 
   const result = await login({ email: email.value, password: password.value });
-  if (result.ok) {
+  if (!result.ok) {
+    showCredentialsError.value = true;
+  } else {
     localStorage.setItem("authenticated", "true");
     router.push("/app/home");
   }
 }
 
-function handlePasswordRecovery(e: MouseEvent) {
+function handlePasswordRecovery(e: Event) {
   e.preventDefault();
 }
 
@@ -36,7 +39,19 @@ const registrationRoute = computed(() => {
       <h2>Take a seat around the bonfire with us!</h2>
 
       <form @submit="handleSubmit($event)">
-        <label for="email" class="label-required">Email</label>
+        <label
+          for="email"
+          class="input-label"
+          :class="{
+            'input-label--error': showCredentialsError,
+          }"
+        >
+          <span>Email</span>
+          <span>&nbsp;</span>
+          <span v-if="showCredentialsError" class="input-label__error"
+            >&ndash; Incorrect email or password</span
+          >
+        </label>
         <input
           v-model="email"
           required
@@ -47,7 +62,19 @@ const registrationRoute = computed(() => {
           max="256"
         />
 
-        <label for="password" class="label-required">Password</label>
+        <label
+          for="password"
+          class="input-label"
+          :class="{
+            'input-label--error': showCredentialsError,
+          }"
+        >
+          <span>Password</span>
+          <span>&nbsp;</span>
+          <span v-if="showCredentialsError" class="input-label__error"
+            >&ndash; Incorrect email or password</span
+          >
+        </label>
         <input
           v-model="password"
           required
@@ -100,5 +127,13 @@ h2 {
 .register-text {
   color: var(--font-gray-1);
   margin-right: 0.5ch;
+}
+
+.input-label__error {
+  font-size: 0.9em;
+}
+
+.input-label--error {
+  color: #e65449;
 }
 </style>
