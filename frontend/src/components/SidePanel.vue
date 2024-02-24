@@ -13,8 +13,8 @@ import {
 import { getDirectMessageChannelId } from "../utils/id";
 import { useUserStore } from "../stores/userStore";
 import { useUserProfilesStore } from "../stores/userProfilesStore";
-import capitalizeEachWord from "../utils/capitalizeEachWord";
 import { useDirectMessagesStore } from "../stores/directMessagesStore";
+import { mapUserStatusToDisplayText } from "../utils/mapUserStatusToDisplayText";
 
 const userStore = useUserStore();
 const userProfilesStore = useUserProfilesStore();
@@ -85,8 +85,25 @@ function handleCloseProfileSettingsModal() {
   profileSettingsModalIsOpen.value = false;
 }
 
-function setStatus(status: UserStatus) {
-  patchUserStatus(status);
+const previousStatus = ref<UserStatus>();
+async function setStatus(status: UserStatus) {
+  if (!userStore.userProfile) return;
+
+  // store previous status to allow reverting on network error
+  previousStatus.value = userStore.userProfile.status;
+
+  // optimistic update
+  userStore.userProfile.status = status;
+
+  const result = await patchUserStatus(status);
+
+  if (!result.ok) {
+    userStore.userProfile.status = previousStatus.value;
+    console.error("Failed to update status");
+  } else {
+    // make sure the state matches the backend
+    userStore.userProfile.status = result.val;
+  }
 }
 </script>
 
@@ -232,7 +249,12 @@ function setStatus(status: UserStatus) {
             @close="handleCloseProfileSettingsModal"
             class="user-card__profile__modal"
           >
-            <div class="user-card__profile__modal__settings"></div>
+            <div class="user-card__profile__modal__settings">
+              <button @click="setStatus('online')">Online</button>
+              <button @click="setStatus('away')">Away</button>
+              <button @click="setStatus('dnd')">Do Not Disturb</button>
+              <button @click="setStatus('offline')">Invisible</button>
+            </div>
           </RelativeModal>
 
           <div class="user-card__profile__image"></div>
@@ -243,7 +265,7 @@ function setStatus(status: UserStatus) {
 
             <div class="container user-card__profile__text__bottom-text">
               <p class="paragraph1">
-                {{ capitalizeEachWord(userStore.userProfile?.status ?? "") }}
+                {{ mapUserStatusToDisplayText(userStore.userProfile?.status) }}
               </p>
 
               <p class="paragraph2">

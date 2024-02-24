@@ -14,6 +14,7 @@ import { getDirectMessageChannelId } from "../../utils/id";
 import router from "../../router";
 import { useUserProfilesStore } from "../../stores/userProfilesStore";
 import { useDirectMessagesStore } from "../../stores/directMessagesStore";
+import { mapUserStatusToDisplayText } from "../../utils/mapUserStatusToDisplayText";
 
 const userStore = useUserStore();
 const relationshipsStore = useRelationshipsStore();
@@ -22,7 +23,6 @@ const directMessagesStore = useDirectMessagesStore();
 
 type FilterOption = "online" | "all" | "pending" | "blocked";
 type MenuOption = FilterOption | "add-friend";
-type Status = "online" | "away" | "dnd" | "offline";
 
 const selectedMenuOption = ref<MenuOption>(
   (localStorage.getItem("selectedMenuOption") as MenuOption) ?? "online"
@@ -44,13 +44,6 @@ const userProfiles = computed<UserProfile[]>(() => {
       return [];
   }
 });
-
-const statusTextMap: Record<Status, string> = {
-  online: "Online",
-  away: "Away",
-  dnd: "Do Not Disturb",
-  offline: "Offline",
-};
 
 function selectMenuOption(option: MenuOption) {
   selectedMenuOption.value = option;
@@ -223,7 +216,7 @@ async function handleDeclineInvite(profile: UserProfile) {
                 </span>
               </p>
               <p class="profile__status">
-                {{ statusTextMap[profile.status] }}
+                {{ mapUserStatusToDisplayText(profile.status) }}
               </p>
             </div>
             <div
