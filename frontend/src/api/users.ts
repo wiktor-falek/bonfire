@@ -20,5 +20,5 @@ export const getUserProfileById = (userId: string) =>
 
 export const patchUserStatus = (status: UserStatus) =>
   wrapAxiosResult(() =>
-    api.patch<UserStatus>("/api/users/status", { status })
+    api.patch<{ status: UserStatus }>("/api/users/status", { status })
   )();

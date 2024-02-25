@@ -98,11 +98,13 @@ async function setStatus(status: UserStatus) {
   const result = await patchUserStatus(status);
 
   if (!result.ok) {
+    // revert to previous status
     userStore.userProfile.status = previousStatus.value;
     console.error("Failed to update status");
   } else {
     // make sure the state matches the backend
-    userStore.userProfile.status = result.val;
+    const canonicalStatus = result.val.status;
+    userStore.userProfile.status = canonicalStatus;
   }
 }
 </script>
@@ -244,19 +246,6 @@ async function setStatus(status: UserStatus) {
 
       <div class="user-card">
         <div class="user-card__profile" @click="handleOpenProfileSettingsModal">
-          <RelativeModal
-            :is-open="profileSettingsModalIsOpen"
-            @close="handleCloseProfileSettingsModal"
-            class="user-card__profile__modal"
-          >
-            <div class="user-card__profile__modal__settings">
-              <button @click="setStatus('online')">Online</button>
-              <button @click="setStatus('away')">Away</button>
-              <button @click="setStatus('dnd')">Do Not Disturb</button>
-              <button @click="setStatus('offline')">Invisible</button>
-            </div>
-          </RelativeModal>
-
           <div class="user-card__profile__image"></div>
           <div class="user-card__profile__text">
             <p class="user-card__profile__text__display-name">
@@ -265,7 +254,11 @@ async function setStatus(status: UserStatus) {
 
             <div class="container user-card__profile__text__bottom-text">
               <p class="paragraph1">
-                {{ mapUserStatusToDisplayText(userStore.userProfile?.status) }}
+                {{
+                  userStore.userProfile?.status === "offline"
+                    ? "Invisible"
+                    : mapUserStatusToDisplayText(userStore.userProfile?.status)
+                }}
               </p>
 
               <p class="paragraph2">
@@ -277,6 +270,19 @@ async function setStatus(status: UserStatus) {
       </div>
     </div>
   </div>
+
+  <RelativeModal
+    :is-open="profileSettingsModalIsOpen"
+    @close="handleCloseProfileSettingsModal"
+    class="user-card__profile__modal"
+  >
+    <div class="user-card__profile__modal__settings">
+      <button @click="setStatus('online')">Online</button>
+      <button @click="setStatus('away')">Away</button>
+      <button @click="setStatus('dnd')">Do Not Disturb</button>
+      <button @click="setStatus('offline')">Invisible</button>
+    </div>
+  </RelativeModal>
 
   <OverlayModal
     :is-open="createConversationModalIsOpen"
