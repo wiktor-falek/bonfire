@@ -1,36 +1,71 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
 import type { UserProfile } from "../api/users";
+import socket from "../socket";
 
 export const useUserProfilesStore = defineStore("userProfiles", () => {
   // userId to UserProfile mapping
-  const userProfiles = ref<Map<string, UserProfile>>(new Map());
+  const userProfiles = new Map<
+    string,
+    { profile: UserProfile; invalidated?: boolean }
+  >();
 
   // channelId to UserProfile mapping
-  const directMessageChannelProfiles = ref<Map<string, UserProfile>>(new Map());
+  const directMessageChannelProfiles = new Map<
+    string,
+    { profile: UserProfile; invalidated?: boolean }
+  >();
 
-  const setUserProfile = (profile: UserProfile) => {
-    userProfiles.value.set(profile.id, profile);
-  };
+  function _subscribeToProfilesChanges(profiles: UserProfile[]) {
+    socket.send(
+      JSON.stringify({
+        type: "subscribe:user-profiles",
+        data: profiles.map((p) => p.id),
+      })
+    );
+  }
 
-  const setUserProfiles = (profiles: UserProfile[]) => {
+  function _unsubscribeFromProfileChanges(profiles: UserProfile[]) {
+    socket.send(
+      JSON.stringify({
+        type: "unsubscribe:user-profiles",
+        data: profiles.map((p) => p.id),
+      })
+    );
+  }
+
+  function getUserProfile(userId: string) {
+    return userProfiles.get(userId)?.profile;
+  }
+
+  function setUserProfile(profile: UserProfile) {
+    userProfiles.set(profile.id, { profile });
+    _subscribeToProfilesChanges([profile]);
+  }
+
+  function setUserProfiles(profiles: UserProfile[]) {
     for (const profile of profiles) {
-      userProfiles.value.set(profile.id, profile);
+      userProfiles.set(profile.id, { profile });
     }
-  };
+    _subscribeToProfilesChanges(profiles);
+  }
 
-  const setDirectMessageChannelProfiles = (
+  function getDirectMessageChannelProfile(channelId: string) {
+    return directMessageChannelProfiles.get(channelId)?.profile;
+  }
+
+  function setDirectMessageChannelProfile(
     channelId: string,
     profile: UserProfile
-  ) => {
-    directMessageChannelProfiles.value.set(channelId, profile);
-  };
+  ) {
+    directMessageChannelProfiles.set(channelId, { profile });
+    _subscribeToProfilesChanges([profile]);
+  }
 
   return {
-    userProfiles,
-    directMessageChannelProfiles,
+    getUserProfile,
     setUserProfile,
     setUserProfiles,
-    setDirectMessageChannelProfiles,
+    getDirectMessageChannelProfile,
+    setDirectMessageChannelProfile,
   };
 });

@@ -60,7 +60,7 @@ async function loadMessagess(channelId: string) {
 }
 
 async function loadUser(channelId: string) {
-  let profile = userProfilesStore.directMessageChannelProfiles.get(channelId);
+  let profile = userProfilesStore.getDirectMessageChannelProfile(channelId);
   if (profile === undefined) {
     const result = await getOtherParticipantProfileInDirectMessageChannel(
       channelId

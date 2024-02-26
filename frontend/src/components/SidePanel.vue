@@ -59,7 +59,7 @@ function handleConversationClick(profile: UserProfile) {
   const userId = userStore.userProfile.id;
   const channelId = getDirectMessageChannelId(userId, profile.id);
 
-  userProfilesStore.setDirectMessageChannelProfiles(channelId, profile);
+  userProfilesStore.setDirectMessageChannelProfile(channelId, profile);
 
   isOpenOnMobile.value = false;
   router.push(`/app/channel/@me/${channelId}`);

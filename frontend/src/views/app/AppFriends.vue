@@ -73,7 +73,7 @@ function handleProfileClick(profile: UserProfile) {
     profile.id
   );
 
-  userProfilesStore.setDirectMessageChannelProfiles(channelId, profile);
+  userProfilesStore.setDirectMessageChannelProfile(channelId, profile);
 
   directMessagesStore.prependUserProfile(profile);
 
