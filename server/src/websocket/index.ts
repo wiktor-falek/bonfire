@@ -4,10 +4,10 @@ import SocketClientManager from "./socketClientManager.js";
 import getCookie from "../utils/getCookie.js";
 import { sessionStore } from "../instances.js";
 import { deserialize } from "./serialization.js";
-import chatHandlers from "./handlers/chatHandlers.js";
+import { directMessage } from "./handlers/chatHandlers.js";
 
 const handlers = {
-  "chat:direct-message": chatHandlers.directMessage,
+  "chat:direct-message": directMessage,
 };
 
 function registerWebSocketServer(wss: WebSocketServer) {

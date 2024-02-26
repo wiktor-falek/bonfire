@@ -1,8 +1,8 @@
 import { z } from "zod";
 import type WsClient from "../wsClient.js";
 import type { ServerToClientEvents } from "../types.js";
-import type { Handlers } from "./types.js";
 import { messageService } from "../../instances.js";
+import { createHandler } from "./handler.js";
 
 const directMessageSchema = z.strictObject({
   recipientId: z.string(),
@@ -37,11 +37,7 @@ async function directMessageHandler(
   client.to(userClientsNamespace).send("chat:message", message);
 }
 
-const handlers = {
-  directMessage: {
-    cb: directMessageHandler,
-    schema: directMessageSchema,
-  },
-} satisfies Handlers;
-
-export default handlers;
+export const directMessage = createHandler(
+  directMessageHandler,
+  directMessageSchema
+);
