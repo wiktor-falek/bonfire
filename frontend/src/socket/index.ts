@@ -1,20 +1,22 @@
 import mitt from "mitt";
+import { type UserProfile } from "../api/users";
 
-type Events = {
+type ServerToClientEvents = {
   error: { reason: string };
   "chat:message": {
     senderId: string;
     content: string;
     timestamp: number;
   };
+  userProfiles: UserProfile[];
 };
 
 type WebSocketEvent = {
-  type: keyof Events;
+  type: keyof ServerToClientEvents;
   data: unknown;
 };
 
-const socketEmitter = mitt<Events>();
+const socketEmitter = mitt<ServerToClientEvents>();
 
 const socket = new WebSocket("ws://localhost:3000");
 
@@ -29,18 +31,10 @@ socket.addEventListener("close", () => {
 socket.addEventListener("message", (messageEvent) => {
   const event: WebSocketEvent = JSON.parse(messageEvent.data);
 
-  switch (event.type) {
-    case "chat:message":
-      const chatMessageData = event.data as Events["chat:message"];
-      socketEmitter.emit("chat:message", chatMessageData);
-      break;
-    case "error":
-      const errorData = event.data as Events["error"];
-      socketEmitter.emit("error", errorData);
-      break;
-    default:
-      console.error("Unhandled socket event", event);
-  }
+  socketEmitter.emit(
+    event.type,
+    event.data as ServerToClientEvents[typeof event.type]
+  );
 });
 
 export { socketEmitter };
