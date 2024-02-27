@@ -6,7 +6,7 @@ export function mapUserStatusToDisplayText(status?: UserStatus) {
   const userStatusTextMap: Record<UserStatus, string> = {
     online: "Online",
     away: "Away",
-    dnd: "Do Not Disturb",
+    dnd: "Dnd",
     offline: "Offline",
   };
 

@@ -604,7 +604,8 @@ hr {
 
 .container {
   height: 1rem;
-  overflow: hidden;
+  white-space: nowrap;
+  overflow-y: auto;
 }
 
 .container > p {
