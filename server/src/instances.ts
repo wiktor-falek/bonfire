@@ -1,22 +1,30 @@
 import Mongo from "./db/mongo.js";
 import Redis from "./db/redis.js";
-import ChannelModel from "./models/channelModel.js";
-import UserModel from "./models/userModel.js";
-import FriendInviteModel from "./models/friendInviteModel.js";
-import RelationModel from "./models/relationModel.js";
-import AuthService from "./services/authService.js";
-import MessageService from "./services/messageService.js";
 import SessionStore from "./stores/sessionStore.js";
-import UserService from "./services/userService.js";
-import RelationshipService from "./services/relationshipService.js";
-import NotificationService from "./services/notificationService.js";
-import UserController from "./controllers/userController.js";
-import AuthController from "./controllers/authController.js";
-import ChannelController from "./controllers/channelController.js";
-import MessageController from "./controllers/messageController.js";
-import RelationshipController from "./controllers/relationshipController.js";
-import StatusController from "./controllers/statusController.js";
-import StatusService from "./services/statusService.js";
+import {
+  ChannelModel,
+  UserModel,
+  FriendInviteModel,
+  RelationModel,
+} from "./models/index.js";
+import {
+  AuthService,
+  MessageService,
+  UserService,
+  StatusService,
+  RelationshipService,
+  NotificationService,
+} from "./services/index.js";
+import {
+  UserControllerHTTP,
+  AuthControllerHTTP,
+  ChannelControllerHTTP,
+  MessageControllerHTTP,
+  RelationshipControllerHTTP,
+  StatusControllerHTTP,
+} from "./controllers/index.js";
+import ChatControllerWS from "./websocket/controllers/chatController.js";
+import ProfileSubscriptionControllerWS from "./websocket/controllers/profileSubscriptionController.js";
 
 // Database connections
 const [redisClient, mongoClient] = await Promise.all([
@@ -50,15 +58,20 @@ export const relationshipService = new RelationshipService(
   notificationService
 );
 
-// Controllers
-export const authController = new AuthController(authService);
-export const userController = new UserController(userService);
-export const channelController = new ChannelController(
+// HTTP Controllers
+export const authControllerHTTP = new AuthControllerHTTP(authService);
+export const userControllerHTTP = new UserControllerHTTP(userService);
+export const channelControllerHTTP = new ChannelControllerHTTP(
   channelModel,
   userService
 );
-export const messageController = new MessageController(messageService);
-export const relationshipController = new RelationshipController(
+export const messageControllerHTTP = new MessageControllerHTTP(messageService);
+export const relationshipControllerHTTP = new RelationshipControllerHTTP(
   relationshipService
 );
-export const statusController = new StatusController(statusService);
+export const statusController = new StatusControllerHTTP(statusService);
+
+// WS Controllers
+export const chatControllerWS = new ChatControllerWS(messageService);
+export const profileSubscriptionControllerWS =
+  new ProfileSubscriptionControllerWS();

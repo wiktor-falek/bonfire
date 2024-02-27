@@ -4,19 +4,19 @@ import {
   postLoginSchema,
   postRegisterSchema,
 } from "../validators/userValidators.js";
-import { authController } from "../instances.js";
+import { authControllerHTTP } from "../instances.js";
 
 const router = Router();
 
 router.post(
   "/login",
   validate(postLoginSchema),
-  authController.login.bind(authController)
+  authControllerHTTP.login.bind(authControllerHTTP)
 );
 router.post(
   "/register",
   validate(postRegisterSchema),
-  authController.register.bind(authController)
+  authControllerHTTP.register.bind(authControllerHTTP)
 );
 
 export default router;

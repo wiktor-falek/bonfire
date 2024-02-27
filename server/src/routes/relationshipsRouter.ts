@@ -9,7 +9,7 @@ import {
   postBlockUserSchema,
   postFriendInviteByUsernameSchema,
 } from "../validators/relationshipValidators.js";
-import { relationshipController } from "../instances.js";
+import { relationshipControllerHTTP } from "../instances.js";
 
 const router = Router();
 
@@ -17,38 +17,48 @@ router.use(authGuard);
 
 router.get(
   "/",
-  relationshipController.getAllUserRelations.bind(relationshipController)
+  relationshipControllerHTTP.getAllUserRelations.bind(
+    relationshipControllerHTTP
+  )
 );
 
 router.post(
   "/send-friend-invite-by-username",
   validate(postFriendInviteByUsernameSchema),
-  relationshipController.postFriendInviteByUsername.bind(relationshipController)
+  relationshipControllerHTTP.postFriendInviteByUsername.bind(
+    relationshipControllerHTTP
+  )
 );
 router.post(
   "/send-friend-invite-by-id",
   validate(postSendFriendInviteSchema),
-  relationshipController.postSendFriendInvite.bind(relationshipController)
+  relationshipControllerHTTP.postSendFriendInvite.bind(
+    relationshipControllerHTTP
+  )
 );
 router.post(
   "/accept-friend-invite",
   validate(postAcceptFriendInviteSchema),
-  relationshipController.postAcceptFriendInvite.bind(relationshipController)
+  relationshipControllerHTTP.postAcceptFriendInvite.bind(
+    relationshipControllerHTTP
+  )
 );
 router.post(
   "/reject-friend-invite",
   validate(postRejectFriendInviteSchema),
-  relationshipController.postRejectFriendInvite.bind(relationshipController)
+  relationshipControllerHTTP.postRejectFriendInvite.bind(
+    relationshipControllerHTTP
+  )
 );
 router.post(
   "/block-user",
   validate(postBlockUserSchema),
-  relationshipController.postBlockUser.bind(relationshipController)
+  relationshipControllerHTTP.postBlockUser.bind(relationshipControllerHTTP)
 );
 router.post(
   "/unblock-user",
   validate(postUnblockUserSchema),
-  relationshipController.postUnblockUser.bind(relationshipController)
+  relationshipControllerHTTP.postUnblockUser.bind(relationshipControllerHTTP)
 );
 
 export default router;

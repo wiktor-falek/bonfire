@@ -2,7 +2,7 @@ import type UserModel from "../models/userModel.js";
 import type { UserStatus } from "../entities/user.js";
 import { Ok } from "resultat";
 
-class StatusService {
+class StatusServiceHTTP {
   constructor(private userModel: UserModel) {}
 
   async setStatus(userId: string, status: UserStatus) {
@@ -18,4 +18,4 @@ class StatusService {
   }
 }
 
-export default StatusService;
+export default StatusServiceHTTP;

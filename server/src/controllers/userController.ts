@@ -3,7 +3,7 @@ import type { Request, Response } from "express";
 import type { getUserProfileByIdSchema } from "../validators/userValidators.js";
 import type UserService from "../services/userService.js";
 
-class UserController {
+class UserControllerHTTP {
   constructor(private userService: UserService) {}
 
   async getCurrentUserProfileInfo(req: Request, res: Response) {
@@ -38,4 +38,4 @@ class UserController {
   }
 }
 
-export default UserController;
+export default UserControllerHTTP;

@@ -6,7 +6,7 @@ import type {
 } from "../validators/userValidators.js";
 import type AuthService from "../services/authService.js";
 
-class AuthController {
+class AuthControllerHTTP {
   constructor(private authService: AuthService) {}
 
   async login(req: ValidatedRequest<typeof postLoginSchema>, res: Response) {
@@ -72,4 +72,4 @@ class AuthController {
   }
 }
 
-export default AuthController;
+export default AuthControllerHTTP;

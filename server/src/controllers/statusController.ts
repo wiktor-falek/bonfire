@@ -3,7 +3,7 @@ import type { Response } from "express";
 import type StatusService from "../services/statusService.js";
 import { type patchUserStatus } from "../validators/statusValidators.js";
 
-class StatusController {
+class StatusControllerHTTP {
   constructor(private statusService: StatusService) {}
 
   async setStatus(
@@ -23,4 +23,4 @@ class StatusController {
   }
 }
 
-export default StatusController;
+export default StatusControllerHTTP;

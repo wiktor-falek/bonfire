@@ -5,7 +5,7 @@ import {
   postMessageSchema,
 } from "../validators/messageValidators.js";
 import authGuard from "../middlewares/authGuard.js";
-import { messageController } from "../instances.js";
+import { messageControllerHTTP } from "../instances.js";
 
 const router = Router();
 
@@ -14,12 +14,12 @@ router.use(authGuard);
 router.get(
   "/",
   validate(getMessageSchema),
-  messageController.getMessages.bind(messageController)
+  messageControllerHTTP.getMessages.bind(messageControllerHTTP)
 );
 router.post(
   "/",
   validate(postMessageSchema),
-  messageController.saveDirectMessage.bind(messageController)
+  messageControllerHTTP.saveDirectMessage.bind(messageControllerHTTP)
 );
 
 export default router;

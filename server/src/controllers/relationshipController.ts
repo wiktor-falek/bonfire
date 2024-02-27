@@ -10,7 +10,7 @@ import {
   postUnblockUserSchema,
 } from "../validators/relationshipValidators.js";
 
-class RelationshipController {
+class RelationshipControllerHTTP {
   constructor(private relationshipService: RelationshipService) {}
 
   async getAllUserRelations(req: Request, res: Response) {
@@ -144,4 +144,4 @@ class RelationshipController {
   }
 }
 
-export default RelationshipController;
+export default RelationshipControllerHTTP;

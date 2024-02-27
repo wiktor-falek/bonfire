@@ -6,7 +6,7 @@ import {
 import type { ValidatedRequest } from "../types.js";
 import type MessageService from "../services/messageService.js";
 
-class MessageController {
+class MessageControllerHTTP {
   constructor(private messageService: MessageService) {}
 
   async getMessages(
@@ -47,4 +47,4 @@ class MessageController {
   }
 }
 
-export default MessageController;
+export default MessageControllerHTTP;
