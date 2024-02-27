@@ -13,6 +13,7 @@ class SocketClientManager<
 
   // client.id to subscribed namespaces mapping.
   private clientSubscribedNamespaces: Map<string, Set<string>>;
+
   constructor() {
     this.clients = new Map();
     this.namespaces = new Map();
