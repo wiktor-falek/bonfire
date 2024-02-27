@@ -69,7 +69,7 @@ export const messageControllerHTTP = new MessageControllerHTTP(messageService);
 export const relationshipControllerHTTP = new RelationshipControllerHTTP(
   relationshipService
 );
-export const statusController = new StatusControllerHTTP(statusService);
+export const statusControllerHTTP = new StatusControllerHTTP(statusService);
 
 // WS Controllers
 export const chatControllerWS = new ChatControllerWS(messageService);

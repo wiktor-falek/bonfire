@@ -4,7 +4,7 @@ import authGuard from "../middlewares/authGuard.js";
 import { getUserProfileByIdSchema } from "../validators/userValidators.js";
 import { patchUserStatus } from "../validators/statusValidators.js";
 import { userControllerHTTP } from "../instances.js";
-import { statusController } from "../instances.js";
+import { statusControllerHTTP } from "../instances.js";
 
 const router = Router();
 
@@ -22,7 +22,7 @@ router.get(
 router.patch(
   "/status",
   validate(patchUserStatus),
-  statusController.setStatus.bind(statusController)
+  statusControllerHTTP.setStatus.bind(statusControllerHTTP)
 );
 
 export default router;
