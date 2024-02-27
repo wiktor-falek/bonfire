@@ -19,7 +19,7 @@ export const useUserProfilesStore = defineStore("userProfiles", () => {
     socket.send(
       JSON.stringify({
         type: "subscribe:user-profiles",
-        data: profiles.map((p) => p.id),
+        data: { profileIds: profiles.map((p) => p.id) },
       })
     );
   }
@@ -28,7 +28,7 @@ export const useUserProfilesStore = defineStore("userProfiles", () => {
     socket.send(
       JSON.stringify({
         type: "unsubscribe:user-profiles",
-        data: profiles.map((p) => p.id),
+        data: { profileIds: profiles.map((p) => p.id) },
       })
     );
   }
