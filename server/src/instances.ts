@@ -1,6 +1,6 @@
 import Mongo from "./db/mongo.js";
 import Redis from "./db/redis.js";
-import SessionStore from "./stores/sessionStore.js";
+import { SessionStore, ProfileSubscriptionStore } from "./stores/index.js";
 import {
   ChannelModel,
   UserModel,
@@ -23,9 +23,10 @@ import {
   RelationshipControllerHTTP,
   StatusControllerHTTP,
 } from "./controllers/index.js";
-import ChatControllerWS from "./websocket/controllers/chatController.js";
-import ProfileSubscriptionControllerWS from "./websocket/controllers/profileSubscriptionController.js";
-import ProfileSubscriptionService from "./services/profileSubscriptionService.js";
+import {
+  ChatControllerWS,
+  ProfileSubscriptionControllerWS,
+} from "./websocket/controllers/index.js";
 
 // Database connections
 const [redisClient, mongoClient] = await Promise.all([
@@ -38,6 +39,7 @@ export const mongoDb = mongoClient.db("bonfire");
 
 // Stores
 export const sessionStore = new SessionStore(redisClient);
+export const profileSubscriptionStore = new ProfileSubscriptionStore();
 
 // Models
 export const userModel = new UserModel(mongoDb);
@@ -50,10 +52,9 @@ export const notificationService = new NotificationService();
 export const authService = new AuthService(userModel, sessionStore);
 export const messageService = new MessageService(channelModel);
 export const userService = new UserService(userModel);
-export const profileSubscriptionService = new ProfileSubscriptionService();
 export const statusService = new StatusService(
   userModel,
-  profileSubscriptionService
+  profileSubscriptionStore
 );
 export const relationshipService = new RelationshipService(
   userModel,
@@ -79,4 +80,4 @@ export const statusControllerHTTP = new StatusControllerHTTP(statusService);
 // WS Controllers
 export const chatControllerWS = new ChatControllerWS(messageService);
 export const profileSubscriptionControllerWS =
-  new ProfileSubscriptionControllerWS(profileSubscriptionService);
+  new ProfileSubscriptionControllerWS(profileSubscriptionStore);

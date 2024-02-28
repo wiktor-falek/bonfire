@@ -1,12 +1,12 @@
 import type UserModel from "../models/userModel.js";
 import type { UserStatus } from "../entities/user.js";
 import { Ok } from "resultat";
-import type ProfileSubscriptionService from "./profileSubscriptionService.js";
+import type ProfileSubscriptionStore from "../stores/profileSubscriptionStore.js";
 
 class StatusService {
   constructor(
     private userModel: UserModel,
-    private profileSubscriptionService: ProfileSubscriptionService
+    private profileSubscriptionStore: ProfileSubscriptionStore
   ) {}
 
   async setStatus(userId: string, status: UserStatus) {
@@ -16,8 +16,7 @@ class StatusService {
       return result;
     }
 
-    const subscribers =
-      this.profileSubscriptionService.getProfileSubscribers(userId);
+    const subscribers = this.profileSubscriptionStore.getSubscribers(userId);
 
     for (const clientId of subscribers) {
       // question is how do I get access to client object

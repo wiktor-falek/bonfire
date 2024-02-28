@@ -9,7 +9,7 @@ class SessionStore {
   /**
    * Creates a user session using the provided data.
    */
-  async createSession(sessionId: string, data: SessionData) {
+  async addSession(sessionId: string, data: SessionData) {
     // const sessionCount = await this.getAllUserSessionsCount(data.userId);
     // if (sessionCount >= 5) {
     //   return Err("User has reached the maximum session limit.");

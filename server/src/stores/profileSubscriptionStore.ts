@@ -1,11 +1,11 @@
-class ProfileSubscriptionService {
+class ProfileSubscriptionStore {
   private profileIdToClientIdsMap: Map<string, Set<string>>;
 
   constructor() {
     this.profileIdToClientIdsMap = new Map();
   }
 
-  subscribe(clientId: string, profileIds: string[]) {
+  addSubscriptions(clientId: string, profileIds: string[]) {
     for (const profileId of profileIds) {
       const clientIds =
         this.profileIdToClientIdsMap.get(profileId) ?? new Set();
@@ -14,17 +14,17 @@ class ProfileSubscriptionService {
     }
   }
 
-  unsubscribe(clientId: string, profileIds: string[]) {
+  getSubscribers(profileId: string): IterableIterator<string> {
+    const subscribers = this.profileIdToClientIdsMap.get(profileId) ?? [];
+    return subscribers.values();
+  }
+
+  deleteSubscriptions(clientId: string, profileIds: string[]) {
     for (const profileId of profileIds) {
       const clientIdsSet = this.profileIdToClientIdsMap.get(profileId);
       clientIdsSet?.delete(clientId);
     }
   }
-
-  getProfileSubscribers(profileId: string): IterableIterator<string> {
-    const subscribers = this.profileIdToClientIdsMap.get(profileId) ?? [];
-    return subscribers.values();
-  }
 }
 
-export default ProfileSubscriptionService;
+export default ProfileSubscriptionStore;
