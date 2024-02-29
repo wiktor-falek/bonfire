@@ -7,10 +7,16 @@ import { useUserStore } from "../../stores/userStore";
 import { useRelationshipsStore } from "../../stores/relationshipsStore";
 import { useUserProfilesStore } from "../../stores/userProfilesStore";
 import { getCurrentProfile } from "../../api/users";
+import { socketEmitter } from "../../socket";
 
 const userStore = useUserStore();
 const relationshipsStore = useRelationshipsStore();
 const profilesStore = useUserProfilesStore();
+
+socketEmitter.on("clientId", (clientId) => {
+  console.log("setting the clientId cookie", clientId);
+  localStorage.setItem("clientId", clientId);
+});
 
 onBeforeMount(async () => {
   const getCurrentProfileResult = await getCurrentProfile();

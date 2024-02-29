@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type WsClient from "../wsClient.js";
+import type { WsClient } from "../wsClient.js";
 import type { ServerToClientEvents } from "../types.js";
 import { directMessageSchema } from "../../validators/websocket/index.js";
 import MessageService from "../../services/messageService.js";

@@ -15,7 +15,7 @@ if (config.NODE_ENV === "development") {
 const server = createServer(app);
 const wss = new WebSocketServer({ server });
 
-wsApp.register(wss);
+export const [wsServerClient, socketClientManager] = wsApp.register(wss);
 
 server.listen(3000, () => {
   console.log(`HTTP server listening on http://localhost:3000`);

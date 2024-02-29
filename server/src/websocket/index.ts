@@ -4,7 +4,7 @@ import SocketClientManager from "./socketClientManager.js";
 import getCookie from "../utils/getCookie.js";
 import { sessionStore } from "../instances.js";
 import { deserialize } from "./serialization.js";
-import type WsClient from "./wsClient.js";
+import { WsClient, WsServerClient } from "./wsClient.js";
 import type { AnyZodObject } from "zod";
 
 // TODO: any strict zod object
@@ -48,6 +48,10 @@ class WebSocketApp {
 
   register(wss: WebSocketServer) {
     const socketClientManager = new SocketClientManager<ServerToClientEvents>();
+    const wsServerClient = new WsServerClient<ServerToClientEvents>(
+      wss,
+      socketClientManager
+    );
 
     wss.on("listening", () => {
       console.log("WebSocket server listening on ws://localhost:3000");
@@ -64,6 +68,10 @@ class WebSocketApp {
         return socketClientManager.deleteClient(client);
       }
 
+      // send the clientId for the client to store it as a cookie, later
+      // it will used for http requests that need to identify the client
+      client.send("clientId", client.id);
+
       const session = result.val;
       const { userId } = session;
 
@@ -76,6 +84,8 @@ class WebSocketApp {
 
       ws.on("close", () => {
         socketClientManager.deleteClient(client);
+        // TODO: delete the subscription data, probably outside of this modules
+        // as it is application code and doesn't belong in library code
         console.log(`User ${userId} disconnected`);
       });
 
@@ -111,6 +121,8 @@ class WebSocketApp {
         cb(client, validation.data, userId);
       });
     });
+
+    return [wsServerClient, socketClientManager] as const;
   }
 }
 

@@ -2,6 +2,7 @@ import type UserModel from "../models/userModel.js";
 import type { UserStatus } from "../entities/user.js";
 import { Ok } from "resultat";
 import type ProfileSubscriptionStore from "../stores/profileSubscriptionStore.js";
+import { wsServerClient } from "../index.js";
 
 class StatusService {
   constructor(
@@ -9,7 +10,7 @@ class StatusService {
     private profileSubscriptionStore: ProfileSubscriptionStore
   ) {}
 
-  async setStatus(userId: string, status: UserStatus) {
+  async setStatus(userId: string, clientId: string, status: UserStatus) {
     const result = await this.userModel.updateStatus(userId, status);
 
     if (!result.ok) {
@@ -17,10 +18,20 @@ class StatusService {
     }
 
     const subscribers = this.profileSubscriptionStore.getSubscribers(userId);
+    const subscriptions =
+      this.profileSubscriptionStore.getSubscriptions(clientId);
 
-    for (const clientId of subscribers) {
-      // question is how do I get access to client object
-      // client.toClient(clientId).emit("subscription:user-profile:status", status);
+    console.log("this shit", { subscribers: [...subscribers] });
+    console.log({ subscriptions: [...subscriptions] });
+
+    for (const subscriberClientId of subscribers) {
+      console.log("sending subscription data to client", clientId);
+      wsServerClient
+        .toClient(subscriberClientId)
+        .send("subscription:user-profile:status", {
+          profileId: userId,
+          status,
+        });
     }
 
     return Ok(status);

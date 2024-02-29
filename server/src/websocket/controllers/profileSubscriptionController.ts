@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { ServerToClientEvents } from "../types.js";
-import WsClient from "../wsClient.js";
+import type { WsClient } from "../wsClient.js";
 import type { userProfilesSchema } from "../../validators/websocket/index.js";
 import type ProfileSubscriptionStore from "../../stores/profileSubscriptionStore.js";
 
@@ -13,7 +13,11 @@ class ProfileSubscriptionControllerWS {
     userId: string
   ) {
     const { profileIds } = data;
-    this.profileSubscriptionStore.addSubscriptions(client.id, profileIds);
+    const subscriptions = this.profileSubscriptionStore.addSubscriptions(
+      client.id,
+      profileIds
+    );
+    console.log("updated subscriptions", subscriptions);
   }
 
   unsubscribeFromUserProfiles(

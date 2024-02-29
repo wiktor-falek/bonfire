@@ -1,8 +1,23 @@
 import { defineStore } from "pinia";
 import type { UserProfile } from "../api/users";
-import socket from "../socket";
+import socket, { socketEmitter } from "../socket";
 
 export const useUserProfilesStore = defineStore("userProfiles", () => {
+  socketEmitter.on(
+    "subscription:user-profile:status",
+    ({ profileId, status }) => {
+      // TODO: update the profile
+      console.log("subscription update", { profileId, status });
+      const entry = userProfiles.get(profileId);
+      if (!entry) {
+        console.error("no bueno");
+        return;
+      }
+
+      entry.profile.status = status;
+    }
+  );
+
   // userId to UserProfile mapping
   const userProfiles = new Map<
     string,
@@ -16,6 +31,7 @@ export const useUserProfilesStore = defineStore("userProfiles", () => {
   >();
 
   function _subscribeToProfilesChanges(profiles: UserProfile[]) {
+    console.log("subscribing", profiles);
     socket.send(
       JSON.stringify({
         type: "subscribe:user-profiles",

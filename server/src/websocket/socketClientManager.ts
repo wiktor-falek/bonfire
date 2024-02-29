@@ -1,5 +1,5 @@
 import { WebSocket } from "ws";
-import WsClient from "./wsClient.js";
+import { WsClient } from "./wsClient.js";
 import type { JSONSerializable } from "./serialization.js";
 
 class SocketClientManager<
@@ -24,6 +24,10 @@ class SocketClientManager<
     const client = new WsClient<Events>(ws, this);
     this.clients.set(client.id, client);
     return client;
+  }
+
+  getClient(clientId: string) {
+    return this.clients.get(clientId);
   }
 
   deleteClient(client: WsClient<Events>) {

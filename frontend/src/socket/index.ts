@@ -1,14 +1,16 @@
 import mitt from "mitt";
-import { type UserProfile } from "../api/users";
+import { UserStatus, type UserProfile } from "../api/users";
 
 type ServerToClientEvents = {
   error: { reason: string };
+  clientId: string;
   "chat:message": {
     senderId: string;
     content: string;
     timestamp: number;
   };
   userProfiles: UserProfile[];
+  "subscription:user-profile:status": { profileId: string; status: UserStatus };
 };
 
 type WebSocketEvent = {
@@ -30,6 +32,8 @@ socket.addEventListener("close", () => {
 
 socket.addEventListener("message", (messageEvent) => {
   const event: WebSocketEvent = JSON.parse(messageEvent.data);
+
+  console.log({ event });
 
   socketEmitter.emit(
     event.type,
