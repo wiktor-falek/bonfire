@@ -17,7 +17,6 @@ class ProfileSubscriptionControllerWS {
       client.id,
       profileIds
     );
-    console.log("updated subscriptions", subscriptions);
   }
 
   unsubscribeFromUserProfiles(

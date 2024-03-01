@@ -46,7 +46,7 @@ class WebSocketApp {
     this.handlers[eventType] = { cb, schema };
   }
 
-  register(wss: WebSocketServer) {
+  register(wss: WebSocketServer, options: { onClose?: Function }) {
     const socketClientManager = new SocketClientManager<ServerToClientEvents>();
     const wsServerClient = new WsServerClient<ServerToClientEvents>(
       wss,
@@ -83,9 +83,8 @@ class WebSocketApp {
       client.subscribe(`user_${userId}`);
 
       ws.on("close", () => {
+        options.onClose?.();
         socketClientManager.deleteClient(client);
-        // TODO: delete the subscription data, probably outside of this modules
-        // as it is application code and doesn't belong in library code
         console.log(`User ${userId} disconnected`);
       });
 

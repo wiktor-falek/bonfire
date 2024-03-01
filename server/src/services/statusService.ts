@@ -21,9 +21,6 @@ class StatusService {
     const subscriptions =
       this.profileSubscriptionStore.getSubscriptions(clientId);
 
-    console.log("this shit", { subscribers: [...subscribers] });
-    console.log({ subscriptions: [...subscriptions] });
-
     for (const subscriberClientId of subscribers) {
       console.log("sending subscription data to client", clientId);
       wsServerClient
