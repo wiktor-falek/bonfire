@@ -22,6 +22,5 @@ export const patchUserStatus = (status: UserStatus) =>
   wrapAxiosResult(() =>
     api.patch<{ status: UserStatus }>("/api/users/status", {
       status,
-      clientId: localStorage.getItem("clientId"),
     })
   )();

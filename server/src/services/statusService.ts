@@ -10,7 +10,7 @@ class StatusService {
     private profileSubscriptionStore: ProfileSubscriptionStore
   ) {}
 
-  async setStatus(userId: string, clientId: string, status: UserStatus) {
+  async setStatus(userId: string, status: UserStatus) {
     const result = await this.userModel.updateStatus(userId, status);
 
     if (!result.ok) {

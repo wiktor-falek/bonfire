@@ -11,13 +11,9 @@ class StatusControllerHTTP {
     res: Response
   ) {
     const userId = res.locals.user.id;
-    const { status, clientId } = req.body;
+    const { status } = req.body;
 
-    if (typeof clientId !== "string") {
-      return res.status(400).json({ error: "Missing clientId cookie" });
-    }
-
-    const result = await this.statusService.setStatus(userId, clientId, status);
+    const result = await this.statusService.setStatus(userId, status);
 
     if (!result.ok) {
       return res.status(400).json({ error: result.err });
