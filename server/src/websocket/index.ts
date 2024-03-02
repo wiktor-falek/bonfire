@@ -44,9 +44,14 @@ class WebSocketApp {
     }
 
     this.handlers[eventType] = { cb, schema };
+
+    return this;
   }
 
-  register(wss: WebSocketServer, options: { onClose?: Function }) {
+  register(
+    wss: WebSocketServer,
+    options: { onClose?: (client: WsClient<ServerToClientEvents>) => any }
+  ) {
     const socketClientManager = new SocketClientManager<ServerToClientEvents>();
     const wsServerClient = new WsServerClient<ServerToClientEvents>(
       wss,
@@ -83,7 +88,7 @@ class WebSocketApp {
       client.subscribe(`user_${userId}`);
 
       ws.on("close", () => {
-        options.onClose?.();
+        options.onClose?.(client);
         socketClientManager.deleteClient(client);
         console.log(`User ${userId} disconnected`);
       });
