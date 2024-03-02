@@ -1,5 +1,0 @@
-- [ ] Render status icon on user profiles
-- [ ] Clean up recent code
-- [ ] Investigate subscribing twice on application starat
-- [ ] Look for performance improvements
-- [ ] Delete subscription data on disconnect
