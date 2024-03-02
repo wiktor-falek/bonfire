@@ -32,9 +32,14 @@ class SocketClientManager<
 
   deleteClient(client: WsClient<Events>) {
     // unsubscribe from all namespaces
-    const namespaces = this.clientSubscribedNamespaces.get(client.id);
-    if (namespaces) {
-      for (const ns of namespaces) {
+    const namespaces = Array.from(
+      this.clientSubscribedNamespaces.get(client.id) ?? []
+    );
+    const length = namespaces.length;
+
+    for (let i = 0; i < length; i++) {
+      const ns = namespaces[i];
+      if (ns) {
         this.namespaces.get(ns)?.delete(client);
       }
     }

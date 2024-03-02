@@ -18,11 +18,10 @@ class StatusService {
     }
 
     const subscribers = this.profileSubscriptionStore.getSubscribers(userId);
-    const subscriptions =
-      this.profileSubscriptionStore.getSubscriptions(clientId);
 
-    for (const subscriberClientId of subscribers) {
-      console.log("sending subscription data to client", clientId);
+    const length = subscribers.length;
+    for (let i = 0; i < length; i++) {
+      const subscriberClientId = subscribers[i]!;
       wsServerClient
         .toClient(subscriberClientId)
         .send("subscription:user-profile:status", {

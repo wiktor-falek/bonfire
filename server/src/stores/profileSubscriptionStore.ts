@@ -16,12 +16,13 @@ class ProfileSubscriptionStore {
     const profileIdsSet =
       this.subscriberClientIdToSubscriptions.get(clientId) ?? new Set();
 
-    for (const profileId of profileIds) {
+    const length = profileIds.length;
+    for (let i = 0; i < length; i++) {
+      const profileId = profileIds[i]!;
+
       profileIdsSet.add(profileId);
       this.subscriberClientIdToSubscriptions.set(clientId, profileIdsSet);
-    }
 
-    for (const profileId of profileIds) {
       const subscriberClientIdsSet =
         this.profileToSubscriberClientIds.get(profileId) ?? new Set();
 
@@ -61,7 +62,11 @@ class ProfileSubscriptionStore {
     const profileIdsSet = this.subscriberClientIdToSubscriptions.get(clientId);
 
     // delete each profile subscription
-    for (const profileId of profileIds) {
+
+    const length = profileIds.length;
+    for (let i = 0; i < length; i++) {
+      const profileId = profileIds[i]!;
+
       profileIdsSet?.delete(profileId);
 
       // delete profile to subscribers mapping

@@ -38,7 +38,9 @@ class NotificationService {
       .eventNames()
       .filter((e) => e.toString().startsWith(`${userId}-`));
 
-    for (const event of userEvents) {
+    const length = userEvents.length;
+    for (let i = 0; i < length; i++) {
+      const event = userEvents[i]!;
       this.eventEmitter.removeAllListeners(event);
     }
   }

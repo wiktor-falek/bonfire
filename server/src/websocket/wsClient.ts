@@ -3,18 +3,6 @@ import { WebSocket, WebSocketServer } from "ws";
 import { serialize, type JSONSerializable } from "./serialization.js";
 import type SocketClientManager from "./socketClientManager.js";
 
-/*
-1. decouple the WebSocket from the class
-2. find a good way to pass it later
-3. update existing code
-4. return new WsClient (without ws) in WebSocketApp.register
-
-ws cannot be optional
-inheritance?
-naming?
-do i make a library at this point
-*/
-
 type Key<Events> = Extract<keyof Events, string>;
 
 export class WsClient<
@@ -107,7 +95,7 @@ export class WsClient<
    * client.sendToAll("event", "Hello, all connected clients!");
    */
   sendToAll<K extends Key<Events>>(eventName: K, data: Events[K]) {
-    const clients = this.socketClientManager.clients.values();
+    const clients = [...this.socketClientManager.clients.values()];
     this._send(eventName, data, clients);
   }
 
@@ -129,7 +117,7 @@ export class WsClient<
     eventName: K,
     data: Events[K]
   ) {
-    const clients = this.socketClientManager.clients.values();
+    const clients = [...this.socketClientManager.clients.values()];
     this._sendBroadcast(eventName, data, clients);
   }
 
@@ -167,19 +155,23 @@ export class WsClient<
   private _send<K extends Key<Events>>(
     eventName: K,
     data: Events[K],
-    clients: WsClient<Events>[] | IterableIterator<WsClient<Events>>
+    clients: WsClient<Events>[]
   ) {
-    for (const client of clients) {
-      client.ws.send(serialize(eventName, data));
+    const length = clients.length;
+    for (let i = 0; i < length; i++) {
+      const client = clients[i];
+      client!.ws.send(serialize(eventName, data));
     }
   }
 
   private _sendBroadcast<K extends Key<Events>>(
     eventName: K,
     data: Events[K],
-    clients: WsClient<Events>[] | IterableIterator<WsClient<Events>>
+    clients: WsClient<Events>[]
   ) {
-    for (const client of clients) {
+    const length = clients.length;
+    for (let i = 0; i < length; i++) {
+      const client = clients[i]!;
       if (this.ws !== client.ws) {
         client.ws.send(serialize(eventName, data));
       }
@@ -240,7 +232,7 @@ export class WsServerClient<
    * client.sendToAll("event", "Hello, all connected clients!");
    */
   sendToAll<K extends Key<Events>>(eventName: K, data: Events[K]) {
-    const clients = this.socketClientManager.clients.values();
+    const clients = [...this.socketClientManager.clients.values()];
     this._send(eventName, data, clients);
   }
 
@@ -268,9 +260,11 @@ export class WsServerClient<
   private _send<K extends Key<Events>>(
     eventName: K,
     data: Events[K],
-    clients: WsClient<Events>[] | IterableIterator<WsClient<Events>>
+    clients: WsClient<Events>[]
   ) {
-    for (const client of clients) {
+    const length = clients.length;
+    for (let i = 0; i < length; i++) {
+      const client = clients[i]!;
       client.ws.send(serialize(eventName, data));
     }
   }
