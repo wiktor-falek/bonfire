@@ -15,6 +15,7 @@ import router from "../../router";
 import { useUserProfilesStore } from "../../stores/userProfilesStore";
 import { useDirectMessagesStore } from "../../stores/directMessagesStore";
 import { mapUserStatusToDisplayText } from "../../utils/mapUserStatusToDisplayText";
+import ProfileIcon from "../../components/ProfileIcon.vue";
 
 const userStore = useUserStore();
 const relationshipsStore = useRelationshipsStore();
@@ -203,9 +204,11 @@ async function handleDeclineInvite(profile: UserProfile) {
         <div class="profiles" v-for="profile in userProfiles">
           <hr class="profile__separator" />
           <div @click="handleProfileClick(profile)" class="profile">
-            <div class="profile__image">
-              <img src="" />
-            </div>
+            <ProfileIcon
+              :status="profile.status"
+              :src="profile.imgSrc"
+              class="profile__icon"
+            />
             <div class="profile__text">
               <p class="profile__names">
                 <span class="profile__names__display-name">
@@ -374,7 +377,7 @@ async function handleDeclineInvite(profile: UserProfile) {
     height: 64px;
   }
 
-  .profile__image {
+  .profile__icon {
     margin-bottom: 4px;
   }
 }
@@ -382,14 +385,6 @@ async function handleDeclineInvite(profile: UserProfile) {
 .profile:hover {
   background-color: #404146;
   cursor: pointer;
-}
-
-.profile__image {
-  height: 32px;
-  width: 32px;
-  border-radius: 50%;
-  border: none;
-  background-color: #404146;
 }
 
 .profile__text {

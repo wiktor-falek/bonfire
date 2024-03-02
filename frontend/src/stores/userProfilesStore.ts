@@ -1,31 +1,31 @@
 import { defineStore } from "pinia";
 import type { UserProfile } from "../api/users";
 import socket, { socketEmitter } from "../socket";
+import { ref, type Ref } from "vue";
 
 export const useUserProfilesStore = defineStore("userProfiles", () => {
   socketEmitter.on(
     "subscription:user-profile:status",
     ({ profileId, status }) => {
-      const entry = userProfiles.get(profileId);
-      if (!entry) {
+      const profile = userProfiles.get(profileId)?.profile;
+      if (!profile) {
         return console.error("Tried to update subscribed profile, found none");
       }
 
-      console.log("profile subscription update", { profileId, status });
-      entry.profile.status = status;
+      profile.value.status = status;
     }
   );
 
-  // userId to UserProfile mapping
+  // userId to profile data mapping
   const userProfiles = new Map<
     string,
-    { profile: UserProfile; invalidated?: boolean }
+    { profile: Ref<UserProfile>; invalidated?: boolean }
   >();
 
-  // channelId to UserProfile mapping
+  // channelId to profile data mapping
   const directMessageChannelProfiles = new Map<
     string,
-    { profile: UserProfile; invalidated?: boolean }
+    { profile: Ref<UserProfile>; invalidated?: boolean }
   >();
 
   function _subscribeToProfilesChanges(profiles: UserProfile[]) {
@@ -51,13 +51,13 @@ export const useUserProfilesStore = defineStore("userProfiles", () => {
   }
 
   function setUserProfile(profile: UserProfile) {
-    userProfiles.set(profile.id, { profile });
+    userProfiles.set(profile.id, { profile: ref(profile) });
     _subscribeToProfilesChanges([profile]);
   }
 
   function setUserProfiles(profiles: UserProfile[]) {
     for (const profile of profiles) {
-      userProfiles.set(profile.id, { profile });
+      userProfiles.set(profile.id, { profile: ref(profile) });
     }
     _subscribeToProfilesChanges(profiles);
   }
@@ -70,7 +70,7 @@ export const useUserProfilesStore = defineStore("userProfiles", () => {
     channelId: string,
     profile: UserProfile
   ) {
-    directMessageChannelProfiles.set(channelId, { profile });
+    directMessageChannelProfiles.set(channelId, { profile: ref(profile) });
     _subscribeToProfilesChanges([profile]);
   }
 
