@@ -1,3 +1,9 @@
+/**
+ * Manages subscriptions between websocket clients and user profile ids.
+ *
+ * This class provides functionality to add, retrieve, and delete subscriptions
+ * between clients (subscribers) and profiles (subscriptions).
+ */
 class ProfileSubscriptionStore {
   private subscriberClientIdToSubscriptions: Map<string, Set<string>>;
   private profileToSubscriberClientIds: Map<string, Set<string>>;
@@ -44,7 +50,7 @@ class ProfileSubscriptionStore {
   }
 
   /**
-   * Retrieves client ids of all clients that subscribe to a profile
+   * Retrieves client ids of all clients that subscribe to a profile.
    * @param profileId id of the target profile
    */
   getSubscribers(profileId: string) {
@@ -74,8 +80,12 @@ class ProfileSubscriptionStore {
     }
   }
 
-  clearSubscriptions(clientId: string) {
-    // TODO: deleteAllSubscriptions if possible, if not possible make it possible
+  /**
+   * Deletes all client subscriptions.
+   * @param clientId id of the subscriber
+   */
+  deleteAllSubscriptions(clientId: string) {
+    this.subscriberClientIdToSubscriptions.delete(clientId);
   }
 }
 

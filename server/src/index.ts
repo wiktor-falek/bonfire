@@ -21,7 +21,7 @@ const wss = new WebSocketServer({ server });
 
 export const [wsServerClient, socketClientManager] = wsApp.register(wss, {
   onClose: (client) => {
-    profileSubscriptionStore.clearSubscriptions(client.id);
+    profileSubscriptionStore.deleteAllSubscriptions(client.id);
   },
 });
 
