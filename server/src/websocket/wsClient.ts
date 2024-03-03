@@ -159,8 +159,8 @@ export class WsClient<
   ) {
     const length = clients.length;
     for (let i = 0; i < length; i++) {
-      const client = clients[i];
-      client!.ws.send(serialize(eventName, data));
+      const client = clients[i]!;
+      client.ws.send(serialize(eventName, data));
     }
   }
 

@@ -52,8 +52,9 @@ describe("friend invite operations", async () => {
     expect(findBToAInviteResult.ok).toBe(false);
   });
 
-  it.todo("deletes an invite", async () => {
-    const friendInvite = createFriendInvite("user_B_ID", "user_A_ID");
+  it("deletes an invite by invite id", async () => {
+    const friendInvite = createFriendInvite("user_A_ID", "user_B_ID");
+    (await friendInviteModel.createInvite(friendInvite)).unwrap();
 
     const deleteResult = await friendInviteModel.deleteInviteById(
       friendInvite._id
@@ -61,6 +62,28 @@ describe("friend invite operations", async () => {
     const duplicateDeleteResult = await friendInviteModel.deleteInviteById(
       friendInvite._id
     );
+
+    assert(deleteResult.ok);
+    assert(!duplicateDeleteResult.ok);
+  });
+
+  it("deletes an invite by sender and recipient ids", async () => {
+    const senderId = "user_A_ID";
+    const recipientId = "user_B_ID";
+    const friendInvite = createFriendInvite(senderId, recipientId);
+    (await friendInviteModel.createInvite(friendInvite)).unwrap();
+
+    const deleteResult =
+      await friendInviteModel.deleteInviteBySenderAndRecipient(
+        senderId,
+        recipientId
+      );
+
+    const duplicateDeleteResult =
+      await friendInviteModel.deleteInviteBySenderAndRecipient(
+        senderId,
+        recipientId
+      );
 
     assert(deleteResult.ok);
     assert(!duplicateDeleteResult.ok);

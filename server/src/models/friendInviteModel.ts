@@ -116,8 +116,8 @@ class FriendInviteModel {
   async deleteInviteById(inviteId: string) {
     try {
       const deleteResult = await this.collection.deleteOne({ _id: inviteId });
-      if (!deleteResult.acknowledged) {
-        return Err("Failed to delete the invite");
+      if (deleteResult.deletedCount === 0) {
+        return Err("Invite not found");
       }
 
       return Ok();
@@ -143,8 +143,8 @@ class FriendInviteModel {
           },
         ],
       });
-      if (!deleteResult.acknowledged) {
-        return Err("Failed to delete the invite");
+      if (deleteResult.deletedCount === 0) {
+        return Err("Invite not found");
       }
 
       return Ok();
