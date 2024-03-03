@@ -1,7 +1,7 @@
 import "dotenv/config";
 
 type Env = {
-  NODE_ENV: string;
+  NODE_ENV: "development" | "production";
   JWT_SECRET: string;
 };
 
@@ -18,7 +18,8 @@ function sanitizeConfig(env: any): Env {
 }
 
 const config = sanitizeConfig({
-  NODE_ENV: "development",
+  NODE_ENV:
+    process.env.NODE_ENV === "production" ? "production" : "development",
   JWT_SECRET: process.env.JWT_SECRET,
 });
 

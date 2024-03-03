@@ -7,8 +7,7 @@
   "scripts": {
     "dev": "tsc-watch --onSuccess \"node .\" ",
     "test": "vitest",
-    "build": "tsc",
-    "start": "node ."
+    "start": "tsc && NODE_ENV=production node ."
   },
   "keywords": [],
   "author": "",
