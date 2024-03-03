@@ -7,7 +7,6 @@ type Env = {
 
 /**
  * Asserts that every env variable is defined.
- * Throws an error if any field is undefined.
  */
 function sanitizeConfig(env: any): Env {
   for (const [key, value] of Object.entries(env)) {
