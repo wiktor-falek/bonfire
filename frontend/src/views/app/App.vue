@@ -7,18 +7,22 @@ import { useUserStore } from "../../stores/userStore";
 import { useRelationshipsStore } from "../../stores/relationshipsStore";
 import { useUserProfilesStore } from "../../stores/userProfilesStore";
 import { getCurrentProfile } from "../../api/users";
-import { socketEmitter } from "../../socket";
+import WebSocketClient from "../../socket";
+
+const socket = WebSocketClient.getInstance();
 
 const userStore = useUserStore();
 const relationshipsStore = useRelationshipsStore();
 const profilesStore = useUserProfilesStore();
 
-socketEmitter.on("clientId", (clientId) => {
+socket.on("clientId", (clientId) => {
   console.log("setting the clientId cookie", clientId);
   localStorage.setItem("clientId", clientId);
 });
 
 onBeforeMount(async () => {
+  socket.connect();
+
   const getCurrentProfileResult = await getCurrentProfile();
   if (getCurrentProfileResult.ok) {
     const profile = getCurrentProfileResult.val;

@@ -1,20 +1,19 @@
 import { defineStore } from "pinia";
 import type { UserProfile } from "../api/users";
-import socket, { socketEmitter } from "../socket";
+import WebSocketClient from "../socket";
 import { ref } from "vue";
 
-export const useUserProfilesStore = defineStore("userProfiles", () => {
-  socketEmitter.on(
-    "subscription:user-profile:status",
-    ({ profileId, status }) => {
-      const profile = userProfiles.value.get(profileId)?.profile;
-      if (!profile) {
-        return console.error("Tried to update subscribed profile, found none");
-      }
+const socket = WebSocketClient.getInstance();
 
-      profile.status = status;
+export const useUserProfilesStore = defineStore("userProfiles", () => {
+  socket.on("subscription:user-profile:status", ({ profileId, status }) => {
+    const profile = userProfiles.value.get(profileId)?.profile;
+    if (!profile) {
+      return console.error("Tried to update subscribed profile, found none");
     }
-  );
+
+    profile.status = status;
+  });
 
   // userId to profile data mapping
   const userProfiles = ref(
@@ -27,21 +26,15 @@ export const useUserProfilesStore = defineStore("userProfiles", () => {
   );
 
   function _subscribeToProfilesChanges(profiles: UserProfile[]) {
-    socket.send(
-      JSON.stringify({
-        type: "subscribe:user-profiles",
-        data: { profileIds: profiles.map((p) => p.id) },
-      })
-    );
+    socket.emit("subscribe:user-profiles", {
+      profileIds: profiles.map((p) => p.id),
+    });
   }
 
   function _unsubscribeFromProfileChanges(profiles: UserProfile[]) {
-    socket.send(
-      JSON.stringify({
-        type: "unsubscribe:user-profiles",
-        data: { profileIds: profiles.map((p) => p.id) },
-      })
-    );
+    socket.emit("unsubscribe:user-profiles", {
+      profileIds: profiles.map((p) => p.id),
+    });
   }
 
   function getUserProfile(userId: string) {

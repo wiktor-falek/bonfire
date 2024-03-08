@@ -6,6 +6,7 @@ import { sessionStore } from "../instances.js";
 import { deserialize } from "./serialization.js";
 import { WsClient, WsServerClient } from "./wsClient.js";
 import type { AnyZodObject } from "zod";
+import type { IncomingMessage } from "node:http";
 
 // TODO: any strict zod object
 
@@ -50,7 +51,14 @@ class WebSocketApp {
 
   register(
     wss: WebSocketServer,
-    options: { onClose?: (client: WsClient<ServerToClientEvents>) => any }
+    options: {
+      onListening?: () => any;
+      onConnection?: (
+        client: WsClient<ServerToClientEvents>,
+        req: IncomingMessage
+      ) => any;
+      onClose?: (client: WsClient<ServerToClientEvents>) => any;
+    }
   ) {
     const socketClientManager = new SocketClientManager<ServerToClientEvents>();
     const wsServerClient = new WsServerClient<ServerToClientEvents>(
@@ -59,11 +67,12 @@ class WebSocketApp {
     );
 
     wss.on("listening", () => {
-      console.log("WebSocket server listening on ws://localhost:3000");
+      options.onListening?.();
     });
 
     wss.on("connection", async (ws, req) => {
       const client = socketClientManager.addClient(ws);
+      options.onConnection?.(client, req);
 
       const sessionId = getCookie("sessionId", req.headers.cookie);
 
@@ -80,7 +89,7 @@ class WebSocketApp {
       const session = result.val;
       const { userId } = session;
 
-      console.log(`User ${userId} connected with sesssion ${sessionId}`);
+      console.log(`Client ${client.id} connected`);
 
       // Subscribe the client to a personal namespace of the user.
       // This enables sending events to all connected devices of that user,
@@ -88,9 +97,8 @@ class WebSocketApp {
       client.subscribe(`user_${userId}`);
 
       ws.on("close", () => {
-        options.onClose?.(client);
         socketClientManager.deleteClient(client);
-        console.log(`User ${userId} disconnected`);
+        options.onClose?.(client);
       });
 
       ws.on("message", (data) => {
@@ -122,6 +130,8 @@ class WebSocketApp {
           return client.send("error", { reason: "Invalid Schema" });
         }
 
+        // TODO: figure out a way to attach data to a client
+        // and move the business logic to onConnection callback
         cb(client, validation.data, userId);
       });
     });

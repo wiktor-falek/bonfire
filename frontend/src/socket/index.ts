@@ -1,4 +1,4 @@
-import mitt from "mitt";
+import mitt, { type Emitter } from "mitt";
 import { UserStatus, type UserProfile } from "../api/users";
 
 type ServerToClientEvents = {
@@ -13,33 +13,96 @@ type ServerToClientEvents = {
   "subscription:user-profile:status": { profileId: string; status: UserStatus };
 };
 
+type ClientToServerEvents = {
+  "chat:direct-message": {
+    recipientId: string;
+    content: string;
+  };
+  "subscribe:user-profiles": { profileIds: string[] };
+  "unsubscribe:user-profiles": { profileIds: string[] };
+};
+
 type WebSocketEvent = {
   type: keyof ServerToClientEvents;
   data: unknown;
 };
 
-const socketEmitter = mitt<ServerToClientEvents>();
+type QueueEvent<ClientToServerK extends keyof ClientToServerEvents> = {
+  type: ClientToServerK;
+  data: ClientToServerEvents[ClientToServerK];
+};
 
-const socket = new WebSocket("ws://localhost:3000");
+class WebSocketClient {
+  private static instance: WebSocketClient;
+  private socket: WebSocket | undefined;
+  private emitter: Emitter<ServerToClientEvents>;
+  private queue: QueueEvent<keyof ClientToServerEvents>[];
 
-socket.addEventListener("open", () => {
-  console.log("socket open");
-});
+  private constructor() {
+    this.emitter = mitt();
+    this.queue = [];
+  }
 
-socket.addEventListener("close", () => {
-  console.log("socket close");
-});
+  static getInstance(): WebSocketClient {
+    if (!WebSocketClient.instance) {
+      WebSocketClient.instance = new WebSocketClient();
+    }
+    return WebSocketClient.instance;
+  }
 
-socket.addEventListener("message", (messageEvent) => {
-  const event: WebSocketEvent = JSON.parse(messageEvent.data);
+  connect() {
+    if (this.socket) {
+      return;
+    }
 
-  console.log({ event });
+    this.socket = new WebSocket("ws://localhost:3000");
 
-  socketEmitter.emit(
-    event.type,
-    event.data as ServerToClientEvents[typeof event.type]
-  );
-});
+    this.socket.addEventListener("open", () => {
+      console.log("socket open");
+    });
 
-export { socketEmitter };
-export default socket;
+    this.socket.addEventListener("close", () => {
+      console.log("socket close");
+    });
+
+    this.socket.addEventListener("message", (messageEvent) => {
+      const event: WebSocketEvent = JSON.parse(messageEvent.data);
+      this.emitter.emit(
+        event.type,
+        event.data as ServerToClientEvents[typeof event.type]
+      );
+    });
+
+    const length = this.queue.length;
+    for (let i = 0; i < length; i++) {
+      const { type, data } = this.queue[i]!;
+      this.emit(type, data);
+    }
+  }
+
+  emit<K extends keyof ClientToServerEvents>(
+    type: K,
+    data: ClientToServerEvents[K]
+  ) {
+    if (!this.socket) {
+      this.queue.push({ type, data });
+      return;
+    }
+
+    this.socket.send(
+      JSON.stringify({
+        type,
+        data,
+      })
+    );
+  }
+
+  on<K extends keyof ServerToClientEvents>(
+    type: K,
+    cb: (data: ServerToClientEvents[K]) => any
+  ) {
+    this.emitter.on(type, cb);
+  }
+}
+
+export default WebSocketClient;

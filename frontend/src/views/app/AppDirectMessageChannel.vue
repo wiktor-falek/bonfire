@@ -5,18 +5,20 @@ import Header from "../../components/app/Header.vue";
 import Footer from "../../components/app/Footer.vue";
 import { getMessages, type Message } from "../../api/messages";
 import formatTimestamp from "../../utils/formatTimestamp";
-import socket, { socketEmitter } from "../../socket";
+import WebSocketClient from "../../socket";
 import type { UserProfile } from "../../api/users";
 import { useUserProfilesStore } from "../../stores/userProfilesStore";
 import { getOtherParticipantProfileInDirectMessageChannel } from "../../api/channels";
 import { useDirectMessagesStore } from "../../stores/directMessagesStore";
 import { useUserStore } from "../../stores/userStore";
 
+const socket = WebSocketClient.getInstance();
+
 const userStore = useUserStore();
 const userProfilesStore = useUserProfilesStore();
 const directMessagesStore = useDirectMessagesStore();
 
-socketEmitter.on("chat:message", (message) => {
+socket.on("chat:message", (message) => {
   if (
     message.senderId === otherUserProfile.value?.id ||
     message.senderId === userStore.userProfile?.id
@@ -39,15 +41,10 @@ function handleSendMessage() {
 
   directMessagesStore.bringProfileToTop(profile);
 
-  socket.send(
-    JSON.stringify({
-      type: "chat:direct-message",
-      data: {
-        recipientId: profile.id,
-        content: trimmedContent,
-      },
-    })
-  );
+  socket.emit("chat:direct-message", {
+    recipientId: profile.id,
+    content: trimmedContent,
+  });
 
   content.value = "";
 }

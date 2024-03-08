@@ -20,8 +20,15 @@ const server = createServer(app);
 const wss = new WebSocketServer({ server });
 
 export const [wsServerClient, socketClientManager] = wsApp.register(wss, {
+  onListening: () => {
+    console.log(`WS server listening on ws://localhost:3000`);
+  },
+  onConnection: (client, req) => {
+
+  },
   onClose: (client) => {
     profileSubscriptionStore.deleteAllSubscriptions(client.id);
+    console.log(`Client ${client.id} disconnected`);
   },
 });
 
