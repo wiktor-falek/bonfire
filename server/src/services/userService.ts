@@ -22,7 +22,7 @@ class UserService {
     };
   }
 
-  async getUserProfileInfo(userId: string) {
+  async getUserProfileById(userId: string) {
     const findUserResult = await this.userModel.findById(userId);
 
     if (!findUserResult.ok) {

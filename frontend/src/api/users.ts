@@ -18,6 +18,13 @@ export const getCurrentProfile = wrapAxiosResult(() =>
 export const getUserProfileById = (userId: string) =>
   wrapAxiosResult(() => api.get<UserProfile>(`/api/users/profile/${userId}`))();
 
+export const getUserProfilesByIds = (userIds: string[]) =>
+  wrapAxiosResult(() =>
+    api.get<UserProfile[]>(
+      `/api/users/profiles?userIds=${JSON.stringify(userIds)}`
+    )
+  )();
+
 export const patchUserStatus = (status: UserStatus) =>
   wrapAxiosResult(() =>
     api.patch<{ status: UserStatus }>("/api/users/status", {

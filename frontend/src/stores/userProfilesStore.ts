@@ -5,6 +5,13 @@ import { ref } from "vue";
 
 const socket = WebSocketClient.getInstance();
 
+/**
+ * A central store that manages all user profiles displayed in direct messages,
+ * friends list and server members. Adding a profile automatically creates a WebSocket
+ * subscription, which handles updating the profile whenever the state changes.
+ * Whenever a component that renders the profiles is unmounted, it should call
+ * unsubscribeFromProfileChanges to avoid excesive network calls.
+ */
 export const useUserProfilesStore = defineStore("userProfiles", () => {
   socket.on("subscription:user-profile:status", ({ profileId, status }) => {
     const profile = userProfiles.value.get(profileId)?.profile;
@@ -31,7 +38,7 @@ export const useUserProfilesStore = defineStore("userProfiles", () => {
     });
   }
 
-  function _unsubscribeFromProfileChanges(profiles: UserProfile[]) {
+  function unsubscribeFromProfileChanges(profiles: UserProfile[]) {
     socket.emit("unsubscribe:user-profiles", {
       profileIds: profiles.map((p) => p.id),
     });
@@ -53,6 +60,8 @@ export const useUserProfilesStore = defineStore("userProfiles", () => {
     _subscribeToProfilesChanges(profiles);
   }
 
+  // TODO: does it make sense that it stores profile of the other user in dm?
+  // look into finding a better solution
   function getDirectMessageChannelProfile(channelId: string) {
     return directMessageChannelProfiles.value.get(channelId)?.profile;
   }
@@ -71,5 +80,6 @@ export const useUserProfilesStore = defineStore("userProfiles", () => {
     setUserProfiles,
     getDirectMessageChannelProfile,
     setDirectMessageChannelProfile,
+    unsubscribeFromProfileChanges,
   };
 });

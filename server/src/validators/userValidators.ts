@@ -28,3 +28,5 @@ export const getUserProfileByIdSchema = z.object({
     userId,
   }),
 });
+
+export const userProfilesSchema = z.array(userId);

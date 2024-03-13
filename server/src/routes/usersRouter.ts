@@ -12,13 +12,18 @@ router.use(authGuard);
 
 router.get(
   "/profile/me",
-  userControllerHTTP.getCurrentUserProfileInfo.bind(userControllerHTTP)
+  userControllerHTTP.getCurrentUserProfile.bind(userControllerHTTP)
 );
 router.get(
   "/profile/:userId",
   validate(getUserProfileByIdSchema),
-  userControllerHTTP.getUserProfileInfoById.bind(userControllerHTTP)
+  userControllerHTTP.getUserProfile.bind(userControllerHTTP)
 );
+router.get(
+  "/profiles",
+  userControllerHTTP.getUserProfiles.bind(userControllerHTTP)
+);
+
 router.patch(
   "/status",
   validate(patchUserStatus),

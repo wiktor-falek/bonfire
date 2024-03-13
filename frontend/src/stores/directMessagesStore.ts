@@ -1,17 +1,58 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import type { UserProfile } from "../api/users";
+import { getUserProfilesByIds, type UserProfile } from "../api/users";
+import { useUserProfilesStore } from "./userProfilesStore";
+import WebSocketClient from "../socket";
 
+const socket = WebSocketClient.getInstance();
+
+/**
+ * Store that manages profiles in direct messages. They are entirely client side
+ * and are persisted using localStorage.
+ */
 export const useDirectMessagesStore = defineStore("directMessages", () => {
-  const userProfiles = ref<UserProfile[]>(
-    JSON.parse(localStorage.getItem("directMessages") || "[]")
-  );
+  socket.on("subscription:user-profile:status", ({ profileId, status }) => {
+    const profile = userProfiles.value.find((p) => p.id === profileId);
+    if (!profile) {
+      return console.error("Tried to update subscribed profile, found none");
+    }
 
-  const _persistUserProfiles = () => {
+    profile.status = status;
+  });
+
+  const _userProfilesStore = useUserProfilesStore();
+
+  const userProfiles = ref<UserProfile[]>([]);
+
+  _retrievePersistedUserProfiles().then((profiles) => {
+    userProfiles.value = userProfiles.value.concat(profiles);
+  });
+
+  function _persistUserProfiles() {
     localStorage.setItem("directMessages", JSON.stringify(userProfiles.value));
-  };
+  }
 
-  const prependUserProfile = (profile: UserProfile) => {
+  async function _retrievePersistedUserProfiles() {
+    const localProfiles = JSON.parse(
+      localStorage.getItem("directMessages") || "[]"
+    ) as UserProfile[];
+
+    const getProfilesResult = await getUserProfilesByIds(
+      localProfiles.map((p) => p.id)
+    );
+
+    if (!getProfilesResult.ok) {
+      return [];
+    }
+
+    const profiles = getProfilesResult.val;
+
+    _userProfilesStore.setUserProfiles(profiles);
+
+    return profiles;
+  }
+
+  function prependUserProfile(profile: UserProfile) {
     const profileAlreadyExists = userProfiles.value.some(
       (p) => p.id === profile.id
     );
@@ -23,9 +64,9 @@ export const useDirectMessagesStore = defineStore("directMessages", () => {
     userProfiles.value.unshift(profile);
 
     _persistUserProfiles();
-  };
+  }
 
-  const bringProfileToTop = (profile: UserProfile) => {
+  function bringProfileToTop(profile: UserProfile) {
     const idx = userProfiles.value.findIndex((p) => p.id === profile.id);
     const profileAlreadyExists = idx !== -1;
 
@@ -37,9 +78,9 @@ export const useDirectMessagesStore = defineStore("directMessages", () => {
     userProfiles.value.unshift(profile);
 
     _persistUserProfiles();
-  };
+  }
 
-  const deleteUserProfileById = (profileId: string) => {
+  function deleteUserProfileById(profileId: string) {
     const idx = userProfiles.value.findIndex(
       (profile) => profile.id === profileId
     );
@@ -47,7 +88,7 @@ export const useDirectMessagesStore = defineStore("directMessages", () => {
       userProfiles.value.splice(idx, 1);
       _persistUserProfiles();
     }
-  };
+  }
 
   return {
     userProfiles,

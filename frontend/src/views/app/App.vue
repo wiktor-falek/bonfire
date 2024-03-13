@@ -13,10 +13,10 @@ const socket = WebSocketClient.getInstance();
 
 const userStore = useUserStore();
 const relationshipsStore = useRelationshipsStore();
-const profilesStore = useUserProfilesStore();
+const userProfilesStore = useUserProfilesStore();
 
 socket.on("clientId", (clientId) => {
-  console.log("setting the clientId cookie", clientId);
+  console.log("setting the clientId", clientId);
   localStorage.setItem("clientId", clientId);
 });
 
@@ -34,7 +34,7 @@ onBeforeMount(async () => {
     const relationships = getRelationshipsResult.val;
     const { friends, pending, blocked } = relationships;
     relationshipsStore.setRelationships(relationships);
-    profilesStore.setUserProfiles([...friends, ...pending, ...blocked]);
+    userProfilesStore.setUserProfiles([...friends, ...pending, ...blocked]);
   }
 });
 </script>

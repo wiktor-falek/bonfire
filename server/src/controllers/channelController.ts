@@ -39,7 +39,7 @@ class ChannelControllerHTTP {
 
     const otherUserId = userId === firstId ? secondId : firstId;
 
-    const getProfileResult = await this.userService.getUserProfileInfo(
+    const getProfileResult = await this.userService.getUserProfileById(
       otherUserId
     );
 
