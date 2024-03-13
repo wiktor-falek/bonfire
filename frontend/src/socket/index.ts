@@ -35,10 +35,12 @@ type QueueEvent<ClientToServerK extends keyof ClientToServerEvents> = {
 class WebSocketClient {
   private static instance: WebSocketClient;
   private socket: WebSocket | undefined;
+  private isOpen: boolean;
   private emitter: Emitter<ServerToClientEvents>;
   private queue: QueueEvent<keyof ClientToServerEvents>[];
 
   private constructor() {
+    this.isOpen = false;
     this.emitter = mitt();
     this.queue = [];
   }
@@ -73,18 +75,22 @@ class WebSocketClient {
       );
     });
 
-    const length = this.queue.length;
-    for (let i = 0; i < length; i++) {
-      const { type, data } = this.queue[i]!;
-      this.emit(type, data);
-    }
+    this.socket.addEventListener("open", () => {
+      this.isOpen = true;
+
+      const length = this.queue.length;
+      for (let i = 0; i < length; i++) {
+        const { type, data } = this.queue[i]!;
+        this.emit(type, data);
+      }
+    });
   }
 
   emit<K extends keyof ClientToServerEvents>(
     type: K,
     data: ClientToServerEvents[K]
   ) {
-    if (!this.socket) {
+    if (!this.isOpen || !this.socket) {
       this.queue.push({ type, data });
       return;
     }
