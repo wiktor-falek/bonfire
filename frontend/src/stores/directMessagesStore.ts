@@ -4,13 +4,13 @@ import { getUserProfilesByIds, type UserProfile } from "../api/users";
 import { useUserProfilesStore } from "./userProfilesStore";
 import WebSocketClient from "../socket";
 
-const socket = WebSocketClient.getInstance();
-
 /**
  * Store that manages profiles in direct messages. They are entirely client side
  * and are persisted using localStorage.
  */
 export const useDirectMessagesStore = defineStore("directMessages", () => {
+  const socket = WebSocketClient.getInstance();
+
   socket.on("subscription:user-profile:status", ({ profileId, status }) => {
     const profile = userProfiles.value.find((p) => p.id === profileId);
     if (!profile) {
@@ -19,8 +19,6 @@ export const useDirectMessagesStore = defineStore("directMessages", () => {
 
     profile.status = status;
   });
-
-  const _userProfilesStore = useUserProfilesStore();
 
   const userProfiles = ref<UserProfile[]>([]);
 
@@ -33,6 +31,8 @@ export const useDirectMessagesStore = defineStore("directMessages", () => {
   }
 
   async function _retrievePersistedUserProfiles() {
+    const userProfilesStore = useUserProfilesStore();
+
     const localProfiles = JSON.parse(
       localStorage.getItem("directMessages") || "[]"
     ) as UserProfile[];
@@ -47,7 +47,7 @@ export const useDirectMessagesStore = defineStore("directMessages", () => {
 
     const profiles = getProfilesResult.val;
 
-    _userProfilesStore.setUserProfiles(profiles);
+    userProfilesStore.setUserProfiles(profiles);
 
     return profiles;
   }

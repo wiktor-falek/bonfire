@@ -57,7 +57,7 @@ class WebSocketApp {
         client: WsClient<ServerToClientEvents>,
         req: IncomingMessage
       ) => any;
-      onClose?: (client: WsClient<ServerToClientEvents>) => any;
+      onClose?: (client: WsClient<ServerToClientEvents>, userId: string) => any;
     }
   ) {
     const socketClientManager = new SocketClientManager<ServerToClientEvents>();
@@ -98,7 +98,7 @@ class WebSocketApp {
 
       ws.on("close", () => {
         socketClientManager.deleteClient(client);
-        options.onClose?.(client);
+        options.onClose?.(client, userId);
       });
 
       ws.on("message", (data) => {

@@ -1,4 +1,4 @@
-import { Ok, Err, type Result } from "resultat";
+import { Ok, Err } from "resultat";
 import type { Collection, Db } from "mongodb";
 import type { User, UserStatus } from "../entities/user.js";
 import type { IUserModel } from "../interfaces/userModelInterface.js";
@@ -102,6 +102,25 @@ class UserModel implements IUserModel {
       return Ok(Boolean(count));
     } catch (_) {
       return Err("Network Error");
+    }
+  }
+
+  async getStatus(userId: string) {
+    try {
+      const status = await this.collection.findOne<UserStatus>(
+        {
+          id: userId,
+        },
+        { projection: { status: 1 } }
+      );
+
+      if (status === null) {
+        return Err("User does not exist" as const);
+      }
+
+      return Ok(status);
+    } catch (_) {
+      return Err("Network Error" as const);
     }
   }
 

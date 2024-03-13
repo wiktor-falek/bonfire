@@ -3,8 +3,6 @@ import type { UserProfile } from "../api/users";
 import WebSocketClient from "../socket";
 import { ref } from "vue";
 
-const socket = WebSocketClient.getInstance();
-
 /**
  * A central store that manages all user profiles displayed in direct messages,
  * friends list and server members. Adding a profile automatically creates a WebSocket
@@ -13,6 +11,8 @@ const socket = WebSocketClient.getInstance();
  * unsubscribeFromProfileChanges to avoid excesive network calls.
  */
 export const useUserProfilesStore = defineStore("userProfiles", () => {
+  const socket = WebSocketClient.getInstance();
+
   socket.on("subscription:user-profile:status", ({ profileId, status }) => {
     const profile = userProfiles.value.get(profileId)?.profile;
     if (!profile) {

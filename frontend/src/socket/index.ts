@@ -83,6 +83,7 @@ class WebSocketClient {
         const { type, data } = this.queue[i]!;
         this.emit(type, data);
       }
+      this.queue = [];
     });
   }
 

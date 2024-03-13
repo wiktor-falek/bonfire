@@ -6,6 +6,7 @@ import {
   mongoDb,
   profileSubscriptionStore,
   sessionStore,
+  statusService,
 } from "./instances.js";
 import { createServer } from "http";
 import { WebSocketServer } from "ws";
@@ -20,15 +21,22 @@ const server = createServer(app);
 const wss = new WebSocketServer({ server });
 
 export const [wsServerClient, socketClientManager] = wsApp.register(wss, {
+  // TODO: move to wsApp.ts
   onListening: () => {
     console.log(`WS server listening on ws://localhost:3000`);
   },
-  onConnection: (client, req) => {
-
-  },
-  onClose: (client) => {
+  onConnection: (client, req) => {},
+  onClose: (client, userId) => {
     profileSubscriptionStore.deleteAllSubscriptions(client.id);
     console.log(`Client ${client.id} disconnected`);
+
+    const connectedClients = socketClientManager._getClientsFromNamespace(
+      `user_${userId}`
+    );
+
+    if (connectedClients.length === 0) {
+      statusService.setStatus(userId, "offline");
+    }
   },
 });
 
