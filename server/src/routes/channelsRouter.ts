@@ -1,8 +1,8 @@
 import { Router } from "express";
+import { getOtherUserProfileInDirectMessageChannelSchema } from "../domains/channels/validators/channel.js";
+import { channelControllerHTTP } from "../instances.js";
 import authGuard from "../middlewares/authGuard.js";
 import validate from "../middlewares/validate.js";
-import { getOtherUserProfileInDirectMessageChannelSchema } from "../validators/channelValidators.js";
-import { channelControllerHTTP } from "../instances.js";
 
 const router = Router();
 

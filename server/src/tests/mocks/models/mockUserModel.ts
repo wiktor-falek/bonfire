@@ -1,6 +1,10 @@
-import { Ok, type Result } from "resultat";
-import { createUser, type User, type UserStatus } from "../../../entities/user.js";
-import type { IUserModel } from "../../../interfaces/userModelInterface.js";
+import { Ok } from "resultat";
+import type { IUserModel } from "../../../domains/users/models/user.interface.js";
+import {
+  createUser,
+  type User,
+  type UserStatus,
+} from "../../../domains/users/index.js";
 
 class MockUserModel implements IUserModel {
   createUser(user: User) {
@@ -29,9 +33,9 @@ class MockUserModel implements IUserModel {
     return Promise.resolve(
       Ok([
         createUser({ username: "", displayName: "", email: "", hash: "" }),
-        createUser({ username: "", displayName: "", email: "", hash: "" })
+        createUser({ username: "", displayName: "", email: "", hash: "" }),
       ])
-    )
+    );
   }
 
   emailExists(email: string) {
@@ -39,7 +43,7 @@ class MockUserModel implements IUserModel {
   }
 
   updateStatus(userId: string, status: UserStatus) {
-    return Promise.resolve(Ok())
+    return Promise.resolve(Ok());
   }
 }
 

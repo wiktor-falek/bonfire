@@ -1,10 +1,10 @@
 import type { Response } from "express";
-import type { ValidatedRequest } from "../types.js";
-import type ChannelModel from "../models/channelModel.js";
-import type { UserService } from "../domains/users/index.js";
-import { getOtherUserProfileInDirectMessageChannelSchema } from "../validators/channelValidators.js";
+import type { ValidatedRequest } from "../../../types.js";
+import { UserService } from "../../users/index.js";
+import type { ChannelModel } from "../models/channel.js";
+import { getOtherUserProfileInDirectMessageChannelSchema } from "../validators/channel.js";
 
-class ChannelControllerHTTP {
+export class ChannelControllerHTTP {
   constructor(
     private channelModel: ChannelModel,
     private userService: UserService
@@ -52,5 +52,3 @@ class ChannelControllerHTTP {
     return res.status(200).json(userProfile);
   }
 }
-
-export default ChannelControllerHTTP;

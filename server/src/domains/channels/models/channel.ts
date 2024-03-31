@@ -1,24 +1,22 @@
-import type { Message } from "../entities/message.js";
-import { Ok, Err } from "resultat";
 import {
   ObjectId,
-  type Document,
-  type MongoError,
   type Collection,
   type Db,
+  type Document,
+  type MongoError,
 } from "mongodb";
-import type {
-  IChannelModel,
-  ChannelType,
-} from "../interfaces/channelModelInterface.js";
+import { Err, Ok } from "resultat";
+import type { Channel } from "../interfaces/channel.js";
+import type { Message } from "../interfaces/message.js";
+import type { IChannelModel } from "./channel.interface.js";
 
-class ChannelModel implements IChannelModel {
+export class ChannelModel implements IChannelModel {
   private db: Db;
-  private collection: Collection<ChannelType>;
+  private collection: Collection<Channel>;
 
   constructor(db: Db) {
     this.db = db;
-    this.collection = this.db.collection<ChannelType>("channels");
+    this.collection = this.db.collection<Channel>("channels");
   }
 
   async saveDirectMessage(
@@ -154,5 +152,3 @@ class ChannelModel implements IChannelModel {
     }
   }
 }
-
-export default ChannelModel;

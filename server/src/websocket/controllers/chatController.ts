@@ -1,8 +1,8 @@
 import { z } from "zod";
-import type { WsClient } from "../wsClient.js";
-import type { ServerToClientEvents } from "../types.js";
+import type { MessageService } from "../../domains/channels/index.js";
 import { directMessageSchema } from "../../validators/websocket/index.js";
-import MessageService from "../../services/messageService.js";
+import type { ServerToClientEvents } from "../types.js";
+import type { WsClient } from "../wsClient.js";
 
 class ChatControllerWS {
   constructor(private messageService: MessageService) {}

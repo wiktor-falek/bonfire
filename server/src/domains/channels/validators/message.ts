@@ -1,14 +1,14 @@
 import { z } from "zod";
+import { userId } from "../../users/validators/user.js";
+import { channelId } from "./channel.js";
 
-const channelId = z.string().length(21);
-const userId = z.string().length(21);
-const lastMessageId = z.string().length(24);
-const content = z.string().trim().min(1).max(2000);
+export const messageId = z.string().length(24);
+export const content = z.string().trim().min(1).max(2000);
 
 export const getMessageSchema = z.object({
   query: z.object({
     channelId,
-    lastMessageId: lastMessageId.optional(),
+    lastMessageId: messageId.optional(),
   }),
 });
 

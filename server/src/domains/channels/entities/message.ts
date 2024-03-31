@@ -1,11 +1,5 @@
 import { ObjectId } from "mongodb";
-
-export type Message = {
-  _id: string;
-  senderId: string;
-  content: string;
-  timestamp: number;
-};
+import type { Message } from "../interfaces/message.js";
 
 export function createMessage(senderId: string, content: string): Message {
   return {

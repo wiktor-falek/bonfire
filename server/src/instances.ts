@@ -1,34 +1,28 @@
+import { RelationshipControllerHTTP } from "./controllers/index.js";
 import Mongo from "./db/mongo.js";
 import Redis from "./db/redis.js";
-import { SessionStore, ProfileSubscriptionStore } from "./stores/index.js";
-import {
-  ChannelModel,
-  FriendInviteModel,
-  RelationModel,
-} from "./models/index.js";
-import {
-  MessageService,
-  RelationshipService,
-  NotificationService,
-} from "./services/index.js";
-import {
-  ChannelControllerHTTP,
-  MessageControllerHTTP,
-  RelationshipControllerHTTP,
-} from "./controllers/index.js";
+import { FriendInviteModel, RelationModel } from "./models/index.js";
+import { NotificationService, RelationshipService } from "./services/index.js";
+import { ProfileSubscriptionStore, SessionStore } from "./stores/index.js";
 import {
   ChatControllerWS,
   ProfileSubscriptionControllerWS,
 } from "./websocket/controllers/index.js";
 
+import { AuthControllerHTTP, AuthService } from "./domains/auth/index.js";
 import {
-  UserModel,
-  UserService,
+  ChannelControllerHTTP,
+  ChannelModel,
+  MessageControllerHTTP,
+  MessageService,
+} from "./domains/channels/index.js";
+import {
+  StatusControllerHTTP,
   StatusService,
   UserControllerHTTP,
-  StatusControllerHTTP,
+  UserModel,
+  UserService,
 } from "./domains/users/index.js";
-import { AuthService, AuthControllerHTTP } from "./domains/auth/index.js";
 
 // Database connections
 const [redisClient, mongoClient] = await Promise.all([

@@ -1,12 +1,9 @@
 import type { Request, Response } from "express";
-import {
-  postMessageSchema,
-  getMessageSchema,
-} from "../validators/messageValidators.js";
-import type { ValidatedRequest } from "../types.js";
-import type MessageService from "../services/messageService.js";
+import type { ValidatedRequest } from "../../../types.js";
+import type { MessageService } from "../services/message.js";
+import { getMessageSchema, postMessageSchema } from "../validators/message.js";
 
-class MessageControllerHTTP {
+export class MessageControllerHTTP {
   constructor(private messageService: MessageService) {}
 
   async getMessages(
@@ -46,5 +43,3 @@ class MessageControllerHTTP {
     return res.status(200).json(result.val);
   }
 }
-
-export default MessageControllerHTTP;

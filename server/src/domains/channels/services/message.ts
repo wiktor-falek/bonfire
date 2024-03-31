@@ -1,11 +1,11 @@
 import type { ObjectId } from "mongodb";
-import type ChannelModel from "../models/channelModel.js";
 import { Err } from "resultat";
 import { createMessage } from "../entities/message.js";
-import { messageEntitySchema } from "../validators/messageValidators.js";
-import { getDirectMessageChannelId } from "../utils/id.js";
+import { getDirectMessageChannelId } from "../helpers/id.js";
+import type { ChannelModel } from "../models/channel.js";
+import { messageEntitySchema } from "../validators/message.js";
 
-class MessageService {
+export class MessageService {
   constructor(private channelModel: ChannelModel) {}
 
   /**
@@ -40,5 +40,3 @@ class MessageService {
     return this.channelModel.getMessages(channelId, amount, lastMessageId);
   }
 }
-
-export default MessageService;

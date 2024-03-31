@@ -1,5 +1,5 @@
-import type { Message } from "../entities/message.js";
-import type { UserStatus } from "../entities/user.js";
+import type { Message } from "../domains/channels/interfaces/message.js";
+import type { UserStatus } from "../domains/users/index.js";
 
 export type ServerToClientEvents = {
   error: { reason: string };

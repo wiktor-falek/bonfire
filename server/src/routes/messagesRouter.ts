@@ -1,11 +1,11 @@
 import { Router } from "express";
-import validate from "../middlewares/validate.js";
 import {
   getMessageSchema,
   postMessageSchema,
-} from "../validators/messageValidators.js";
-import authGuard from "../middlewares/authGuard.js";
+} from "../domains/channels/validators/message.js";
 import { messageControllerHTTP } from "../instances.js";
+import authGuard from "../middlewares/authGuard.js";
+import validate from "../middlewares/validate.js";
 
 const router = Router();
 
