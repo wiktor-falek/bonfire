@@ -1,32 +1,30 @@
 import type { Request, Response } from "express";
-import type { ValidatedRequest } from "../types.js";
-import type RelationshipService from "../services/relationshipService.js";
+import type { ValidatedRequest } from "../../../types.js";
 import {
-  postFriendInviteByUsernameSchema,
-  postSendFriendInviteSchema,
   postAcceptFriendInviteSchema,
-  postRejectFriendInviteSchema,
   postBlockUserSchema,
+  postFriendInviteByUsernameSchema,
+  postRejectFriendInviteSchema,
+  postSendFriendInviteSchema,
   postUnblockUserSchema,
-} from "../validators/relationshipValidators.js";
+} from "../validators/relation.js";
+import { RelationService } from "../services/relation.js";
 
-class RelationshipControllerHTTP {
-  constructor(private relationshipService: RelationshipService) {}
+export class RelationControllerHTTP {
+  constructor(private relationService: RelationService) {}
 
   async getAllUserRelations(req: Request, res: Response) {
     const userId = res.locals.user.id;
 
-    const result = await this.relationshipService.getAllRelatedUserProfiles(
-      userId
-    );
+    const result = await this.relationService.getAllRelatedUserProfiles(userId);
 
     if (!result.ok) {
       return res.status(400).json({ error: result.err });
     }
 
-    const relationships = result.val;
+    const relations = result.val;
 
-    return res.status(200).json(relationships);
+    return res.status(200).json(relations);
   }
 
   async postFriendInviteByUsername(
@@ -36,7 +34,7 @@ class RelationshipControllerHTTP {
     const senderId = res.locals.user.id;
     const recipientUsername = req.body.username;
 
-    const result = await this.relationshipService.sendFriendInviteByUsername(
+    const result = await this.relationService.sendFriendInviteByUsername(
       senderId,
       recipientUsername
     );
@@ -55,7 +53,7 @@ class RelationshipControllerHTTP {
     const senderId = res.locals.user.id;
     const recipientId = req.body.userId;
 
-    const result = await this.relationshipService.sendFriendInviteById(
+    const result = await this.relationService.sendFriendInviteById(
       senderId,
       recipientId
     );
@@ -74,7 +72,7 @@ class RelationshipControllerHTTP {
     const userId = res.locals.user.id;
     const { senderId } = req.body;
 
-    const result = await this.relationshipService.acceptFriendInvite(
+    const result = await this.relationService.acceptFriendInvite(
       userId,
       senderId
     );
@@ -93,7 +91,7 @@ class RelationshipControllerHTTP {
     const userId = res.locals.user.id;
     const { senderId } = req.body;
 
-    const result = await this.relationshipService.rejectFriendInvite(
+    const result = await this.relationService.rejectFriendInvite(
       userId,
       senderId
     );
@@ -112,10 +110,7 @@ class RelationshipControllerHTTP {
     const senderId = res.locals.user.id;
     const recipientId = req.body.userId;
 
-    const result = await this.relationshipService.blockUser(
-      senderId,
-      recipientId
-    );
+    const result = await this.relationService.blockUser(senderId, recipientId);
 
     if (!result.ok) {
       return res.status(400).json({ error: result.err });
@@ -131,7 +126,7 @@ class RelationshipControllerHTTP {
     const senderId = res.locals.user.id;
     const recipientId = req.body.userId;
 
-    const result = await this.relationshipService.unblockUser(
+    const result = await this.relationService.unblockUser(
       senderId,
       recipientId
     );
@@ -143,5 +138,3 @@ class RelationshipControllerHTTP {
     return res.status(200).json({});
   }
 }
-
-export default RelationshipControllerHTTP;

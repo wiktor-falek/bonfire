@@ -1,12 +1,12 @@
 import { Err, Ok } from "resultat";
-import { createFriendInvite } from "../entities/friendInvite.js";
-import { createFriendRelation } from "../entities/relations.js";
-import type FriendInviteModel from "../models/friendInviteModel.js";
-import type RelationModel from "../models/relationModel.js";
-import type NotificationService from "./notificationService.js";
-import type { UserModel, UserService } from "../domains/users/index.js";
+import type { NotificationService } from "../../../services/notificationService.js";
+import type { UserModel, UserService } from "../../users/index.js";
+import { createFriendInvite } from "../entities/invite.js";
+import { createFriendRelation } from "../entities/relation.js";
+import type { FriendInviteModel } from "../models/invite.js";
+import type { RelationModel } from "../models/relation.js";
 
-class RelationshipService {
+export class RelationService {
   constructor(
     private userModel: UserModel,
     private friendInviteModel: FriendInviteModel,
@@ -99,14 +99,14 @@ class RelationshipService {
     }
 
     if (result.val === "Recipient Already Invited Sender") {
-      // Create relationship instead of an invite because now both users invited each other.
+      // Create relation instead of an invite because now both users invited each other.
       const friendRelation = createFriendRelation(senderId, recipientId);
       const createRelationResult = await this.relationModel.createRelation(
         friendRelation
       );
 
       if (!createRelationResult.ok) {
-        return Err("Failed to create relationship");
+        return Err("Failed to create relation");
       }
 
       this.friendInviteModel
@@ -190,5 +190,3 @@ class RelationshipService {
     return Err("Not Implemented");
   }
 }
-
-export default RelationshipService;

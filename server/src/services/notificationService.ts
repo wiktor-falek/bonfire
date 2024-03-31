@@ -6,7 +6,7 @@ type Events = {
 
 type Key<Events> = Extract<keyof Events, string>;
 
-class NotificationService {
+export class NotificationService {
   private eventEmitter: EventEmitter;
   constructor() {
     this.eventEmitter = new EventEmitter();
@@ -45,5 +45,3 @@ class NotificationService {
     }
   }
 }
-
-export default NotificationService;

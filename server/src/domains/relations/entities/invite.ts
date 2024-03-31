@@ -1,11 +1,5 @@
 import { ObjectId } from "mongodb";
-
-export type FriendInvite = {
-  _id: string;
-  senderId: string;
-  recipientId: string;
-  timestamp: number;
-};
+import type { FriendInvite } from "../interfaces/invite.js";
 
 export function createFriendInvite(
   senderId: string,

@@ -1,8 +1,8 @@
-import { describe, it, expect, assert, beforeEach } from "vitest";
-import FriendInviteModel from "./friendInviteModel.js";
-import { getInMemoryMongoDb } from "../tests/utils.js";
-import { createFriendInvite } from "../entities/friendInvite.js";
 import type { Db } from "mongodb";
+import { assert, beforeEach, describe, expect, it } from "vitest";
+import { getInMemoryMongoDb } from "../../../tests/utils.js";
+import { createFriendInvite } from "../entities/invite.js";
+import { FriendInviteModel } from "./invite.js";
 
 describe("friend invite operations", async () => {
   let inMemoryDb: Db;

@@ -1,12 +1,12 @@
-import { Ok, Err } from "resultat";
 import { type Collection, type Db } from "mongodb";
+import { Err, Ok } from "resultat";
 import type {
   BlockRelation,
   FriendRelation,
   Relation,
-} from "../entities/relations.js";
+} from "../interfaces/relation.js";
 
-class RelationModel {
+export class RelationModel {
   private db: Db;
   private collection: Collection<Relation>;
 
@@ -33,7 +33,7 @@ class RelationModel {
     try {
       const relation = await this.collection.findOne({ _id: relationId });
       if (relation === null) {
-        return Err("Relationship does not exist");
+        return Err("relation does not exist");
       }
 
       return Ok(relation);
@@ -118,5 +118,3 @@ class RelationModel {
     }
   }
 }
-
-export default RelationModel;

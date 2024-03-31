@@ -7,7 +7,7 @@ import {
   usersRouter,
   messagesRouter,
   channelsRouter,
-  relationshipsRouter,
+  relationsRouter,
 } from "./routes/index.js";
 
 const app = express();
@@ -29,6 +29,6 @@ app.use("/auth", authRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/messages", messagesRouter);
 app.use("/api/channels", channelsRouter);
-app.use("/api/relationships", relationshipsRouter);
+app.use("/api/relations", relationsRouter);
 
 export default app;

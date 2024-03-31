@@ -1,8 +1,8 @@
-import { type FriendInvite } from "../entities/friendInvite.js";
-import { Ok, Err } from "resultat";
 import { type Collection, type Db } from "mongodb";
+import { Err, Ok } from "resultat";
+import { type FriendInvite } from "../interfaces/invite.js";
 
-class FriendInviteModel {
+export class FriendInviteModel {
   private db: Db;
   private collection: Collection<FriendInvite>;
 
@@ -153,5 +153,3 @@ class FriendInviteModel {
     }
   }
 }
-
-export default FriendInviteModel;
