@@ -1,12 +1,12 @@
-import type { ValidatedRequest } from "../types.js";
 import type { Request, Response } from "express";
+import type { ValidatedRequest } from "../../../../types.js";
+import type { UserService } from "../../services/user.js";
 import {
   userProfilesSchema,
   type getUserProfileByIdSchema,
-} from "../validators/userValidators.js";
-import type UserService from "../services/userService.js";
+} from "../../validators/user.js";
 
-class UserControllerHTTP {
+export class UserControllerHTTP {
   constructor(private userService: UserService) {}
 
   async getCurrentUserProfile(req: Request, res: Response) {
@@ -66,5 +66,3 @@ class UserControllerHTTP {
     return res.status(200).json(userProfiles);
   }
 }
-
-export default UserControllerHTTP;

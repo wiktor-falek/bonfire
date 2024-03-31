@@ -1,4 +1,4 @@
-import type UserModel from "../models/userModel.js";
+import type { UserModel } from "../domains/users/index.js";
 import type { UserStatus } from "../entities/user.js";
 import { Ok } from "resultat";
 import type ProfileSubscriptionStore from "../stores/profileSubscriptionStore.js";

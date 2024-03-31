@@ -4,8 +4,7 @@ import { createFriendRelation } from "../entities/relations.js";
 import type FriendInviteModel from "../models/friendInviteModel.js";
 import type RelationModel from "../models/relationModel.js";
 import type NotificationService from "./notificationService.js";
-import type UserModel from "../models/userModel.js";
-import type UserService from "./userService.js";
+import type { UserModel, UserService } from "../domains/users/index.js";
 
 class RelationshipService {
   constructor(

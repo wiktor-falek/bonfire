@@ -3,7 +3,7 @@ import type { Response } from "express";
 import type {
   postLoginSchema,
   postRegisterSchema,
-} from "../validators/userValidators.js";
+} from "../domains/users/validators/user.js";
 import type AuthService from "../services/authService.js";
 
 class AuthControllerHTTP {

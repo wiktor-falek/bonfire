@@ -1,5 +1,5 @@
 import { Err, Ok } from "resultat";
-import UserModel from "../models/userModel.js";
+import { UserModel } from "../domains/users/index.js";
 import bcrypt from "bcrypt";
 import { createUser } from "../entities/user.js";
 import { v4 as uuidv4 } from "uuid";

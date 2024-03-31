@@ -3,7 +3,7 @@ import validate from "../middlewares/validate.js";
 import {
   postLoginSchema,
   postRegisterSchema,
-} from "../validators/userValidators.js";
+} from "../domains/users/validators/user.js";
 import { authControllerHTTP } from "../instances.js";
 
 const router = Router();

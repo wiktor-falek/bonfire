@@ -1,9 +1,9 @@
 import { Ok, Err } from "resultat";
 import type { Collection, Db } from "mongodb";
-import type { User, UserStatus } from "../entities/user.js";
-import type { IUserModel } from "../interfaces/userModelInterface.js";
+import type { User, UserStatus } from "../interfaces/user.js";
+import type { IUserModel } from "./user.interface.js";
 
-class UserModel implements IUserModel {
+export class UserModel implements IUserModel {
   private db: Db;
   private collection: Collection<User>;
 
@@ -141,5 +141,3 @@ class UserModel implements IUserModel {
     }
   }
 }
-
-export default UserModel;

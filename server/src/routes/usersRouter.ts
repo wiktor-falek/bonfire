@@ -1,7 +1,7 @@
 import { Router } from "express";
 import validate from "../middlewares/validate.js";
 import authGuard from "../middlewares/authGuard.js";
-import { getUserProfileByIdSchema } from "../validators/userValidators.js";
+import { getUserProfileByIdSchema } from "../domains/users/validators/user.js";
 import { patchUserStatus } from "../validators/statusValidators.js";
 import { userControllerHTTP } from "../instances.js";
 import { statusControllerHTTP } from "../instances.js";

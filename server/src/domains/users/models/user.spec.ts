@@ -1,6 +1,6 @@
 import { describe, it, expect, assert } from "vitest";
-import UserModel from "./userModel.js";
-import { getInMemoryMongoDb } from "../tests/utils.js";
+import { UserModel } from "./user.js";
+import { getInMemoryMongoDb } from "../../../tests/utils.js";
 import { createUser } from "../entities/user.js";
 
 describe("user operations", async () => {
@@ -44,10 +44,14 @@ describe("user operations", async () => {
   });
 
   it("finds the existing user", async () => {
-    const userByUsername = (await userModel.findByUsername("username")).unwrap();
+    const userByUsername = (
+      await userModel.findByUsername("username")
+    ).unwrap();
     assert(userByUsername !== null);
 
-    const userByEmail = (await userModel.findByEmail("test@email.com")).unwrap();
+    const userByEmail = (
+      await userModel.findByEmail("test@email.com")
+    ).unwrap();
     assert(userByEmail !== null);
 
     const userById = (await userModel.findById(userByUsername.id)).unwrap();

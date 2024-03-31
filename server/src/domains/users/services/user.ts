@@ -1,16 +1,8 @@
 import { Err, Ok } from "resultat";
-import type UserModel from "../models/userModel.js";
-import type { User, UserStatus } from "../entities/user.js";
+import type { User, UserProfile } from "../interfaces/user.js";
+import type { UserModel } from "../models/user.js";
 
-type UserProfile = {
-  id: string;
-  username: string;
-  displayName: string;
-  status: UserStatus;
-  imgSrc?: string;
-};
-
-class UserService {
+export class UserService {
   constructor(private userModel: UserModel) {}
 
   private userToProfile(user: User): UserProfile {
@@ -54,5 +46,3 @@ class UserService {
     return Ok(profiles);
   }
 }
-
-export default UserService;

@@ -3,20 +3,17 @@ import Redis from "./db/redis.js";
 import { SessionStore, ProfileSubscriptionStore } from "./stores/index.js";
 import {
   ChannelModel,
-  UserModel,
   FriendInviteModel,
   RelationModel,
 } from "./models/index.js";
 import {
   AuthService,
   MessageService,
-  UserService,
   StatusService,
   RelationshipService,
   NotificationService,
 } from "./services/index.js";
 import {
-  UserControllerHTTP,
   AuthControllerHTTP,
   ChannelControllerHTTP,
   MessageControllerHTTP,
@@ -27,6 +24,12 @@ import {
   ChatControllerWS,
   ProfileSubscriptionControllerWS,
 } from "./websocket/controllers/index.js";
+
+import {
+  UserModel,
+  UserService,
+  UserControllerHTTP,
+} from "./domains/users/index.js";
 
 // Database connections
 const [redisClient, mongoClient] = await Promise.all([

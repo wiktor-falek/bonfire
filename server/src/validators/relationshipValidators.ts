@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { username, userId } from "./userValidators.js";
+import { username, userId } from "../domains/users/validators/user.js";
 
 export const postFriendInviteByUsernameSchema = z.object({
   body: z.object({
