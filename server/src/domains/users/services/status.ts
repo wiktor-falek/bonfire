@@ -1,10 +1,10 @@
-import type { UserModel } from "../domains/users/index.js";
-import type { UserStatus } from "../entities/user.js";
+import type { UserModel } from "../models/user.js";
+import type { UserStatus } from "../interfaces/user.js";
 import { Ok } from "resultat";
-import type ProfileSubscriptionStore from "../stores/profileSubscriptionStore.js";
-import { wsServerClient } from "../index.js";
+import type ProfileSubscriptionStore from "../../../stores/profileSubscriptionStore.js";
+import { wsServerClient } from "../../../index.js";
 
-class StatusService {
+export class StatusService {
   constructor(
     private userModel: UserModel,
     private profileSubscriptionStore: ProfileSubscriptionStore
@@ -34,6 +34,7 @@ class StatusService {
       return updateStatusResult;
     }
 
+    // TODO: call NotificationService method once implemented
     const subscribers = this.profileSubscriptionStore.getSubscribers(userId);
 
     const length = subscribers.length;
@@ -50,5 +51,3 @@ class StatusService {
     return Ok(status);
   }
 }
-
-export default StatusService;

@@ -1,9 +1,9 @@
-import type { ValidatedRequest } from "../types.js";
 import type { Response } from "express";
-import type StatusService from "../services/statusService.js";
-import { type patchUserStatus } from "../validators/statusValidators.js";
+import type { ValidatedRequest } from "../../../../types.js";
+import type { StatusService } from "../../services/status.js";
+import type { patchUserStatus } from "../../validators/status.js";
 
-class StatusControllerHTTP {
+export class StatusControllerHTTP {
   constructor(private statusService: StatusService) {}
 
   async setStatus(
@@ -22,5 +22,3 @@ class StatusControllerHTTP {
     return res.status(200).json({ status: result.val });
   }
 }
-
-export default StatusControllerHTTP;

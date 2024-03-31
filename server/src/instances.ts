@@ -7,18 +7,14 @@ import {
   RelationModel,
 } from "./models/index.js";
 import {
-  AuthService,
   MessageService,
-  StatusService,
   RelationshipService,
   NotificationService,
 } from "./services/index.js";
 import {
-  AuthControllerHTTP,
   ChannelControllerHTTP,
   MessageControllerHTTP,
   RelationshipControllerHTTP,
-  StatusControllerHTTP,
 } from "./controllers/index.js";
 import {
   ChatControllerWS,
@@ -28,8 +24,11 @@ import {
 import {
   UserModel,
   UserService,
+  StatusService,
   UserControllerHTTP,
+  StatusControllerHTTP,
 } from "./domains/users/index.js";
+import { AuthService, AuthControllerHTTP } from "./domains/auth/index.js";
 
 // Database connections
 const [redisClient, mongoClient] = await Promise.all([

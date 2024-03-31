@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const status = z.enum(["online", "offline", "dnd", "away"]);
+export const status = z.enum(["online", "offline", "dnd", "away"]);
 
 export const patchUserStatus = z.object({
   body: z.object({

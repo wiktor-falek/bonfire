@@ -1,12 +1,12 @@
-import type { ValidatedRequest } from "../types.js";
 import type { Response } from "express";
+import type { ValidatedRequest } from "../../../../types.js";
 import type {
   postLoginSchema,
   postRegisterSchema,
-} from "../domains/users/validators/user.js";
-import type AuthService from "../services/authService.js";
+} from "../../../users/validators/user.js";
+import { type AuthService } from "../../services/auth.js";
 
-class AuthControllerHTTP {
+export class AuthControllerHTTP {
   constructor(private authService: AuthService) {}
 
   async login(req: ValidatedRequest<typeof postLoginSchema>, res: Response) {
@@ -71,5 +71,3 @@ class AuthControllerHTTP {
     });
   }
 }
-
-export default AuthControllerHTTP;

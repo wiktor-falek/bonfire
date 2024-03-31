@@ -1,11 +1,10 @@
-import { Err, Ok } from "resultat";
-import { UserModel } from "../domains/users/index.js";
 import bcrypt from "bcrypt";
-import { createUser } from "../entities/user.js";
+import { Err, Ok } from "resultat";
 import { v4 as uuidv4 } from "uuid";
-import type SessionStore from "../stores/sessionStore.js";
+import type SessionStore from "../../../stores/sessionStore.js";
+import { UserModel, createUser } from "../../users/index.js";
 
-class AuthService {
+export class AuthService {
   constructor(
     private userModel: UserModel,
     private sessionStore: SessionStore
@@ -17,9 +16,7 @@ class AuthService {
     username: string,
     displayName: string
   ) {
-    // Check for existing username or email before hashing passwords.
-    // This allows having distinctive error messages, and compared to
-    // relying on unique indexes this also avoids pre-emptive hashing.
+    // Avoid pre-emptive hashing by checking if username or password is already in use
     const [usernameExistsResult, emailExistsResult] = await Promise.all([
       this.userModel.usernameExists(username),
       this.userModel.emailExists(email),
@@ -79,5 +76,3 @@ class AuthService {
     return Ok({ user, sessionId });
   }
 }
-
-export default AuthService;
