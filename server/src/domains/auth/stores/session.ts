@@ -1,22 +1,19 @@
 import type { RedisClientType } from "redis";
 import { Err, Ok } from "resultat";
+import type { Session } from "../index.js";
 
-type SessionData = { userId: string };
-
-class SessionStore {
-  constructor(private client: RedisClientType) {}
+export class SessionStore {
+  keyspace: string;
+  constructor(private client: RedisClientType) {
+    this.keyspace = "userSessions";
+  }
 
   /**
    * Creates a user session using the provided data.
    */
-  async addSession(sessionId: string, data: SessionData) {
-    // const sessionCount = await this.getAllUserSessionsCount(data.userId);
-    // if (sessionCount >= 5) {
-    //   return Err("User has reached the maximum session limit.");
-    // }
-
+  async addSession(sessionId: string, data: Session) {
     try {
-      await this.client.hSet("userSessions", sessionId, JSON.stringify(data));
+      await this.client.hSet(this.keyspace, sessionId, JSON.stringify(data));
       return Ok(sessionId);
     } catch (_) {
       return Err("Failed to create a session");
@@ -24,19 +21,19 @@ class SessionStore {
   }
 
   /**
-   * Retrieves the user session data associated with the session ID.
+   * Retrieves the user session associated with the sessionId.
    */
   async getSession(sessionId?: string) {
     if (sessionId === undefined) {
       return Err("Session does not exist");
     }
     try {
-      const data = await this.client.hGet("userSessions", sessionId);
+      const data = await this.client.hGet(this.keyspace, sessionId);
       if (!data) {
         return Err("Session not found or has expired");
       }
 
-      const sessionData = JSON.parse(data) as SessionData;
+      const sessionData = JSON.parse(data) as Session;
       return Ok(sessionData);
     } catch (_) {
       return Err("Failed to retrieve session");
@@ -47,5 +44,3 @@ class SessionStore {
     return Err("Not Implemented");
   }
 }
-
-export default SessionStore;

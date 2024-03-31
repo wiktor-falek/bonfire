@@ -3,13 +3,17 @@ import Mongo from "./db/mongo.js";
 import Redis from "./db/redis.js";
 import { FriendInviteModel, RelationModel } from "./models/index.js";
 import { NotificationService, RelationshipService } from "./services/index.js";
-import { ProfileSubscriptionStore, SessionStore } from "./stores/index.js";
+import { ProfileSubscriptionStore } from "./stores/index.js";
 import {
   ChatControllerWS,
   ProfileSubscriptionControllerWS,
 } from "./websocket/controllers/index.js";
 
-import { AuthControllerHTTP, AuthService } from "./domains/auth/index.js";
+import {
+  AuthControllerHTTP,
+  AuthService,
+  SessionStore,
+} from "./domains/auth/index.js";
 import {
   ChannelControllerHTTP,
   ChannelModel,

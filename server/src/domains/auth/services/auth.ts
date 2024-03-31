@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
 import { Err, Ok } from "resultat";
 import { v4 as uuidv4 } from "uuid";
-import type SessionStore from "../../../stores/sessionStore.js";
 import { UserModel, createUser } from "../../users/index.js";
+import type { SessionStore } from "../stores/session.js";
 
 export class AuthService {
   constructor(
