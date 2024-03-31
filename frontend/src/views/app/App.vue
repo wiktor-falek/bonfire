@@ -2,9 +2,9 @@
 import { onBeforeMount } from "vue";
 import Bonfire from "../../components/Bonfire.vue";
 import SidePanel from "../../components/SidePanel.vue";
-import { getRelationships } from "../../api/relationships";
+import { getRelations } from "../../api/relations";
 import { useUserStore } from "../../stores/userStore";
-import { useRelationshipsStore } from "../../stores/relationshipsStore";
+import { useRelationsStore } from "../../stores/relationsStore";
 import { useUserProfilesStore } from "../../stores/userProfilesStore";
 import { getCurrentProfile } from "../../api/users";
 import WebSocketClient from "../../socket";
@@ -12,7 +12,7 @@ import WebSocketClient from "../../socket";
 const socket = WebSocketClient.getInstance();
 
 const userStore = useUserStore();
-const relationshipsStore = useRelationshipsStore();
+const relationsStore = useRelationsStore();
 const userProfilesStore = useUserProfilesStore();
 
 socket.on("clientId", (clientId) => {
@@ -29,11 +29,11 @@ onBeforeMount(async () => {
     userStore.setUserProfile(profile);
   }
 
-  const getRelationshipsResult = await getRelationships();
-  if (getRelationshipsResult.ok) {
-    const relationships = getRelationshipsResult.val;
-    const { friends, pending, blocked } = relationships;
-    relationshipsStore.setRelationships(relationships);
+  const getRelationsResult = await getRelations();
+  if (getRelationsResult.ok) {
+    const relations = getRelationsResult.val;
+    const { friends, pending, blocked } = relations;
+    relationsStore.setRelations(relations);
     userProfilesStore.setUserProfiles([...friends, ...pending, ...blocked]);
   }
 });
