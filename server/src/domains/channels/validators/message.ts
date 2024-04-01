@@ -5,6 +5,16 @@ import { channelId } from "./channel.js";
 export const messageId = z.string().length(24);
 export const content = z.string().trim().min(1).max(2000);
 
+export const messageEntitySchema = z.object({
+  senderId: userId,
+  content,
+});
+
+export const directMessageSchema = z.strictObject({
+  recipientId: z.string(),
+  content: z.string(),
+});
+
 export const getMessageSchema = z.object({
   query: z.object({
     channelId,
@@ -17,9 +27,4 @@ export const postMessageSchema = z.object({
     recipientId: userId,
     content,
   }),
-});
-
-export const messageEntitySchema = z.object({
-  senderId: userId,
-  content,
 });

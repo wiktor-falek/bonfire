@@ -1,4 +1,4 @@
-import { generateNumericId } from "../../../utils/id.js";
+import { generateNumericId } from "../../../helpers/id.js";
 import type { User } from "../interfaces/user.js";
 
 export function createUser(input: {

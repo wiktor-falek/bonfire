@@ -1,12 +1,10 @@
 import WebSocketApp from "./websocket/index.js";
 import {
-  directMessageSchema,
-  userProfilesSchema,
-} from "./validators/websocket/index.js";
-import {
   chatControllerWS,
   profileSubscriptionControllerWS,
 } from "./instances.js";
+import { userProfileIdsSchema } from "./domains/users/index.js";
+import { directMessageSchema } from "./domains/channels/index.js";
 
 const wsApp = new WebSocketApp()
   .bind(
@@ -19,14 +17,14 @@ const wsApp = new WebSocketApp()
     profileSubscriptionControllerWS.subscribeToUserProfiles.bind(
       profileSubscriptionControllerWS
     ),
-    userProfilesSchema
+    userProfileIdsSchema
   )
   .bind(
     "unsubscribe:user-profiles",
     profileSubscriptionControllerWS.unsubscribeFromUserProfiles.bind(
       profileSubscriptionControllerWS
     ),
-    userProfilesSchema
+    userProfileIdsSchema
   );
 
 export default wsApp;

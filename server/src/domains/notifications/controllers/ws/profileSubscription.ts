@@ -1,15 +1,15 @@
 import { z } from "zod";
-import type { ServerToClientEvents } from "../types.js";
-import type { WsClient } from "../wsClient.js";
-import type { userProfilesSchema } from "../../validators/websocket/index.js";
-import type ProfileSubscriptionStore from "../../stores/profileSubscriptionStore.js";
+import type { ProfileSubscriptionStore } from "../../index.js";
+import type { ServerToClientEvents } from "../../../../websocket/types.js";
+import type { WsClient } from "../../../../websocket/wsClient.js";
+import type { userProfileIdsSchema } from "../../../users/index.js";
 
-class ProfileSubscriptionControllerWS {
+export class ProfileSubscriptionControllerWS {
   constructor(private profileSubscriptionStore: ProfileSubscriptionStore) {}
 
   subscribeToUserProfiles(
     client: WsClient<ServerToClientEvents>,
-    data: z.infer<typeof userProfilesSchema>,
+    data: z.infer<typeof userProfileIdsSchema>,
     userId: string
   ) {
     const { profileIds } = data;
@@ -21,9 +21,7 @@ class ProfileSubscriptionControllerWS {
 
   unsubscribeFromUserProfiles(
     client: WsClient<ServerToClientEvents>,
-    data: z.infer<typeof userProfilesSchema>,
+    data: z.infer<typeof userProfileIdsSchema>,
     userId: string
   ) {}
 }
-
-export default ProfileSubscriptionControllerWS;

@@ -1,8 +1,8 @@
 import type { UserModel } from "../models/user.js";
 import type { UserStatus } from "../interfaces/user.js";
 import { Ok } from "resultat";
-import type ProfileSubscriptionStore from "../../../stores/profileSubscriptionStore.js";
 import { wsServerClient } from "../../../index.js";
+import type { ProfileSubscriptionStore } from "../../notifications/index.js";
 
 export class StatusService {
   constructor(

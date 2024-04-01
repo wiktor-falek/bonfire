@@ -1,13 +1,4 @@
-import { ProfileSubscriptionStore } from "./stores/index.js";
-import {
-  ChatControllerWS,
-  ProfileSubscriptionControllerWS,
-} from "./websocket/controllers/index.js";
-
-//
-import Mongo from "./db/mongo.js";
-import Redis from "./db/redis.js";
-
+import { Mongo, Redis } from "./db/index.js";
 import {
   AuthControllerHTTP,
   AuthService,
@@ -16,9 +7,20 @@ import {
 import {
   ChannelControllerHTTP,
   ChannelModel,
+  ChatControllerWS,
   MessageControllerHTTP,
   MessageService,
 } from "./domains/channels/index.js";
+import {
+  ProfileSubscriptionControllerWS,
+  ProfileSubscriptionStore,
+} from "./domains/notifications/index.js";
+import {
+  FriendInviteModel,
+  RelationControllerHTTP,
+  RelationModel,
+  RelationService,
+} from "./domains/relations/index.js";
 import {
   StatusControllerHTTP,
   StatusService,
@@ -26,13 +28,6 @@ import {
   UserModel,
   UserService,
 } from "./domains/users/index.js";
-import {
-  FriendInviteModel,
-  RelationControllerHTTP,
-  RelationModel,
-} from "./domains/relations/index.js";
-import { NotificationService } from "./services/notificationService.js"; // TODO: move to notifications domain
-import { RelationService } from "./domains/relations/services/relation.js";
 
 // Database connections
 const [redisClient, mongoClient] = await Promise.all([
@@ -54,7 +49,6 @@ export const friendInviteModel = new FriendInviteModel(mongoDb);
 export const relationModel = new RelationModel(mongoDb);
 
 // Services
-export const notificationService = new NotificationService();
 export const authService = new AuthService(userModel, sessionStore);
 export const messageService = new MessageService(channelModel);
 export const userService = new UserService(userModel);
@@ -66,8 +60,7 @@ export const relationService = new RelationService(
   userModel,
   friendInviteModel,
   relationModel,
-  userService,
-  notificationService
+  userService
 );
 
 // HTTP Controllers

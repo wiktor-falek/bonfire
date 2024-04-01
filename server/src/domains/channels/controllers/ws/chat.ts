@@ -1,10 +1,10 @@
 import { z } from "zod";
-import type { MessageService } from "../../domains/channels/index.js";
-import { directMessageSchema } from "../../validators/websocket/index.js";
-import type { ServerToClientEvents } from "../types.js";
-import type { WsClient } from "../wsClient.js";
+import type { ServerToClientEvents } from "../../../../websocket/types.js";
+import type { WsClient } from "../../../../websocket/wsClient.js";
+import type { MessageService } from "../../index.js";
+import type { directMessageSchema } from "../../validators/message.js";
 
-class ChatControllerWS {
+export class ChatControllerWS {
   constructor(private messageService: MessageService) {}
 
   async directMessage(
@@ -35,5 +35,3 @@ class ChatControllerWS {
     client.to(userClientsNamespace).send("chat:message", message);
   }
 }
-
-export default ChatControllerWS;

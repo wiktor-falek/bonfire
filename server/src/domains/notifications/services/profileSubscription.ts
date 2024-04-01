@@ -1,0 +1,3 @@
+class ProfileSubscriptionService {
+  constructor() {}
+}

@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
-import type { ValidatedRequest } from "../../../types.js";
-import type { MessageService } from "../services/message.js";
-import { getMessageSchema, postMessageSchema } from "../validators/message.js";
+import type { MessageService } from "../../index.js";
+import type { getMessageSchema, postMessageSchema } from "../../validators/message.js";
+import type { ValidatedRequest } from "../../../../types.js";
 
 export class MessageControllerHTTP {
   constructor(private messageService: MessageService) {}

@@ -1,5 +1,4 @@
 import { Err, Ok } from "resultat";
-import type { NotificationService } from "../../../services/notificationService.js";
 import type { UserModel, UserService } from "../../users/index.js";
 import { createFriendInvite } from "../entities/invite.js";
 import { createFriendRelation } from "../entities/relation.js";
@@ -11,9 +10,9 @@ export class RelationService {
     private userModel: UserModel,
     private friendInviteModel: FriendInviteModel,
     private relationModel: RelationModel,
-    private userService: UserService,
-    private notificationService: NotificationService
-  ) {}
+    private userService: UserService
+  ) // private notificationService: NotificationService
+  {}
 
   async getAllRelatedUserProfiles(userId: string) {
     try {
@@ -124,9 +123,9 @@ export class RelationService {
     }
 
     // TODO: only if recipient did not block the sender
-    this.notificationService.notify(recipientId, "friend-invite", {
-      from: senderId,
-    });
+    // this.notificationService.notify(recipientId, "friend-invite", {
+    //   from: senderId,
+    // });
 
     return Ok({ invite });
   }

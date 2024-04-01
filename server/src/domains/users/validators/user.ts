@@ -6,6 +6,12 @@ export const username = z.string().min(3).max(32).trim();
 export const displayName = z.string().max(32).trim().default("");
 export const userId = z.string().length(21);
 
+export const userProfilesSchema = z.array(userId);
+
+export const userProfileIdsSchema = z.strictObject({
+  profileIds: z.array(z.string()),
+});
+
 export const postLoginSchema = z.object({
   body: z.object({
     email,
@@ -27,5 +33,3 @@ export const getUserProfileByIdSchema = z.object({
     userId,
   }),
 });
-
-export const userProfilesSchema = z.array(userId);

@@ -4,7 +4,7 @@
  * This class provides functionality to add, retrieve, and delete subscriptions
  * between clients (subscribers) and profiles (subscriptions).
  */
-class ProfileSubscriptionStore {
+export class ProfileSubscriptionStore {
   private subscriberClientIdToSubscriptions: Map<string, Set<string>>;
   private profileToSubscriberClientIds: Map<string, Set<string>>;
 
@@ -88,5 +88,3 @@ class ProfileSubscriptionStore {
     this.subscriberClientIdToSubscriptions.delete(clientId);
   }
 }
-
-export default ProfileSubscriptionStore;

@@ -1,6 +1,6 @@
 import { describe, it, afterEach, expect } from "vitest";
 
-import ProfileSubscriptionStore from "./profileSubscriptionStore.js";
+import { ProfileSubscriptionStore } from "./profileSubscription.js";
 
 let store = new ProfileSubscriptionStore();
 afterEach(() => {
