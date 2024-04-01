@@ -1,5 +1,5 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
-import Mongo from "../db/mongo.js";
+import { Mongo } from "../db/mongo.js";
 import createIndexes from "../db/helpers/createIndexes.js";
 
 export async function getInMemoryMongoDb() {

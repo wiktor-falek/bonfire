@@ -15,6 +15,7 @@ import { useUserStore } from "../stores/userStore";
 import { useUserProfilesStore } from "../stores/userProfilesStore";
 import { useDirectMessagesStore } from "../stores/directMessagesStore";
 import { mapUserStatusToDisplayText } from "../utils/mapUserStatusToDisplayText";
+import ProfileIcon from "./ProfileIcon.vue";
 
 const userStore = useUserStore();
 const userProfilesStore = useUserProfilesStore();
@@ -59,7 +60,7 @@ function handleConversationClick(profile: UserProfile) {
   const userId = userStore.userProfile.id;
   const channelId = getDirectMessageChannelId(userId, profile.id);
 
-  userProfilesStore.setDirectMessageChannelProfiles(channelId, profile);
+  userProfilesStore.setDirectMessageChannelProfile(channelId, profile);
 
   isOpenOnMobile.value = false;
   router.push(`/app/channel/@me/${channelId}`);
@@ -218,9 +219,7 @@ async function setStatus(status: UserStatus) {
             :key="profile.username"
             @click="handleConversationClick(profile)"
           >
-            <div
-              class="direct-messages__conversations__conversation__image"
-            ></div>
+            <ProfileIcon :status="profile.status" :src="profile.imgSrc" />
             <p class="direct-messages__conversations__conversation__name">
               {{ profile.displayName }}
             </p>
@@ -246,7 +245,10 @@ async function setStatus(status: UserStatus) {
 
       <div class="user-card">
         <div class="user-card__profile" @click="handleOpenProfileSettingsModal">
-          <div class="user-card__profile__image"></div>
+          <ProfileIcon
+            :status="userStore.userProfile?.status"
+            :src="userStore.userProfile?.imgSrc"
+          />
           <div class="user-card__profile__text">
             <p class="user-card__profile__text__display-name">
               {{ userStore.userProfile?.displayName }}
@@ -500,15 +502,6 @@ hr {
   visibility: visible;
 }
 
-.direct-messages__conversations__conversation__image {
-  background-color: #3a3838;
-  border-radius: 50px;
-  height: 80%;
-  aspect-ratio: 1 / 1;
-  background-color: #47484b;
-  margin-right: 10px;
-}
-
 .direct-messages__conversations__conversation__name {
   color: #bdbcbc;
   font-weight: 600;
@@ -516,6 +509,7 @@ hr {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-left: 10px;
 }
 .direct-messages__conversations__conversation__close {
   margin-left: auto;
@@ -581,13 +575,6 @@ hr {
   display: none;
 }
 
-.user-card__profile__image {
-  height: 32px;
-  aspect-ratio: 1 / 1;
-  background-color: #47484b;
-  border-radius: 50%;
-}
-
 .user-card__profile__text {
   display: flex;
   flex-direction: column;
@@ -604,7 +591,8 @@ hr {
 
 .container {
   height: 1rem;
-  overflow: hidden;
+  white-space: nowrap;
+  overflow-y: auto;
 }
 
 .container > p {

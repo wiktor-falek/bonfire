@@ -1,10 +1,10 @@
 import { Router } from "express";
 import validate from "../middlewares/validate.js";
 import authGuard from "../middlewares/authGuard.js";
-import { getUserProfileByIdSchema } from "../validators/userValidators.js";
-import { patchUserStatus } from "../validators/statusValidators.js";
-import { userController } from "../instances.js";
-import { statusController } from "../instances.js";
+import { getUserProfileByIdSchema } from "../domains/users/validators/user.js";
+import { patchUserStatus } from "../domains/users/validators/status.js";
+import { userControllerHTTP } from "../instances.js";
+import { statusControllerHTTP } from "../instances.js";
 
 const router = Router();
 
@@ -12,17 +12,22 @@ router.use(authGuard);
 
 router.get(
   "/profile/me",
-  userController.getCurrentUserProfileInfo.bind(userController)
+  userControllerHTTP.getCurrentUserProfile.bind(userControllerHTTP)
 );
 router.get(
   "/profile/:userId",
   validate(getUserProfileByIdSchema),
-  userController.getUserProfileInfoById.bind(userController)
+  userControllerHTTP.getUserProfile.bind(userControllerHTTP)
 );
+router.get(
+  "/profiles",
+  userControllerHTTP.getUserProfiles.bind(userControllerHTTP)
+);
+
 router.patch(
   "/status",
   validate(patchUserStatus),
-  statusController.setStatus.bind(statusController)
+  statusControllerHTTP.setStatus.bind(statusControllerHTTP)
 );
 
 export default router;

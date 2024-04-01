@@ -1,11 +1,11 @@
 import { Router } from "express";
-import validate from "../middlewares/validate.js";
 import {
   getMessageSchema,
   postMessageSchema,
-} from "../validators/messageValidators.js";
+} from "../domains/channels/validators/message.js";
+import { messageControllerHTTP } from "../instances.js";
 import authGuard from "../middlewares/authGuard.js";
-import { messageController } from "../instances.js";
+import validate from "../middlewares/validate.js";
 
 const router = Router();
 
@@ -14,12 +14,12 @@ router.use(authGuard);
 router.get(
   "/",
   validate(getMessageSchema),
-  messageController.getMessages.bind(messageController)
+  messageControllerHTTP.getMessages.bind(messageControllerHTTP)
 );
 router.post(
   "/",
   validate(postMessageSchema),
-  messageController.saveDirectMessage.bind(messageController)
+  messageControllerHTTP.saveDirectMessage.bind(messageControllerHTTP)
 );
 
 export default router;

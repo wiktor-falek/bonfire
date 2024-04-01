@@ -1,5 +1,5 @@
 import { WebSocket } from "ws";
-import WsClient from "./wsClient.js";
+import { WsClient } from "./wsClient.js";
 import type { JSONSerializable } from "./serialization.js";
 
 class SocketClientManager<
@@ -13,6 +13,7 @@ class SocketClientManager<
 
   // client.id to subscribed namespaces mapping.
   private clientSubscribedNamespaces: Map<string, Set<string>>;
+
   constructor() {
     this.clients = new Map();
     this.namespaces = new Map();
@@ -25,11 +26,20 @@ class SocketClientManager<
     return client;
   }
 
+  getClient(clientId: string) {
+    return this.clients.get(clientId);
+  }
+
   deleteClient(client: WsClient<Events>) {
     // unsubscribe from all namespaces
-    const namespaces = this.clientSubscribedNamespaces.get(client.id);
-    if (namespaces) {
-      for (const ns of namespaces) {
+    const namespaces = Array.from(
+      this.clientSubscribedNamespaces.get(client.id) ?? []
+    );
+    const length = namespaces.length;
+
+    for (let i = 0; i < length; i++) {
+      const ns = namespaces[i];
+      if (ns) {
         this.namespaces.get(ns)?.delete(client);
       }
     }

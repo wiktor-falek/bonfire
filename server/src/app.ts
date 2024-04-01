@@ -2,11 +2,13 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import morgan from "morgan";
-import authRouter from "./routes/authRouter.js";
-import usersRouter from "./routes/usersRouter.js";
-import messagesRouter from "./routes/messagesRouter.js";
-import channelsRouter from "./routes/channelsRouter.js";
-import relationshipsRouter from "./routes/relationshipsRouter.js";
+import {
+  authRouter,
+  usersRouter,
+  messagesRouter,
+  channelsRouter,
+  relationsRouter,
+} from "./routes/index.js";
 
 const app = express();
 
@@ -27,6 +29,6 @@ app.use("/auth", authRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/messages", messagesRouter);
 app.use("/api/channels", channelsRouter);
-app.use("/api/relationships", relationshipsRouter);
+app.use("/api/relations", relationsRouter);
 
 export default app;

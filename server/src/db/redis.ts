@@ -1,6 +1,6 @@
 import { createClient, type RedisClientType } from "redis";
 
-class Redis {
+export class Redis {
   private client: RedisClientType;
 
   constructor(url: string) {
@@ -11,5 +11,3 @@ class Redis {
     return this.client.connect();
   }
 }
-
-export default Redis;

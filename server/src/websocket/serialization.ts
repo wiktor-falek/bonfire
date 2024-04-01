@@ -1,7 +1,7 @@
 import type { RawData } from "ws";
 import { z } from "zod";
 
-const websocketEventSchema = z.object({
+const websocketEventSchema = z.strictObject({
   type: z.string().min(1).max(128),
   data: z.any(),
 });

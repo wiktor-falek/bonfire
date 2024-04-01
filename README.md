@@ -10,11 +10,13 @@
 - Redis (session management and caching)
 
 ### Frontend:
+
 - Vue 3
 - CSS
 - WebSocket API
 
 ## External dependencies
-- NodeJS 19 (or higher)
+
+- NodeJS v20.11.1 LTS
 - MongoDB
 - Redis

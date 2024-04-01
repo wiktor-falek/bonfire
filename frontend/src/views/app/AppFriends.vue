@@ -7,17 +7,18 @@ import {
   postAcceptFriendInvite,
   postFriendInviteByUsername,
   postRejectFriendInvite,
-} from "../../api/relationships";
-import { useRelationshipsStore } from "../../stores/relationshipsStore";
+} from "../../api/relations";
+import { useRelationsStore } from "../../stores/relationsStore";
 import { useUserStore } from "../../stores/userStore";
 import { getDirectMessageChannelId } from "../../utils/id";
 import router from "../../router";
 import { useUserProfilesStore } from "../../stores/userProfilesStore";
 import { useDirectMessagesStore } from "../../stores/directMessagesStore";
 import { mapUserStatusToDisplayText } from "../../utils/mapUserStatusToDisplayText";
+import ProfileIcon from "../../components/ProfileIcon.vue";
 
 const userStore = useUserStore();
-const relationshipsStore = useRelationshipsStore();
+const relationsStore = useRelationsStore();
 const userProfilesStore = useUserProfilesStore();
 const directMessagesStore = useDirectMessagesStore();
 
@@ -31,15 +32,15 @@ const selectedMenuOption = ref<MenuOption>(
 const userProfiles = computed<UserProfile[]>(() => {
   switch (selectedMenuOption.value) {
     case "online":
-      return relationshipsStore.relationships.friends.filter(
+      return relationsStore.relations.friends.filter(
         (e) => e.status !== "offline"
       );
     case "all":
-      return relationshipsStore.relationships.friends;
+      return relationsStore.relations.friends;
     case "pending":
-      return relationshipsStore.relationships.pending;
+      return relationsStore.relations.pending;
     case "blocked":
-      return relationshipsStore.relationships.blocked;
+      return relationsStore.relations.blocked;
     default:
       return [];
   }
@@ -60,7 +61,7 @@ async function handleSendFriendInvite(username: string) {
   }
 
   // TODO: display success
-  // TODO: dispatch new pending friend invite to relationshipsStore
+  // TODO: dispatch new pending friend invite to relationsStore
 }
 
 function handleProfileClick(profile: UserProfile) {
@@ -73,7 +74,7 @@ function handleProfileClick(profile: UserProfile) {
     profile.id
   );
 
-  userProfilesStore.setDirectMessageChannelProfiles(channelId, profile);
+  userProfilesStore.setDirectMessageChannelProfile(channelId, profile);
 
   directMessagesStore.prependUserProfile(profile);
 
@@ -84,7 +85,7 @@ async function handleAcceptInvite(profile: UserProfile) {
   const result = await postAcceptFriendInvite(profile.id);
 
   if (result.ok) {
-    const { friends, pending } = relationshipsStore.relationships;
+    const { friends, pending } = relationsStore.relations;
 
     const idx = pending.findIndex((e) => e.id === profile.id);
 
@@ -105,7 +106,7 @@ async function handleDeclineInvite(profile: UserProfile) {
   const result = await postRejectFriendInvite(profile.id);
 
   if (result.ok) {
-    const { pending } = relationshipsStore.relationships;
+    const { pending } = relationsStore.relations;
 
     const idx = pending.findIndex((e) => e.id === profile.id);
 
@@ -203,9 +204,11 @@ async function handleDeclineInvite(profile: UserProfile) {
         <div class="profiles" v-for="profile in userProfiles">
           <hr class="profile__separator" />
           <div @click="handleProfileClick(profile)" class="profile">
-            <div class="profile__image">
-              <img src="" />
-            </div>
+            <ProfileIcon
+              :status="profile.status"
+              :src="profile.imgSrc"
+              class="profile__icon"
+            />
             <div class="profile__text">
               <p class="profile__names">
                 <span class="profile__names__display-name">
@@ -374,7 +377,7 @@ async function handleDeclineInvite(profile: UserProfile) {
     height: 64px;
   }
 
-  .profile__image {
+  .profile__icon {
     margin-bottom: 4px;
   }
 }
@@ -382,14 +385,6 @@ async function handleDeclineInvite(profile: UserProfile) {
 .profile:hover {
   background-color: #404146;
   cursor: pointer;
-}
-
-.profile__image {
-  height: 32px;
-  width: 32px;
-  border-radius: 50%;
-  border: none;
-  background-color: #404146;
 }
 
 .profile__text {

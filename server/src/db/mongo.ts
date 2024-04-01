@@ -1,6 +1,6 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 
-class Mongo {
+export class Mongo {
   private client: MongoClient;
 
   constructor(url: string) {
@@ -21,5 +21,3 @@ class Mongo {
     return this.client.close();
   }
 }
-
-export default Mongo;
