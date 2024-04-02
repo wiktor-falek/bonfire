@@ -30,11 +30,14 @@ export const [wsServerClient, socketClientManager] = wsApp.register(wss, {
     profileSubscriptionStore.deleteAllSubscriptions(client.id);
     console.log(`Client ${client.id} disconnected`);
 
-    const connectedClients = socketClientManager._getClientsFromNamespace(
+    const connectedUserClients = socketClientManager._getClientsFromNamespace(
       `user_${userId}`
     );
 
-    if (connectedClients.length === 0) {
+    if (connectedUserClients.length === 0) {
+      // TODO: user being online/offline should be persisted separately
+      // so the status would be what user chooses to appear as
+      // but if no devices are connected it will always be offline
       statusService.setStatus(userId, "offline");
     }
   },

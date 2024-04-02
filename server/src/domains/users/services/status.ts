@@ -12,7 +12,7 @@ export class StatusService {
 
   async setStatus(userId: string, status: UserStatus) {
     // Check if status changed to prevent unnecessary notifications.
-    // This would be especially bad if user was invisible and went offline
+    // This would be especially bad if user was invisible and went offline.
     const getStatusResult = await this.userModel.getStatus(userId);
 
     if (!getStatusResult.ok) {
@@ -34,7 +34,7 @@ export class StatusService {
       return updateStatusResult;
     }
 
-    // TODO: call NotificationService method once implemented
+    // TODO: move this logic to a service once implemented
     const subscribers = this.profileSubscriptionStore.getSubscribers(userId);
 
     const length = subscribers.length;
