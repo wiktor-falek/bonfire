@@ -8,7 +8,7 @@ type Env = {
 };
 
 /**
- * Asserts that every env variable is defined.
+ * Asserts that every environment variable is defined.
  */
 function sanitizeConfig(env: any): Env {
   const missingFields = [];
