@@ -1,3 +1,4 @@
+import config from "./config.js";
 import { Mongo, Redis } from "./db/index.js";
 import {
   AuthControllerHTTP,
@@ -11,6 +12,8 @@ import {
   MessageControllerHTTP,
   MessageService,
 } from "./domains/channels/index.js";
+import { EmailSender } from "./domains/emails/helpers/emailSender.js";
+import { EmailService } from "./domains/emails/index.js";
 import {
   ProfileSubscriptionControllerWS,
   ProfileSubscriptionStore,
@@ -49,6 +52,9 @@ export const friendInviteModel = new FriendInviteModel(mongoDb);
 export const relationModel = new RelationModel(mongoDb);
 
 // Services
+export const emailService = new EmailService(
+  new EmailSender(config.EMAIL_USER, config.EMAIL_PASS)
+);
 export const authService = new AuthService(userModel, sessionStore);
 export const messageService = new MessageService(channelModel);
 export const userService = new UserService(userModel);
