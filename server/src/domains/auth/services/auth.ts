@@ -3,11 +3,14 @@ import { Err, Ok } from "resultat";
 import { v4 as uuidv4 } from "uuid";
 import { UserModel, createUser } from "../../users/index.js";
 import type { SessionStore } from "../stores/session.js";
+import { generateEmailVerificationToken } from "../helpers/emailVerification.js";
+import type { IEmailService } from "../../emails/services/email.interface.js";
 
 export class AuthService {
   constructor(
     private userModel: UserModel,
-    private sessionStore: SessionStore
+    private sessionStore: SessionStore,
+    private emailService: IEmailService
   ) {}
 
   async register(
@@ -41,7 +44,14 @@ export class AuthService {
 
     const user = createUser({ email, username, displayName, hash });
 
-    return this.userModel.createUser(user);
+    const createUserResult = await this.userModel.createUser(user);
+
+    if (createUserResult.ok) {
+      const verificationToken = generateEmailVerificationToken({ email });
+      this.emailService.sendSignupEmail(email, { username, verificationToken });
+    }
+
+    return createUserResult;
   }
 
   async login(email: string, password: string) {

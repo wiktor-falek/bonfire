@@ -14,6 +14,7 @@ import {
 } from "./domains/channels/index.js";
 import { EmailSender } from "./domains/emails/helpers/emailSender.js";
 import { EmailService } from "./domains/emails/index.js";
+import { NoOpEmailService } from "./domains/emails/services/email.no-op.js";
 import {
   ProfileSubscriptionControllerWS,
   ProfileSubscriptionStore,
@@ -52,10 +53,15 @@ export const friendInviteModel = new FriendInviteModel(mongoDb);
 export const relationModel = new RelationModel(mongoDb);
 
 // Services
-export const emailService = new EmailService(
-  new EmailSender(config.EMAIL_USER, config.EMAIL_PASS)
+export const emailService =
+  config.NODE_ENV === "production"
+    ? new EmailService(new EmailSender(config.EMAIL_USER, config.EMAIL_PASS))
+    : new NoOpEmailService();
+export const authService = new AuthService(
+  userModel,
+  sessionStore,
+  emailService
 );
-export const authService = new AuthService(userModel, sessionStore);
 export const messageService = new MessageService(channelModel);
 export const userService = new UserService(userModel);
 export const statusService = new StatusService(

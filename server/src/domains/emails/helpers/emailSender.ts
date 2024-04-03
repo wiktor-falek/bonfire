@@ -3,7 +3,7 @@ import type SMTPTransport from "nodemailer/lib/smtp-transport/index.js";
 import { Err, Ok } from "resultat";
 
 export class EmailSender {
-  transporter: Transporter<SMTPTransport.SentMessageInfo>;
+  private transporter: Transporter<SMTPTransport.SentMessageInfo>;
   constructor(user: string, pass: string) {
     this.transporter = createTransport({
       service: "gmail",
