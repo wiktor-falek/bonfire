@@ -120,7 +120,7 @@ export class UserModel implements IUserModel {
           "account.username": username,
         },
         {
-          "account.email": email,
+          $set: { "account.email": email },
         }
       );
 
