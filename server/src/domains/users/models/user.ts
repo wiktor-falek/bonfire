@@ -79,7 +79,7 @@ export class UserModel implements IUserModel {
     }
   }
 
-  // TODO: get rid of this, unique index handles duplicate email if verified
+  // TODO: refactor to check if email exists and is verified
   async emailExists(email: string) {
     try {
       const count = await this.collection.countDocuments(
