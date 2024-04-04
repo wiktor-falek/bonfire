@@ -1,4 +1,3 @@
-import { Err } from "resultat";
 import type { EmailSender } from "../helpers/emailSender.js";
 import type { IEmailService } from "./email.interface.js";
 
@@ -42,10 +41,7 @@ export class EmailService implements IEmailService {
   /**
    * Sends a password recovery link.
    */
-  sendPasswordRecovery(
-    to: string,
-    data: { username: string }
-  ) {
+  sendPasswordRecovery(to: string, data: { username: string }) {
     return this.emailSender.send({
       to,
       subject: "Password Recovery",

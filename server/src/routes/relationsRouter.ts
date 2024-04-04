@@ -11,7 +11,7 @@ import {
   postFriendInviteByUsernameSchema,
 } from "../domains/relations/validators/relation.js";
 
-const router = Router();
+export const router = Router();
 
 router.use(authGuard);
 
@@ -50,5 +50,3 @@ router.post(
   validate(postUnblockUserSchema),
   relationControllerHTTP.postUnblockUser.bind(relationControllerHTTP)
 );
-
-export default router;

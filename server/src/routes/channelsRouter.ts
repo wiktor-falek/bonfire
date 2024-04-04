@@ -4,7 +4,7 @@ import { channelControllerHTTP } from "../instances.js";
 import authGuard from "../middlewares/authGuard.js";
 import validate from "../middlewares/validate.js";
 
-const router = Router();
+export const router = Router();
 
 router.use(authGuard);
 
@@ -15,5 +15,3 @@ router.get(
     channelControllerHTTP
   )
 );
-
-export default router;

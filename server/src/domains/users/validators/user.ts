@@ -12,22 +12,6 @@ export const userProfileIdsSchema = z.strictObject({
   profileIds: z.array(z.string()),
 });
 
-export const postLoginSchema = z.object({
-  body: z.object({
-    email,
-    password,
-  }),
-});
-
-export const postRegisterSchema = z.object({
-  body: z.object({
-    email,
-    password,
-    username,
-    displayName,
-  }),
-});
-
 export const getUserProfileByIdSchema = z.object({
   params: z.object({
     userId,

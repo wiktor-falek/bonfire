@@ -1,4 +1,4 @@
-import { Ok } from "resultat";
+import { Ok, type Result } from "resultat";
 import type { IUserModel } from "../../../domains/users/models/user.interface.js";
 import {
   createUser,
@@ -40,6 +40,22 @@ class MockUserModel implements IUserModel {
 
   emailExists(email: string) {
     return Promise.resolve(Ok(true));
+  }
+
+  usernameExists(username: string): Promise<Result<boolean, string>> {
+    return Promise.resolve(Ok(true));
+  }
+
+  verifyEmail(username: string, email: string) {
+    return Promise.resolve(Ok());
+  }
+
+  changeEmail(username: string, email: string) {
+    return Promise.resolve(Ok());
+  }
+
+  getStatus(userId: string): Promise<Result<UserStatus, string>> {
+    return Promise.resolve(Ok("online"));
   }
 
   updateStatus(userId: string, status: UserStatus) {

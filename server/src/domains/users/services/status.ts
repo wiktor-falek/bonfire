@@ -1,12 +1,12 @@
-import type { UserModel } from "../models/user.js";
 import type { UserStatus } from "../interfaces/user.js";
 import { Ok } from "resultat";
 import { wsServerClient } from "../../../index.js";
 import type { ProfileSubscriptionStore } from "../../notifications/index.js";
+import type { IUserModel } from "../models/user.interface.js";
 
 export class StatusService {
   constructor(
-    private userModel: UserModel,
+    private userModel: IUserModel,
     private profileSubscriptionStore: ProfileSubscriptionStore
   ) {}
 

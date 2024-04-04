@@ -12,6 +12,9 @@ export class NoOpEmailService implements IEmailService {
     to: string,
     data: { username: string; verificationToken: string }
   ) {
+    console.log(
+      `Verify email at: http://localhost:5173/verify/${data.verificationToken}`
+    );
     return Promise.resolve(Ok({} as SMTPTransport.SentMessageInfo));
   }
 

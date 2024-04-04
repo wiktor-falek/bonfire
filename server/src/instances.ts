@@ -1,8 +1,10 @@
 import config from "./config.js";
 import { Mongo, Redis } from "./db/index.js";
+import { VerificationControllerHTTP } from "./domains/auth/controllers/http/verification.js";
 import {
   AuthControllerHTTP,
   AuthService,
+  EmailVerificationService,
   SessionStore,
 } from "./domains/auth/index.js";
 import {
@@ -57,6 +59,10 @@ export const emailService =
   config.NODE_ENV === "production"
     ? new EmailService(new EmailSender(config.EMAIL_USER, config.EMAIL_PASS))
     : new NoOpEmailService();
+export const emailVerificationService = new EmailVerificationService(
+  userModel,
+  emailService
+);
 export const authService = new AuthService(
   userModel,
   sessionStore,
@@ -77,6 +83,9 @@ export const relationService = new RelationService(
 
 // HTTP Controllers
 export const authControllerHTTP = new AuthControllerHTTP(authService);
+export const verificationControllerHTTP = new VerificationControllerHTTP(
+  emailVerificationService
+);
 export const userControllerHTTP = new UserControllerHTTP(userService);
 export const channelControllerHTTP = new ChannelControllerHTTP(
   channelModel,

@@ -6,7 +6,7 @@ import { patchUserStatus } from "../domains/users/validators/status.js";
 import { userControllerHTTP } from "../instances.js";
 import { statusControllerHTTP } from "../instances.js";
 
-const router = Router();
+export const router = Router();
 
 router.use(authGuard);
 
@@ -29,5 +29,3 @@ router.patch(
   validate(patchUserStatus),
   statusControllerHTTP.setStatus.bind(statusControllerHTTP)
 );
-
-export default router;

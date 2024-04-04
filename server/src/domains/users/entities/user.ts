@@ -10,7 +10,11 @@ export function createUser(input: {
   return {
     id: generateNumericId(21),
     account: {
-      ...input,
+      email: input.email,
+      verifiedEmail: false,
+      hash: input.hash,
+      username: input.username,
+      displayName: input.displayName,
       registrationTimestamp: Date.now(),
     },
     status: "offline",

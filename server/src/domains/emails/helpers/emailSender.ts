@@ -29,7 +29,7 @@ export class EmailSender {
       return Ok(info);
     } catch (e) {
       console.error("UNHANDLED ERROR: ", e);
-      return Err(e);
+      return Err("Failed to send email" as const);
     }
   }
 }

@@ -10,12 +10,9 @@ import {
 } from "./instances.js";
 import { createServer } from "http";
 import { WebSocketServer } from "ws";
-import config from "./config.js";
 
-if (config.NODE_ENV === "development") {
-  await createIndexes(mongoDb);
-  console.log("Successfully created MongoDB indexes");
-}
+(await createIndexes(mongoDb)).unwrap();
+console.log("Created MongoDB indexes");
 
 const server = createServer(app);
 const wss = new WebSocketServer({ server });

@@ -1,5 +1,5 @@
-import { Ok, Err } from "resultat";
-import type { Collection, Db } from "mongodb";
+import { MongoError, type Collection, type Db } from "mongodb";
+import { Err, Ok } from "resultat";
 import type { User, UserStatus } from "../interfaces/user.js";
 import type { IUserModel } from "./user.interface.js";
 
@@ -21,7 +21,11 @@ export class UserModel implements IUserModel {
       }
 
       return Ok();
-    } catch (_) {
+    } catch (_e) {
+      const error = _e as MongoError;
+      if (error.code) {
+        return Err("Unique constraint failed");
+      }
       return Err("Failed to create a user");
     }
   }
@@ -75,6 +79,7 @@ export class UserModel implements IUserModel {
     }
   }
 
+  // TODO: get rid of this, unique index handles duplicate email if verified
   async emailExists(email: string) {
     try {
       const count = await this.collection.countDocuments(
@@ -101,6 +106,61 @@ export class UserModel implements IUserModel {
 
       return Ok(Boolean(count));
     } catch (_) {
+      return Err("Network Error");
+    }
+  }
+
+  /**
+   * Changes email of the user, if another user has not verified that email.
+   */
+  async changeEmail(username: string, email: string) {
+    try {
+      const result = await this.collection.updateOne(
+        {
+          "account.username": username,
+        },
+        {
+          "account.email": email,
+        }
+      );
+
+      return result.acknowledged ? Ok() : Err("Something went wrong" as const);
+    } catch (_e) {
+      const error = _e as MongoError;
+      if (error.code === 11000) {
+        return Err("Email is already in use" as const);
+      }
+      return Err("Network error" as const);
+    }
+  }
+
+  /**
+   * Sets `account.verifiedEmail` to true if the user uses the provided email,
+   * and no user has verified provided email.
+   */
+  async verifyEmail(username: string, email: string) {
+    try {
+      const result = await this.collection.updateOne(
+        {
+          "account.username": username,
+          "account.email": email,
+          "account.verifiedEmail": false,
+        },
+        {
+          $set: { "account.verifiedEmail": true },
+        }
+      );
+
+      if (!result.acknowledged) {
+        return Err("Already verified or user does not use this email");
+      }
+
+      return Ok();
+    } catch (_e) {
+      const error = _e as MongoError;
+      if (error.code === 11000) {
+        return Err("Email is already in use");
+      }
       return Err("Network Error");
     }
   }

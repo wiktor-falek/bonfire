@@ -1,12 +1,12 @@
 import { Router } from "express";
-import validate from "../middlewares/validate.js";
 import {
   postLoginSchema,
   postRegisterSchema,
-} from "../domains/users/validators/user.js";
+} from "../domains/auth/validators/auth.js";
 import { authControllerHTTP } from "../instances.js";
+import validate from "../middlewares/validate.js";
 
-const router = Router();
+export const router = Router();
 
 router.post(
   "/login",
@@ -18,5 +18,3 @@ router.post(
   validate(postRegisterSchema),
   authControllerHTTP.register.bind(authControllerHTTP)
 );
-
-export default router;

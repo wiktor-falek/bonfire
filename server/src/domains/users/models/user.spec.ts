@@ -27,20 +27,53 @@ describe("user operations", async () => {
       hash: "whatever",
     });
 
-    const duplicateEmailUser = createUser({
+    const duplicateUnverifiedEmailUser = createUser({
       username: "whatever",
       displayName: "whatever",
       email: "test@email.com",
       hash: "whatever",
     });
 
-    const duplicateUsernameResult = await userModel.createUser(
+    const createDuplicateUsernameResult = await userModel.createUser(
       duplicateUsernameUser
     );
-    const duplicateEmailResult = await userModel.createUser(duplicateEmailUser);
+    const createDuplicateEmailResult = await userModel.createUser(
+      duplicateUnverifiedEmailUser
+    );
 
-    expect(duplicateUsernameResult.ok).toBe(false);
-    expect(duplicateEmailResult.ok).toBe(false);
+    expect(createDuplicateUsernameResult.ok).toBe(false);
+    expect(createDuplicateEmailResult.ok).toBe(true);
+  });
+
+  it.skip("prevents duplicate email if already verified", async () => {
+    const firstUser = createUser({
+      username: "firstUser",
+      displayName: "whatever",
+      email: "taken@email.com",
+      hash: "whatever",
+    });
+
+    const secondUser = createUser({
+      username: "secondUser",
+      displayName: "whatever",
+      email: "taken@email.com",
+      hash: "whatever",
+    });
+
+    (await userModel.createUser(firstUser)).unwrap();
+
+    const { username, email } = firstUser.account;
+    (await userModel.verifyEmail(username, email)).unwrap();
+
+    (await userModel.createUser(secondUser)).unwrap();
+
+    const foundFirstUser = (
+      await userModel.findByUsername("firstUser")
+    ).unwrap();
+    const foundSecondUser = (
+      await userModel.findByUsername("secondUser")
+    ).unwrap();
+    expect(foundSecondUser).toBeNull();
   });
 
   it("finds the existing user", async () => {

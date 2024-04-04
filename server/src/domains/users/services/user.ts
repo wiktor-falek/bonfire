@@ -1,9 +1,9 @@
 import { Err, Ok } from "resultat";
 import type { User, UserProfile } from "../interfaces/user.js";
-import type { UserModel } from "../models/user.js";
+import type { IUserModel } from "../models/user.interface.js";
 
 export class UserService {
-  constructor(private userModel: UserModel) {}
+  constructor(private userModel: IUserModel) {}
 
   private userToProfile(user: User): UserProfile {
     return {

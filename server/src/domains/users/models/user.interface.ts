@@ -8,5 +8,9 @@ export type IUserModel = {
   findById(id: string): Promise<Result<User | null, string>>;
   findAllByIds(ids: string[]): Promise<Result<User[], string>>;
   emailExists(email: string): Promise<Result<boolean, string>>;
+  usernameExists(username: string): Promise<Result<boolean, string>>;
+  verifyEmail(username: string, email: string): Promise<Result<unknown, string>>;
+  changeEmail(username: string, email: string): Promise<Result<unknown, string>>;
+  getStatus(userId: string): Promise<Result<UserStatus, string>>
   updateStatus(userId: string, status: UserStatus): Promise<Result<unknown, string>>;
 };

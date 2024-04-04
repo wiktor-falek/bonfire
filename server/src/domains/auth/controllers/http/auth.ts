@@ -3,7 +3,7 @@ import type { ValidatedRequest } from "../../../../types.js";
 import type {
   postLoginSchema,
   postRegisterSchema,
-} from "../../../users/validators/user.js";
+} from "../../validators/auth.js";
 import { type AuthService } from "../../services/auth.js";
 
 export class AuthControllerHTTP {

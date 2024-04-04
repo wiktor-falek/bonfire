@@ -1,4 +1,5 @@
 import type { Db } from "mongodb";
+import { Err, Ok } from "resultat";
 
 async function createIndexes(mongoDb: Db) {
   try {
@@ -20,6 +21,7 @@ async function createIndexes(mongoDb: Db) {
         {
           key: { "account.email": 1 },
           unique: true,
+          partialFilterExpression: { "account.verifiedEmail": true },
         },
       ]),
       mongoDb.collection("channels").createIndexes([
@@ -36,9 +38,9 @@ async function createIndexes(mongoDb: Db) {
       ]),
     ]);
 
-    return Promise.resolve(results.flat());
-  } catch (error) {
-    return Promise.reject(error);
+    return Ok(results.flat());
+  } catch (e) {
+    return Err(e);
   }
 }
 

@@ -1,13 +1,5 @@
-import authRouter from "./authRouter.js";
-import usersRouter from "./usersRouter.js";
-import messagesRouter from "./messagesRouter.js";
-import channelsRouter from "./channelsRouter.js";
-import relationsRouter from "./relationsRouter.js";
-
-export {
-  authRouter,
-  usersRouter,
-  messagesRouter,
-  channelsRouter,
-  relationsRouter,
-};
+export { router as authRouter } from "./authRouter.js";
+export { router as usersRouter } from "./usersRouter.js";
+export { router as messagesRouter } from "./messagesRouter.js";
+export { router as channelsRouter } from "./channelsRouter.js";
+export { router as relationsRouter } from "./relationsRouter.js";

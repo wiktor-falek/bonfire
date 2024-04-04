@@ -1,18 +1,18 @@
 import { Err, Ok } from "resultat";
-import type { UserModel, UserService } from "../../users/index.js";
+import type { UserService } from "../../users/index.js";
 import { createFriendInvite } from "../entities/invite.js";
 import { createFriendRelation } from "../entities/relation.js";
 import type { FriendInviteModel } from "../models/invite.js";
 import type { RelationModel } from "../models/relation.js";
+import type { IUserModel } from "../../users/models/user.interface.js";
 
 export class RelationService {
   constructor(
-    private userModel: UserModel,
+    private userModel: IUserModel,
     private friendInviteModel: FriendInviteModel,
     private relationModel: RelationModel,
-    private userService: UserService
-  ) // private notificationService: NotificationService
-  {}
+    private userService: UserService // private notificationService: NotificationService
+  ) {}
 
   async getAllRelatedUserProfiles(userId: string) {
     try {

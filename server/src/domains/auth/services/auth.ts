@@ -1,14 +1,15 @@
 import bcrypt from "bcrypt";
 import { Err, Ok } from "resultat";
 import { v4 as uuidv4 } from "uuid";
-import { UserModel, createUser } from "../../users/index.js";
+import { createUser } from "../../users/index.js";
 import type { SessionStore } from "../stores/session.js";
 import { generateEmailVerificationToken } from "../helpers/emailVerification.js";
 import type { IEmailService } from "../../emails/services/email.interface.js";
+import type { IUserModel } from "../../users/models/user.interface.js";
 
 export class AuthService {
   constructor(
-    private userModel: UserModel,
+    private userModel: IUserModel,
     private sessionStore: SessionStore,
     private emailService: IEmailService
   ) {}
@@ -47,7 +48,10 @@ export class AuthService {
     const createUserResult = await this.userModel.createUser(user);
 
     if (createUserResult.ok) {
-      const verificationToken = generateEmailVerificationToken({ email });
+      const verificationToken = generateEmailVerificationToken({
+        username,
+        email,
+      });
       this.emailService.sendSignupEmail(email, { username, verificationToken });
     }
 
