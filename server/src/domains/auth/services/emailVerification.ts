@@ -1,3 +1,4 @@
+import { Err } from "resultat";
 import type { IEmailService } from "../../emails/services/email.interface.js";
 import type { IUserModel } from "../../users/models/user.interface.js";
 import {
@@ -12,13 +13,25 @@ export class EmailVerificationService {
     private emailService: IEmailService
   ) {}
 
-  verifyEmail(token: string) {
+  async verifyEmail(token: string) {
     const verifyResult = verifyEmailVerificationToken(token);
     if (!verifyResult.ok) {
       return verifyResult;
     }
 
     const { username, email } = verifyResult.val;
+
+    const emailIsVerifiedResult = await this.userModel.emailIsVerified(email);
+
+    if (!emailIsVerifiedResult.ok) {
+      return emailIsVerifiedResult;
+    }
+
+    const emailIsVerified = emailIsVerifiedResult.val;
+
+    if (emailIsVerified) {
+      return Err("Email is already in use");
+    }
 
     return this.userModel.verifyEmail(username, email);
   }

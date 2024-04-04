@@ -38,7 +38,7 @@ class MockUserModel implements IUserModel {
     );
   }
 
-  emailExists(email: string) {
+  emailIsVerified(email: string) {
     return Promise.resolve(Ok(true));
   }
 

@@ -79,12 +79,15 @@ export class UserModel implements IUserModel {
     }
   }
 
-  // TODO: refactor to check if email exists and is verified
-  async emailExists(email: string) {
+  /**
+   * Returns true if any user uses that email and verified it.
+   */
+  async emailIsVerified(email: string) {
     try {
       const count = await this.collection.countDocuments(
         {
           "account.email": email,
+          "account.verifiedEmail": true,
         },
         { limit: 1 }
       );
@@ -151,8 +154,10 @@ export class UserModel implements IUserModel {
         }
       );
 
-      if (!result.acknowledged) {
-        return Err("Already verified or user does not use this email");
+      console.log({ result });
+
+      if (!result.modifiedCount) {
+        return Err("Already verified or invalid email");
       }
 
       return Ok();

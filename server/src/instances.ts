@@ -35,6 +35,9 @@ import {
   UserService,
 } from "./domains/users/index.js";
 
+// ??????????????????????? why the fuck is it undefined in testing hello?
+console.log(StatusService, UserService)
+
 // Database connections
 const [redisClient, mongoClient] = await Promise.all([
   new Redis("redis://localhost:6379").connectOrThrow(),

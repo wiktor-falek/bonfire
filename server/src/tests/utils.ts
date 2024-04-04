@@ -7,6 +7,6 @@ export async function getInMemoryMongoDb() {
   const uri = server.getUri();
   const mongoClient = await new Mongo(uri).connectOrThrow();
   const mongoDb = mongoClient.db("bonfire");
-  await createIndexes(mongoDb);
+  (await createIndexes(mongoDb)).unwrap();
   return mongoDb;
 }

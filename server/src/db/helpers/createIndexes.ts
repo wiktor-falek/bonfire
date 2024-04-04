@@ -20,8 +20,6 @@ async function createIndexes(mongoDb: Db) {
         },
         {
           key: { "account.email": 1 },
-          unique: true,
-          partialFilterExpression: { "account.verifiedEmail": true },
         },
       ]),
       mongoDb.collection("channels").createIndexes([

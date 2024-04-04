@@ -23,7 +23,7 @@ export class AuthService {
     // Avoid pre-emptive hashing by checking if username or password is already in use
     const [usernameExistsResult, emailExistsResult] = await Promise.all([
       this.userModel.usernameExists(username),
-      this.userModel.emailExists(email),
+      this.userModel.emailIsVerified(email),
     ]);
 
     if (!emailExistsResult.ok || !usernameExistsResult.ok) {
