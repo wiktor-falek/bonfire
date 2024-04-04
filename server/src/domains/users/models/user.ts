@@ -1,4 +1,4 @@
-import { MongoError, type Collection, type Db } from "mongodb";
+import type { Collection, Db, MongoError } from "mongodb";
 import { Err, Ok } from "resultat";
 import type { User, UserStatus } from "../interfaces/user.js";
 import type { IUserModel } from "./user.interface.js";
