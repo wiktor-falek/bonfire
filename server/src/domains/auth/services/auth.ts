@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import { Err, Ok } from "resultat";
 import { v4 as uuidv4 } from "uuid";
-import { createUser } from "../../users/index.js";
+import { createUser } from "../../users/entities/user.js";
 import type { SessionStore } from "../stores/session.js";
 import { generateEmailVerificationToken } from "../helpers/emailVerification.js";
 import type { IEmailService } from "../../emails/services/email.interface.js";

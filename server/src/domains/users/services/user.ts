@@ -46,5 +46,3 @@ export class UserService {
     return Ok(profiles);
   }
 }
-
-console.log("here", UserService);

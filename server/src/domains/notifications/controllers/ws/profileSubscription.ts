@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { ProfileSubscriptionStore } from "../../index.js";
+import type { ProfileSubscriptionStore } from "../../stores/profileSubscription.js";
 import type { ServerToClientEvents } from "../../../../websocket/types.js";
 import type { WsClient } from "../../../../websocket/wsClient.js";
 import type { userProfileIdsSchema } from "../../../users/index.js";

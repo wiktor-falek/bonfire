@@ -1,13 +1,10 @@
-import { beforeEach, describe, it, expect } from "vitest";
-import { EmailVerificationService } from "./emailVerification.js";
-import { NoOpEmailService } from "../../emails/services/email.no-op.js";
-import { UserModel, createUser } from "../../users/index.js";
-import { getInMemoryMongoDb } from "../../../tests/utils.js";
 import type { Db } from "mongodb";
-import type { IUserModel } from "../../users/models/user.interface.js";
+import { beforeEach, describe, expect, it } from "vitest";
+import { getInMemoryMongoDb } from "../../../tests/utils.js";
+import { NoOpEmailService } from "../../emails/services/email.no-op.js";
+import { UserModel, createUser, type IUserModel } from "../../users/index.js";
 import { generateEmailVerificationToken } from "../helpers/emailVerification.js";
-
-// Why is this shit breaking? Class is not a constructor my ass why the fuck is it undefined
+import { EmailVerificationService } from "./emailVerification.js";
 
 let inMemoryDb: Db;
 let userModel: IUserModel;

@@ -1,6 +1,6 @@
 import type { RedisClientType } from "redis";
 import { Err, Ok } from "resultat";
-import type { Session } from "../index.js";
+import type { Session } from "../interfaces/session.js";
 
 export class SessionStore {
   keyspace: string;

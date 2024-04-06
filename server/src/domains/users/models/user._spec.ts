@@ -1,7 +1,6 @@
-import { describe, it, expect, assert } from "vitest";
-import { UserModel } from "./user.js";
+import { assert, describe, expect, it } from "vitest";
 import { getInMemoryMongoDb } from "../../../tests/utils.js";
-import { createUser } from "../entities/user.js";
+import { UserModel, createUser } from "../index.js";
 
 describe("user operations", async () => {
   const inMemoryDb = await getInMemoryMongoDb();

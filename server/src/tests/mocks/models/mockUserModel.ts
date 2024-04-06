@@ -1,7 +1,7 @@
 import { Ok, type Result } from "resultat";
-import type { IUserModel } from "../../../domains/users/models/user.interface.js";
 import {
   createUser,
+  type IUserModel,
   type User,
   type UserStatus,
 } from "../../../domains/users/index.js";

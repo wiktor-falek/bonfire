@@ -1,6 +1,6 @@
 import { Err } from "resultat";
-import type { IEmailService } from "../../emails/services/email.interface.js";
-import type { IUserModel } from "../../users/models/user.interface.js";
+import type { IEmailService } from "../../emails/index.js";
+import type { IUserModel } from "../../users/index.js";
 import {
   generateEmailVerificationToken,
   verifyEmailVerificationToken,

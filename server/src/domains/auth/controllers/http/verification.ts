@@ -1,6 +1,7 @@
 import type { Response } from "express";
 import type { ValidatedRequest } from "../../../../types.js";
-import { getVerifyToken, type EmailVerificationService } from "../../index.js";
+import { type EmailVerificationService } from "../../services/emailVerification.js";
+import { getVerifyToken } from "../../validators/verify.js";
 
 export class VerificationControllerHTTP {
   constructor(private emailVerificationService: EmailVerificationService) {}

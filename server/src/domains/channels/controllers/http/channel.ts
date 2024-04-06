@@ -1,5 +1,5 @@
 import type { Response } from "express";
-import type { ChannelModel } from "../../index.js";
+import type { ChannelModel } from "../../models/channel.js";
 import type { UserService } from "../../../users/index.js";
 import type { ValidatedRequest } from "../../../../types.js";
 import type { getOtherUserProfileInDirectMessageChannelSchema } from "../../validators/channel.js";
