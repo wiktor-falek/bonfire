@@ -30,6 +30,7 @@ A Discord like chatting application built for the sake of learning and experimen
 - [x] Creating block relationship when one user blocks the other one
 - [ ] Ignoring incoming messages, friend requests from blocked users
 - [ ] Dispatching invites/accepts/blocks
+- [ ] Notifications on friend invite when not in pending friend requests view
 
 ### Messages
 
