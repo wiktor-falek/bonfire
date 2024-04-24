@@ -5,6 +5,7 @@ import type {
   postRegisterSchema,
 } from "../../validators/auth.js";
 import { type AuthService } from "../../services/auth.js";
+import config from "../../../../config.js";
 
 export class AuthControllerHTTP {
   constructor(private authService: AuthService) {}
@@ -24,6 +25,7 @@ export class AuthControllerHTTP {
 
     res.cookie("sessionId", sessionId, {
       httpOnly: true,
+      secure: config.NODE_ENV === "production",
       maxAge: 30 * 60 * 60 * 24 * 1000, // one month
     });
 
@@ -61,6 +63,7 @@ export class AuthControllerHTTP {
 
     res.cookie("sessionId", sessionId, {
       httpOnly: true,
+      secure: config.NODE_ENV === "production",
       maxAge: 30 * 60 * 60 * 24 * 1000, // one month
     });
 

@@ -58,7 +58,9 @@ class WebSocketClient {
       return;
     }
 
-    this.socket = new WebSocket("ws://localhost:3000");
+    this.socket = new WebSocket(
+      import.meta.env.VITE_API_URL ?? "ws://localhost:3000"
+    );
 
     this.socket.addEventListener("open", () => {
       console.log("socket open");
