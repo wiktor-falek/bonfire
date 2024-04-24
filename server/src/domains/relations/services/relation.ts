@@ -77,18 +77,20 @@ export class RelationService {
       return Err("Cannot invite yourself");
     }
 
-    const findRelationResult =
+    const findExistingRelationResult =
       await this.relationModel.findFriendRelationByUserIds(
         senderId,
         recipientId
       );
 
-    if (findRelationResult.ok) {
+    if (!findExistingRelationResult.ok) {
+      return findExistingRelationResult;
+    }
+
+    const existingRelation = findExistingRelationResult.val;
+
+    if (existingRelation !== null) {
       return Err("Friend relation already exists");
-    } else {
-      if (findRelationResult.err === "Network error") {
-        return findRelationResult;
-      }
     }
 
     const invite = createFriendInvite(senderId, recipientId);
@@ -123,10 +125,19 @@ export class RelationService {
       return Ok({ friendRelation });
     }
 
-    // TODO: only if recipient did not block the sender
-    // this.notificationService.notify(recipientId, "friend-invite", {
-    //   from: senderId,
-    // });
+    const senderHasBlockedRecipientResult = await this.userHasBlockedUser(
+      recipientId,
+      senderId
+    );
+    if (!senderHasBlockedRecipientResult.ok) {
+      return senderHasBlockedRecipientResult;
+    }
+
+    const senderHasBlockedRecipient = senderHasBlockedRecipientResult.val;
+
+    if (senderHasBlockedRecipient) {
+      return Err("The user has blocked you");
+    }
 
     this.userService.getUserProfileById(senderId).then((result) => {
       if (!result.ok) {
@@ -196,6 +207,24 @@ export class RelationService {
       senderId,
       userId
     );
+  }
+
+  async userHasBlockedUser(userId: string, targetUserId: string) {
+    const findExistingRelationResult =
+      await this.relationModel.findRelationBetweenUsers(userId, targetUserId);
+
+    if (!findExistingRelationResult.ok) {
+      return findExistingRelationResult;
+    }
+
+    const existingRelation = findExistingRelationResult.val;
+
+    if (existingRelation === null || existingRelation.kind !== "block") {
+      // TODO: distinct who blocked who
+      return Ok(false);
+    }
+
+    return Ok(true);
   }
 
   async blockUser(userId: string, targetUserId: string) {

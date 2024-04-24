@@ -108,10 +108,6 @@ export class RelationModel {
         ],
       });
 
-      if (friendRelation === null) {
-        return Err("Relation does not exist" as const);
-      }
-
       return Ok(friendRelation);
     } catch (_) {
       return Err("Network error" as const);
