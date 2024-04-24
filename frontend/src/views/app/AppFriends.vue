@@ -17,13 +17,16 @@ import { useDirectMessagesStore } from "../../stores/directMessagesStore";
 import { mapUserStatusToDisplayText } from "../../utils/mapUserStatusToDisplayText";
 import ProfileIcon from "../../components/ProfileIcon.vue";
 
+type FilterOption = "online" | "all" | "pending" | "blocked";
+type MenuOption = FilterOption | "add-friend";
+
 const userStore = useUserStore();
 const relationsStore = useRelationsStore();
 const userProfilesStore = useUserProfilesStore();
 const directMessagesStore = useDirectMessagesStore();
 
-type FilterOption = "online" | "all" | "pending" | "blocked";
-type MenuOption = FilterOption | "add-friend";
+const addFriendSuccess = ref("");
+const addFriendError = ref("");
 
 const selectedMenuOption = ref<MenuOption>(
   (localStorage.getItem("selectedMenuOption") as MenuOption) ?? "online"
@@ -55,13 +58,15 @@ const inviteUsernameInput = ref("");
 async function handleSendFriendInvite(username: string) {
   const result = await postFriendInviteByUsername(username);
   if (!result.ok) {
-    const error = result.err;
-    // TODO: display error
-    return;
-  }
+    const error = result.err.error as string; // TODO: fix any
 
-  // TODO: display success
-  // TODO: dispatch new pending friend invite to relationsStore
+    addFriendSuccess.value = "";
+    addFriendError.value = error;
+  } else {
+    addFriendError.value = "";
+    addFriendSuccess.value = `Success! Friend invite sent to ${username}.`;
+    // TODO: dispatch new pending friend invite to relationsStore
+  }
 }
 
 function handleProfileClick(profile: UserProfile) {
@@ -183,13 +188,28 @@ async function handleDeclineInvite(profile: UserProfile) {
     <div class="left">
       <div v-if="selectedMenuOption === 'add-friend'">
         <h1>Add Friend</h1>
-        <input maxlength="32" v-model="inviteUsernameInput" type="text" />
+        <input
+          maxlength="32"
+          v-model="inviteUsernameInput"
+          type="text"
+          @input="
+            (e) => {
+              addFriendError = '';
+              addFriendSuccess = '';
+            }
+          "
+        />
         <button
           :disabled="inviteUsernameInput.length === 0"
           @click="handleSendFriendInvite(inviteUsernameInput)"
         >
           Send Friend Request
         </button>
+
+        <p id="add-friend-success">{{ addFriendSuccess }}</p>
+        <p id="add-friend-error">
+          {{ addFriendError }}
+        </p>
       </div>
 
       <div v-else class="user-friends-section">
@@ -324,6 +344,14 @@ async function handleDeclineInvite(profile: UserProfile) {
 #add-friend.navigation__menu__option--selected {
   color: #ff652c !important;
   background: none;
+}
+
+#add-friend-success {
+  color: rgb(29, 189, 29);
+}
+
+#add-friend-error {
+  color: rgb(255, 90, 90);
 }
 
 .search {

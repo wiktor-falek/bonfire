@@ -65,7 +65,7 @@ export class RelationService {
     const recipient = findUserResult.val;
 
     if (recipient === null) {
-      return Err("Incorrect username");
+      return Err("User does not exist");
     }
 
     return this.sendFriendInviteById(senderId, recipient.id);
