@@ -14,7 +14,7 @@ A Discord like chatting application built for the sake of learning and experimen
 
 ### Profile
 
-- [x] Updating status (Online, Away, Dnd, Offline), shared with listening users in real time
+- [x] Updating status (Online, Away, Dnd, Offline), dispatched to subscribing users in real time
 - [ ] Appear offline when all devices are disconnected (display the persisted status on going online)
 - [ ] Updating display name
 - [ ] About me
@@ -24,11 +24,12 @@ A Discord like chatting application built for the sake of learning and experimen
 - [x] Friend invite by username
 - [ ] Friend invite by id (by clicking in the users profile)
 - [ ] Removing a friend
-- [ ] Accepting a friend request
-- [ ] Rejecting a friend request
+- [x] Accepting a friend request
+- [x] Rejecting a friend request
 - [x] Creating friend relationship when both users invite each other
 - [x] Creating block relationship when one user blocks the other one
 - [ ] Ignoring incoming messages, friend requests from blocked users
+- [ ] Dispatching invites/accepts/blocks
 
 ### Messages
 

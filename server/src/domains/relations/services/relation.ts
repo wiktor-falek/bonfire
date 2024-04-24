@@ -1,10 +1,11 @@
 import { Err, Ok } from "resultat";
-import type { UserService } from "../../users/index.js";
+import { UserService } from "../../users/index.js";
 import { createFriendInvite } from "../entities/invite.js";
 import { createFriendRelation } from "../entities/relation.js";
 import type { FriendInviteModel } from "../models/invite.js";
 import type { RelationModel } from "../models/relation.js";
 import type { IUserModel } from "../../users/models/user.interface.js";
+import { wsServerClient } from "../../../index.js";
 
 export class RelationService {
   constructor(
@@ -126,6 +127,22 @@ export class RelationService {
     // this.notificationService.notify(recipientId, "friend-invite", {
     //   from: senderId,
     // });
+
+    this.userService.getUserProfileById(senderId).then((result) => {
+      if (!result.ok) {
+        console.error(
+          "Failed to dispatch friend invite to recipient. User not found."
+        );
+        return;
+      }
+
+      const senderProfile = result.val;
+
+      // TODO: abstract into a service
+      wsServerClient
+        .to(`user_${recipientId}`)
+        .send("relation:friend-invite", { profile: senderProfile });
+    });
 
     return Ok({ invite });
   }
