@@ -7,6 +7,7 @@ import {
   profileSubscriptionStore,
   sessionStore,
   statusService,
+  userModel,
 } from "./instances.js";
 import { createServer } from "http";
 import { WebSocketServer } from "ws";
@@ -22,7 +23,10 @@ export const [wsServerClient, socketClientManager] = wsApp.register(wss, {
   onListening: () => {
     console.log(`WS server listening on ws://localhost:3000`);
   },
-  onConnection: (client, req) => {},
+  onConnection: (client, req, userId) => {
+    console.log(`Client ${client.id} connected`);
+    userModel.setIsOnline(userId, true);
+  },
   onClose: (client, userId) => {
     profileSubscriptionStore.deleteAllSubscriptions(client.id);
     console.log(`Client ${client.id} disconnected`);
@@ -35,7 +39,7 @@ export const [wsServerClient, socketClientManager] = wsApp.register(wss, {
       // TODO: user being online/offline should be persisted separately
       // so the status would be what user chooses to appear as
       // but if no devices are connected it will always be offline
-      statusService.setStatus(userId, "offline");
+      userModel.setIsOnline(userId, false);
     }
   },
 });

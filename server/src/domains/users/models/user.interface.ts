@@ -1,5 +1,5 @@
 import type { Result } from "resultat";
-import type { User, UserStatus } from "../interfaces/user.js";
+import type { SelectableUserStatus, User, UserStatus } from "../interfaces/user.js";
 
 export type IUserModel = {
   createUser(user: User): Promise<Result<unknown, string>>;
@@ -12,5 +12,6 @@ export type IUserModel = {
   verifyEmail(username: string, email: string): Promise<Result<unknown, string>>;
   changeEmail(username: string, email: string): Promise<Result<unknown, string>>;
   getStatus(userId: string): Promise<Result<UserStatus, string>>
-  updateStatus(userId: string, status: UserStatus): Promise<Result<unknown, string>>;
+  updateStatus(userId: string, status: SelectableUserStatus): Promise<Result<unknown, string>>;
+  setIsOnline(userId: string, isOnline: boolean): Promise<Result<unknown, string>>;
 };

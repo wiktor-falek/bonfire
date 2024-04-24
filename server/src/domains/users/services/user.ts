@@ -6,11 +6,18 @@ export class UserService {
   constructor(private userModel: IUserModel) {}
 
   private userToProfile(user: User): UserProfile {
+    let status;
+    if (!user.isOnline) {
+      status = "offline";
+    } else {
+      status = user.status === "invisible" ? "offline" : user.status;
+    }
+
     return {
       id: user.id,
       username: user.account.username,
       displayName: user.account.displayName,
-      status: user.status,
+      status: user.status === "invisible" ? "offline" : user.status,
     };
   }
 

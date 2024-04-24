@@ -1,6 +1,10 @@
 import type { Collection, Db, MongoError } from "mongodb";
 import { Err, Ok } from "resultat";
-import type { User, UserStatus } from "../interfaces/user.js";
+import type {
+  SelectableUserStatus,
+  User,
+  UserStatus,
+} from "../interfaces/user.js";
 import type { IUserModel } from "./user.interface.js";
 
 export class UserModel implements IUserModel {
@@ -189,7 +193,7 @@ export class UserModel implements IUserModel {
     }
   }
 
-  async updateStatus(userId: string, status: UserStatus) {
+  async updateStatus(userId: string, status: SelectableUserStatus) {
     try {
       const updateResult = await this.collection.updateOne(
         { id: userId },
@@ -204,5 +208,19 @@ export class UserModel implements IUserModel {
     } catch (_) {
       return Err("Network Error");
     }
+  }
+
+  async setIsOnline(userId: string, isOnline: boolean) {
+    try {
+      const updateResult = await this.collection.updateOne(
+        { id: userId },
+        {
+          $set: { isOnline },
+        }
+      );
+    } catch (_) {
+      return Err("Network Error");
+    }
+    return Err("xpp");
   }
 }

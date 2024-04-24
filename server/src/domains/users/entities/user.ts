@@ -17,6 +17,7 @@ export function createUser(input: {
       displayName: input.displayName,
       registrationTimestamp: Date.now(),
     },
-    status: "offline",
+    status: "online",
+    isOnline: false,
   };
 }

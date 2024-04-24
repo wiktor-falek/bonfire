@@ -1,4 +1,4 @@
-import type { UserStatus } from "../interfaces/user.js";
+import type { SelectableUserStatus, UserStatus } from "../interfaces/user.js";
 import { Ok } from "resultat";
 import { wsServerClient } from "../../../index.js";
 import type { ProfileSubscriptionStore } from "../../notifications/index.js";
@@ -10,7 +10,7 @@ export class StatusService {
     private profileSubscriptionStore: ProfileSubscriptionStore
   ) {}
 
-  async setStatus(userId: string, status: UserStatus) {
+  async setStatus(userId: string, status: SelectableUserStatus) {
     // Check if status changed to prevent unnecessary notifications.
     // This would be especially bad if user was invisible and went offline.
     const getStatusResult = await this.userModel.getStatus(userId);
@@ -44,7 +44,7 @@ export class StatusService {
         .toClient(subscriberClientId)
         .send("subscription:user-profile:status", {
           profileId: userId,
-          status,
+          status: status === "invisible" ? "offline" : status,
         });
     }
 

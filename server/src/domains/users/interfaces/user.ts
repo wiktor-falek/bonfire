@@ -8,10 +8,13 @@ export type User = {
     registrationTimestamp: number;
     hash: string;
   };
-  status: UserStatus;
+  status: SelectableUserStatus;
+  isOnline: boolean;
 };
 
 export type UserStatus = "online" | "away" | "dnd" | "offline";
+
+export type SelectableUserStatus = Exclude<UserStatus, "offline"> | "invisible";
 
 export type UserProfile = {
   id: string;

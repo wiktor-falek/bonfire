@@ -55,7 +55,8 @@ class WebSocketApp {
       onListening?: () => any;
       onConnection?: (
         client: WsClient<ServerToClientEvents>,
-        req: IncomingMessage
+        req: IncomingMessage,
+        userId: string
       ) => any;
       onClose?: (client: WsClient<ServerToClientEvents>, userId: string) => any;
     }
@@ -72,7 +73,6 @@ class WebSocketApp {
 
     wss.on("connection", async (ws, req) => {
       const client = socketClientManager.addClient(ws);
-      options.onConnection?.(client, req);
 
       const sessionId = getCookie("sessionId", req.headers.cookie);
 
@@ -89,12 +89,12 @@ class WebSocketApp {
       const session = result.val;
       const { userId } = session;
 
-      console.log(`Client ${client.id} connected`);
-
       // Subscribe the client to a personal namespace of the user.
       // This enables sending events to all connected devices of that user,
       // by using client.to(`user_${userId}`).send(...)
       client.subscribe(`user_${userId}`);
+
+      options.onConnection?.(client, req, userId);
 
       ws.on("close", () => {
         socketClientManager.deleteClient(client);
