@@ -1,23 +1,23 @@
 import { Err, Ok } from "resultat";
-import type { User, UserProfile } from "../interfaces/user.js";
+import type { User, UserProfile, UserStatus } from "../interfaces/user.js";
 import type { IUserModel } from "../models/user.interface.js";
 
 export class UserService {
   constructor(private userModel: IUserModel) {}
 
   private userToProfile(user: User): UserProfile {
-    let status;
-    if (!user.isOnline) {
+    let status: UserStatus;
+    if (!user.isOnline || user.status === "invisible") {
       status = "offline";
     } else {
-      status = user.status === "invisible" ? "offline" : user.status;
+      status = user.status;
     }
 
     return {
       id: user.id,
       username: user.account.username,
       displayName: user.account.displayName,
-      status: user.status === "invisible" ? "offline" : user.status,
+      status,
     };
   }
 
