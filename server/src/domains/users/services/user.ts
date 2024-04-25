@@ -7,7 +7,7 @@ export class UserService {
 
   private userToProfile(user: User): UserProfile {
     let status: UserStatus;
-    if (!user.isOnline || user.status === "invisible") {
+    if (user.status === "invisible") {
       status = "offline";
     } else {
       status = user.status;

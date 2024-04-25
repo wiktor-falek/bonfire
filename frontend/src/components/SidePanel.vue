@@ -7,6 +7,7 @@ import OverlayModal from "./OverlayModal.vue";
 import emitter from "../emitter";
 import {
   patchUserStatus,
+  SelectableUserStatus,
   type UserProfile,
   type UserStatus,
 } from "../api/users";
@@ -87,14 +88,14 @@ function handleCloseProfileSettingsModal() {
 }
 
 const previousStatus = ref<UserStatus>();
-async function setStatus(status: UserStatus) {
+async function setStatus(status: SelectableUserStatus) {
   if (!userStore.userProfile) return;
 
   // store previous status to allow reverting on network error
   previousStatus.value = userStore.userProfile.status;
 
   // optimistic update
-  userStore.userProfile.status = status;
+  userStore.userProfile.status = status === "invisible" ? "offline" : status;
 
   const result = await patchUserStatus(status);
 
@@ -282,7 +283,7 @@ async function setStatus(status: UserStatus) {
       <button @click="setStatus('online')">Online</button>
       <button @click="setStatus('away')">Away</button>
       <button @click="setStatus('dnd')">Do Not Disturb</button>
-      <button @click="setStatus('offline')">Invisible</button>
+      <button @click="setStatus('invisible')">Invisible</button>
     </div>
   </RelativeModal>
 

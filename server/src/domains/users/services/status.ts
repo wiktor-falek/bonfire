@@ -48,6 +48,6 @@ export class StatusService {
         });
     }
 
-    return Ok(status);
+    return Ok<UserStatus>(status === "invisible" ? "offline" : status);
   }
 }

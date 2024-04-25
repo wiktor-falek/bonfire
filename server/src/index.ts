@@ -6,7 +6,6 @@ import {
   mongoDb,
   profileSubscriptionStore,
   sessionStore,
-  statusService,
   userModel,
 } from "./instances.js";
 import { createServer } from "http";
@@ -26,6 +25,7 @@ export const [wsServerClient, socketClientManager] = wsApp.register(wss, {
   onConnection: (client, req, userId) => {
     console.log(`Client ${client.id} connected`);
     userModel.setIsOnline(userId, true);
+    console.log("going online")
   },
   onClose: (client, userId) => {
     profileSubscriptionStore.deleteAllSubscriptions(client.id);
@@ -39,6 +39,7 @@ export const [wsServerClient, socketClientManager] = wsApp.register(wss, {
       // TODO: user being online/offline should be persisted separately
       // so the status would be what user chooses to appear as
       // but if no devices are connected it will always be offline
+      console.log("going offline")
       userModel.setIsOnline(userId, false);
     }
   },

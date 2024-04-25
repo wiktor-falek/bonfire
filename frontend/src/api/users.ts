@@ -3,6 +3,8 @@ import wrapAxiosResult from "./utils/wrapAxiosResult";
 
 export type UserStatus = "online" | "away" | "dnd" | "offline";
 
+export type SelectableUserStatus = Exclude<UserStatus, "offline"> | "invisible";
+
 export type UserProfile = {
   id: string;
   username: string;
@@ -25,7 +27,7 @@ export const getUserProfilesByIds = (userIds: string[]) =>
     )
   )();
 
-export const patchUserStatus = (status: UserStatus) =>
+export const patchUserStatus = (status: SelectableUserStatus) =>
   wrapAxiosResult(() =>
     api.patch<{ status: UserStatus }>("/api/users/status", {
       status,
