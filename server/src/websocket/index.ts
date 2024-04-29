@@ -8,8 +8,6 @@ import { WsClient, WsServerClient } from "./wsClient.js";
 import type { AnyZodObject } from "zod";
 import type { IncomingMessage } from "node:http";
 
-// TODO: any strict zod object
-
 class WebSocketApp {
   private handlers: {
     [key: string]: {
@@ -27,7 +25,7 @@ class WebSocketApp {
     this.registered = false;
   }
 
-  bind(
+  register(
     eventType: string,
     cb: (
       client: WsClient<ServerToClientEvents>,
@@ -37,7 +35,7 @@ class WebSocketApp {
     schema: AnyZodObject
   ) {
     if (this.registered) {
-      throw new Error("Cannot bind after registering");
+      throw new Error("Cannot register event handler after listening");
     }
 
     if (eventType in this.handlers) {
@@ -49,7 +47,7 @@ class WebSocketApp {
     return this;
   }
 
-  register(
+  listen(
     wss: WebSocketServer,
     options: {
       onListening?: () => any;
@@ -130,8 +128,6 @@ class WebSocketApp {
           return client.send("error", { reason: "Invalid Schema" });
         }
 
-        // TODO: figure out a way to attach data to a client
-        // and move the business logic to onConnection callback
         cb(client, validation.data, userId);
       });
     });

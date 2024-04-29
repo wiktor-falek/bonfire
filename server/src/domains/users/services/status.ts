@@ -34,7 +34,7 @@ export class StatusService {
       return updateStatusResult;
     }
 
-    // TODO: move this logic to a service once implemented
+    // TODO: move to a notifcation service
     const subscribers = this.profileSubscriptionStore.getSubscribers(userId);
 
     const length = subscribers.length;

@@ -158,8 +158,6 @@ export class UserModel implements IUserModel {
         }
       );
 
-      console.log({ result });
-
       if (!result.modifiedCount) {
         return Err("Already verified or invalid email");
       }
@@ -176,18 +174,18 @@ export class UserModel implements IUserModel {
 
   async getStatus(userId: string) {
     try {
-      const status = await this.collection.findOne<UserStatus>(
+      const result = await this.collection.findOne<{ status: UserStatus }>(
         {
           id: userId,
         },
-        { projection: { status: 1 } }
+        { projection: { _id: 0, status: 1 } }
       );
 
-      if (status === null) {
+      if (result === null) {
         return Err("User does not exist" as const);
       }
 
-      return Ok(status);
+      return Ok<UserStatus>(result.status);
     } catch (_) {
       return Err("Network Error" as const);
     }
