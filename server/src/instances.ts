@@ -21,6 +21,7 @@ import {
   ProfileSubscriptionControllerWS,
   ProfileSubscriptionStore,
 } from "./domains/notifications/index.js";
+import { NotificationService } from "./domains/notifications/services/notifications.js";
 import {
   FriendInviteModel,
   RelationControllerHTTP,
@@ -34,6 +35,7 @@ import {
   UserModel,
   UserService,
 } from "./domains/users/index.js";
+import { wsServerClient } from "./index.js";
 
 // Database connections
 const [redisClient, mongoClient] = await Promise.all([
@@ -68,12 +70,13 @@ export const authService = new AuthService(
   sessionStore,
   emailService
 );
-export const messageService = new MessageService(channelModel);
-export const userService = new UserService(userModel);
-export const statusService = new StatusService(
-  userModel,
+export const notificationService = new NotificationService(
+  // wsServerClient,
   profileSubscriptionStore
 );
+export const messageService = new MessageService(channelModel);
+export const userService = new UserService(userModel);
+export const statusService = new StatusService(userModel, notificationService);
 export const relationService = new RelationService(
   userModel,
   friendInviteModel,

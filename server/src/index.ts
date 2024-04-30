@@ -4,6 +4,7 @@ import cron from "node-cron";
 import createIndexes from "./db/helpers/createIndexes.js";
 import {
   mongoDb,
+  notificationService,
   profileSubscriptionStore,
   sessionStore,
   userModel,
@@ -25,55 +26,38 @@ export const [wsServerClient, socketClientManager] = wsApp.listen(wss, {
     console.log(`WS server listening on ws://localhost:${PORT}`);
   },
   onConnection: (client, req, userId) => {
-    console.log(`Client ${client.id} connected`);
+    console.log(`User ${userId} Client ${client.id} connected`);
+
     userModel.setIsOnline(userId, true);
 
-    userModel.getStatus(userId).then((result) => {
-      if (!result.ok) return;
-      const status = result.val;
+    const devicesConnected = socketClientManager._getClientsFromNamespace(
+      `user_${userId}`
+    ).length;
 
-      // Avoid emitting if appearing offline for
-      if (status === "offline") return;
+    if (devicesConnected === 1) {
+      userModel.getStatus(userId).then((result) => {
+        if (!result.ok) return;
+        const status = result.val;
 
-      // TODO: move to a notifcation service
-      const subscribers = profileSubscriptionStore.getSubscribers(userId);
+        // Avoid emitting if appearing offline for user privacy
+        if (status === "offline") return;
 
-      const length = subscribers.length;
-      for (let i = 0; i < length; i++) {
-        const subscriberClientId = subscribers[i]!;
-        wsServerClient
-          .toClient(subscriberClientId)
-          .send("subscription:user-profile:status", {
-            profileId: userId,
-            status,
-          });
-      }
-    });
+        notificationService.notifyUserProfileStatusChange(userId, status);
+      });
+    }
   },
   onClose: (client, userId) => {
+    console.log(`User ${userId} Client ${client.id} disconnected`);
+
     profileSubscriptionStore.deleteAllSubscriptions(client.id);
-    console.log(`Client ${client.id} disconnected`);
 
-    const connectedUserClients = socketClientManager._getClientsFromNamespace(
+    const devicesConnected = socketClientManager._getClientsFromNamespace(
       `user_${userId}`
-    );
+    ).length;
 
-    if (connectedUserClients.length === 0) {
+    if (devicesConnected === 0) {
       userModel.setIsOnline(userId, false);
-
-      // TODO: move to a notifcation service
-      const subscribers = profileSubscriptionStore.getSubscribers(userId);
-
-      const length = subscribers.length;
-      for (let i = 0; i < length; i++) {
-        const subscriberClientId = subscribers[i]!;
-        wsServerClient
-          .toClient(subscriberClientId)
-          .send("subscription:user-profile:status", {
-            profileId: userId,
-            status: "offline",
-          });
-      }
+      notificationService.notifyUserProfileStatusChange(userId, "offline");
     }
   },
 });
