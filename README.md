@@ -6,6 +6,8 @@ A Discord like chatting application built for the sake of learning and experimen
 
 ### Auth
 
+- [x] Registration
+- [x] Automatic login on registration
 - [x] Email authentication
 - [ ] Account verification email
 - [ ] 2FA
@@ -35,6 +37,13 @@ A Discord like chatting application built for the sake of learning and experimen
 ### Messages
 
 - [x] Exchanging direct messages between users
+- [ ] File uploads
+- [ ] Emojis
+- [ ] Reactions
+
+### Voice Chat
+
+- [ ] Voice call between two users
 
 ### Servers
 
@@ -47,20 +56,22 @@ A Discord like chatting application built for the sake of learning and experimen
 ### Notifications
 
 - [ ] Unread messages
+- [ ] Friend requests
 
 ## Technologies used
 
 ### Backend:
 
 - Express
-- Node WebSocket Client (custom API with different kinds of emits and namespaces)
+- Node WebSocket Client (custom API with namespaces and different emits)
 - MongoDB
-- Redis (session management and caching)
+- Redis (managing sessions)
 
 ### Frontend:
 
 - Vue 3
 - CSS
+- Pinia
 - WebSocket API
 
 ## External dependencies
