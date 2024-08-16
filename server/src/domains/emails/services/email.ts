@@ -1,3 +1,4 @@
+import config from "../../../config.js";
 import type { EmailSender } from "../helpers/emailSender.js";
 import type { IEmailService } from "./email.interface.js";
 
@@ -16,7 +17,7 @@ export class EmailService implements IEmailService {
       subject: "Welcome to Bonfire — Activate your account",
       text:
         `Hi ${data.username}, Click here to confirm your email address and activate your account\n` +
-        `http://localhost:3000/auth/verify/${data.verificationToken}\n` +
+        `${config.FRONTEND_URL}/verify?token=${data.verificationToken}\n` +
         `This link will expire in 24 hours.`,
     });
   }
@@ -33,7 +34,7 @@ export class EmailService implements IEmailService {
       subject: "Activate your account",
       text:
         `Hi ${data.username}, Click here to confirm your email address and activate your account\n` +
-        `http://localhost:3000/auth/verify/${data.verificationToken}\n` +
+        `${config.FRONTEND_URL}/?token=${data.verificationToken}\n` +
         `This link will expire in 24 hours.`,
     });
   }

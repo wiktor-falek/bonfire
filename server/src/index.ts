@@ -11,9 +11,11 @@ import {
 } from "./instances.js";
 import { createServer } from "http";
 import { WebSocketServer } from "ws";
+import config from "./config.js";
+
+console.log(`Running in ${config.NODE_ENV} mode`);
 
 (await createIndexes(mongoDb)).unwrap();
-console.log("Created MongoDB indexes");
 
 const PORT = 3000;
 

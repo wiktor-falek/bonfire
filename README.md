@@ -2,6 +2,13 @@
 
 A Discord like chatting application built for the sake of learning and experimenting.
 
+## TODO
+- [ ] /verify page - success view with link to home page, error view with reason
+- [ ] /friends page - responsive design for mobile
+- [ ] /friends page - Add Friend styling
+- [ ] Finish appearing offline when all devices are disconnected (display the persisted status on going online)
+- [ ] Redis adapter for WebSocket
+
 ## Features
 
 ### Auth
@@ -9,30 +16,35 @@ A Discord like chatting application built for the sake of learning and experimen
 - [x] Registration
 - [x] Automatic login on registration
 - [x] Email authentication
-- [ ] Account verification email
 - [ ] 2FA
 - [ ] Logout
 - [ ] Logout from all devices
 
+### Email
+- [x] Sending account verification email
+- [x] Verifying email by clicking a link
+- [ ] Sending email verification to a different email
+- [ ] Changing email
+- [ ] Account recovery
+
 ### Profile
 
 - [x] Updating status (Online, Away, Dnd, Offline), dispatched to subscribing users in real time
-- [ ] Appear offline when all devices are disconnected (display the persisted status on going online)
 - [ ] Updating display name
-- [ ] About me
+- [ ] About me section
 
 ### User relations
 
 - [x] Friend invite by username
-- [ ] Friend invite by id (by clicking in the users profile)
+- [ ] Friend invite by id (by clicking on a user profile)
 - [ ] Removing a friend
 - [x] Accepting a friend request
 - [x] Rejecting a friend request
 - [x] Creating friend relationship when both users invite each other
 - [x] Creating block relationship when one user blocks the other one
-- [ ] Ignoring incoming messages, friend requests from blocked users
-- [ ] Dispatching invites/accepts/blocks
-- [ ] Notifications on friend invite when not in pending friend requests view
+- [ ] Ignoring incoming messages and friend requests from blocked users
+- [ ] Dispatching invites/accepts/blocks in real time
+- [ ] Notifications on friend invite when outside of pending friend requests UI
 
 ### Messages
 
@@ -65,7 +77,7 @@ A Discord like chatting application built for the sake of learning and experimen
 - Express
 - Node WebSocket Client (custom API with namespaces and different emits)
 - MongoDB
-- Redis (managing sessions)
+- Redis (managing sessions, caching in the future)
 
 ### Frontend:
 

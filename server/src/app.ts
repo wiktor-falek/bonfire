@@ -8,6 +8,7 @@ import {
   messagesRouter,
   channelsRouter,
   relationsRouter,
+  verifyRouter,
 } from "./routes/index.js";
 import config from "./config.js";
 
@@ -36,6 +37,7 @@ app.use(morgan(":status :method :url :response-time[2] ms"));
 
 // Routers
 app.use("/auth", authRouter);
+app.use("/verify", verifyRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/messages", messagesRouter);
 app.use("/api/channels", channelsRouter);

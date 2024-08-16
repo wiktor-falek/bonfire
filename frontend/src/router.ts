@@ -6,6 +6,7 @@ import App from "./views/app/App.vue";
 import AppHome from "./views/app/AppHome.vue";
 import AppDirectMessageChannel from "./views/app/AppDirectMessageChannel.vue";
 import AppFriends from "./views/app/AppFriends.vue";
+import Verify from "./views/app/Verify.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -35,6 +36,14 @@ const router = createRouter({
         skipAuth: true,
         redirectToAppIfAuth: true,
       },
+    },
+    {
+      path: "/verify",
+      name: "verify",
+      component: Verify,
+      meta: {
+        skipAuth: true,
+      }
     },
     {
       path: "/app",

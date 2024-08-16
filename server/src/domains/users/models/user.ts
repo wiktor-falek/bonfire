@@ -103,7 +103,7 @@ export class UserModel implements IUserModel {
       const count = await this.collection.countDocuments(
         {
           "account.email": email,
-          "account.verifiedEmail": true,
+          "account.hasVerifiedEmail": true,
         },
         { limit: 1 }
       );
@@ -154,7 +154,7 @@ export class UserModel implements IUserModel {
   }
 
   /**
-   * Sets `account.verifiedEmail` to true if the user uses the provided email,
+   * Sets `account.hasVerifiedEmail` to true if the user uses the provided email,
    * and no user has verified provided email.
    */
   async verifyEmail(username: string, email: string) {
@@ -163,10 +163,10 @@ export class UserModel implements IUserModel {
         {
           "account.username": username,
           "account.email": email,
-          "account.verifiedEmail": false,
+          "account.hasVerifiedEmail": false,
         },
         {
-          $set: { "account.verifiedEmail": true },
+          $set: { "account.hasVerifiedEmail": true },
         }
       );
 

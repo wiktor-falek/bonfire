@@ -2,7 +2,7 @@ export type User = {
   id: string;
   account: {
     email: string;
-    verifiedEmail: boolean;
+    hasVerifiedEmail: boolean;
     username: string;
     displayName: string;
     registrationTimestamp: number;

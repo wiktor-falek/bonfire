@@ -11,7 +11,7 @@ export function createUser(input: {
     id: generateNumericId(21),
     account: {
       email: input.email,
-      verifiedEmail: false,
+      hasVerifiedEmail: false,
       hash: input.hash,
       username: input.username,
       displayName: input.displayName,
