@@ -35,7 +35,6 @@ import {
   UserModel,
   UserService,
 } from "./domains/users/index.js";
-import { wsServerClient } from "./index.js";
 
 // Database connections
 const [redisClient, mongoClient] = await Promise.all([

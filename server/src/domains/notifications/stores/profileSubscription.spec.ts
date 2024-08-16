@@ -1,13 +1,13 @@
-import { describe, it, afterEach, expect } from "vitest";
-
+import { describe, it, beforeEach, expect } from "vitest";
 import { ProfileSubscriptionStore } from "./profileSubscription.js";
 
-let store = new ProfileSubscriptionStore();
-afterEach(() => {
-  store = new ProfileSubscriptionStore();
-});
-
 describe("subscription store", () => {
+  let store: ProfileSubscriptionStore;
+
+  beforeEach(() => {
+    store = new ProfileSubscriptionStore();
+  });
+
   it("adds and retrieves subscription", () => {
     const clientId = "clientId-1";
     const profileIds = ["profileId-1", "profileId-2", "profileId-3"];

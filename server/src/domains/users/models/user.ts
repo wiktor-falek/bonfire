@@ -17,6 +17,18 @@ export class UserModel implements IUserModel {
   }
 
   async createUser(user: User) {
+    const emailIsInUseResult = await this.emailIsVerified(user.account.email);
+    
+    if (!emailIsInUseResult.ok) {
+      return emailIsInUseResult
+    };
+
+    const emailIsInUse = emailIsInUseResult.val;
+
+    if (emailIsInUse) {
+      return Err("Email is already in use");
+    }
+
     try {
       const result = await this.collection.insertOne(user);
 

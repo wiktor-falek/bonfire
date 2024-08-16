@@ -34,6 +34,8 @@ export const [wsServerClient, socketClientManager] = wsApp.listen(wss, {
       `user_${userId}`
     ).length;
 
+    console.log({ devicesConnected });
+
     if (devicesConnected === 1) {
       userModel.getStatus(userId).then((result) => {
         if (!result.ok) return;

@@ -1,0 +1,12 @@
+{
+  "name": "bonfire",
+  "version": "1.0.0",
+  "description": "A Discord like chatting application built for the sake of learning and experimenting.",
+  "scripts": {
+    "install": "npm install frontend/ server/",
+    "build": "cd frontend/ && npm run build && cd ../server && npm run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

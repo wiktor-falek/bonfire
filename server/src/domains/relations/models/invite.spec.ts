@@ -1,16 +1,33 @@
-import type { Db } from "mongodb";
-import { assert, beforeEach, describe, expect, it } from "vitest";
+import type { Db, MongoClient } from "mongodb";
+import {
+  afterAll,
+  afterEach,
+  assert,
+  beforeEach,
+  describe,
+  expect,
+  it,
+} from "vitest";
 import { getInMemoryMongoDb } from "../../../tests/utils.js";
 import { createFriendInvite } from "../entities/invite.js";
 import { FriendInviteModel } from "./invite.js";
+import type { MongoMemoryServer } from "mongodb-memory-server";
 
 describe("friend invite operations", async () => {
-  let inMemoryDb: Db;
+  let mongoServer: MongoMemoryServer;
+  let mongoDb: Db;
   let friendInviteModel: FriendInviteModel;
 
   beforeEach(async () => {
-    inMemoryDb = await getInMemoryMongoDb();
-    friendInviteModel = new FriendInviteModel(inMemoryDb);
+    const [server, db] = await getInMemoryMongoDb();
+    mongoServer = server;
+    mongoDb = db;
+    friendInviteModel = new FriendInviteModel(db);
+  });
+
+  afterEach(async () => {
+    await mongoDb.dropDatabase();
+    await mongoServer.stop();
   });
 
   it("creates an invite", async () => {
