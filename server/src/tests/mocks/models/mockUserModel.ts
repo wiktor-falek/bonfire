@@ -2,6 +2,7 @@ import { Ok, type Result } from "resultat";
 import {
   createUser,
   type IUserModel,
+  type SelectableUserStatus,
   type User,
   type UserStatus,
 } from "../../../domains/users/index.js";
@@ -58,7 +59,11 @@ class MockUserModel implements IUserModel {
     return Promise.resolve(Ok("online"));
   }
 
-  updateStatus(userId: string, status: UserStatus) {
+  updateStatus(userId: string, status: SelectableUserStatus) {
+    return Promise.resolve(Ok());
+  }
+
+  setIsOnline(userId: string, isOnline: boolean) {
     return Promise.resolve(Ok());
   }
 }

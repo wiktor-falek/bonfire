@@ -1,6 +1,10 @@
 import type { Collection, Db, MongoError } from "mongodb";
 import { Err, Ok } from "resultat";
-import type { User, UserStatus } from "../interfaces/user.js";
+import type {
+  SelectableUserStatus,
+  User,
+  UserStatus,
+} from "../interfaces/user.js";
 import type { IUserModel } from "./user.interface.js";
 
 export class UserModel implements IUserModel {
@@ -13,6 +17,18 @@ export class UserModel implements IUserModel {
   }
 
   async createUser(user: User) {
+    const emailIsInUseResult = await this.emailIsVerified(user.account.email);
+    
+    if (!emailIsInUseResult.ok) {
+      return emailIsInUseResult
+    };
+
+    const emailIsInUse = emailIsInUseResult.val;
+
+    if (emailIsInUse) {
+      return Err("Email is already in use");
+    }
+
     try {
       const result = await this.collection.insertOne(user);
 
@@ -154,8 +170,6 @@ export class UserModel implements IUserModel {
         }
       );
 
-      console.log({ result });
-
       if (!result.modifiedCount) {
         return Err("Already verified or invalid email");
       }
@@ -172,24 +186,24 @@ export class UserModel implements IUserModel {
 
   async getStatus(userId: string) {
     try {
-      const status = await this.collection.findOne<UserStatus>(
+      const result = await this.collection.findOne<{ status: UserStatus }>(
         {
           id: userId,
         },
-        { projection: { status: 1 } }
+        { projection: { _id: 0, status: 1 } }
       );
 
-      if (status === null) {
+      if (result === null) {
         return Err("User does not exist" as const);
       }
 
-      return Ok(status);
+      return Ok<UserStatus>(result.status);
     } catch (_) {
       return Err("Network Error" as const);
     }
   }
 
-  async updateStatus(userId: string, status: UserStatus) {
+  async updateStatus(userId: string, status: SelectableUserStatus) {
     try {
       const updateResult = await this.collection.updateOne(
         { id: userId },
@@ -204,5 +218,19 @@ export class UserModel implements IUserModel {
     } catch (_) {
       return Err("Network Error");
     }
+  }
+
+  async setIsOnline(userId: string, isOnline: boolean) {
+    try {
+      const updateResult = await this.collection.updateOne(
+        { id: userId },
+        {
+          $set: { isOnline },
+        }
+      );
+    } catch (_) {
+      return Err("Network Error");
+    }
+    return Err("xpp");
   }
 }

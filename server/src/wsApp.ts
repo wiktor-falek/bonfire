@@ -7,19 +7,19 @@ import { userProfileIdsSchema } from "./domains/users/index.js";
 import { directMessageSchema } from "./domains/channels/index.js";
 
 const wsApp = new WebSocketApp()
-  .bind(
+  .register(
     "chat:direct-message",
     chatControllerWS.directMessage.bind(chatControllerWS),
     directMessageSchema
   )
-  .bind(
+  .register(
     "subscribe:user-profiles",
     profileSubscriptionControllerWS.subscribeToUserProfiles.bind(
       profileSubscriptionControllerWS
     ),
     userProfileIdsSchema
   )
-  .bind(
+  .register(
     "unsubscribe:user-profiles",
     profileSubscriptionControllerWS.unsubscribeFromUserProfiles.bind(
       profileSubscriptionControllerWS

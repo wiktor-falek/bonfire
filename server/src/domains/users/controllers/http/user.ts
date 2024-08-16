@@ -12,7 +12,7 @@ export class UserControllerHTTP {
   async getCurrentUserProfile(req: Request, res: Response) {
     const userId = res.locals.user.id;
 
-    const result = await this.userService.getUserProfileById(userId);
+    const result = await this.userService.getCurrentUserProfileById(userId);
 
     if (!result.ok) {
       return res.status(400).json({ error: result.err });

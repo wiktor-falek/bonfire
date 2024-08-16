@@ -9,13 +9,23 @@ import {
   channelsRouter,
   relationsRouter,
 } from "./routes/index.js";
+import config from "./config.js";
 
 const app = express();
+app.options(
+  "*",
+  cors({
+    // origin: config.FRONTEND_URL
+    origin: true,
+    credentials: true,
+  })
+);
 
 // Middlewares
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    // origin: config.FRONTEND_URL
+    origin: true,
     credentials: true,
   })
 );
