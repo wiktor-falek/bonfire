@@ -1,17 +1,17 @@
 import config from "./config.js";
 import { Mongo, Redis } from "./db/index.js";
-import { VerificationControllerHTTP } from "./domains/auth/controllers/http/verification.js";
+import { VerificationControllerHttp } from "./domains/auth/controllers/http/verification.js";
 import {
-  AuthControllerHTTP,
+  AuthControllerHttp,
   AuthService,
   EmailVerificationService,
   SessionStore,
 } from "./domains/auth/index.js";
 import {
-  ChannelControllerHTTP,
+  ChannelControllerHttp,
   ChannelModel,
   ChatControllerWS,
-  MessageControllerHTTP,
+  MessageControllerHttp,
   MessageService,
 } from "./domains/channels/index.js";
 import { EmailSender } from "./domains/emails/helpers/emailSender.js";
@@ -24,14 +24,14 @@ import {
 import { NotificationService } from "./domains/notifications/services/notifications.js";
 import {
   FriendInviteModel,
-  RelationControllerHTTP,
+  RelationControllerHttp,
   RelationModel,
   RelationService,
 } from "./domains/relations/index.js";
 import {
-  StatusControllerHTTP,
+  StatusControllerHttp,
   StatusService,
-  UserControllerHTTP,
+  UserControllerHttp,
   UserModel,
   UserService,
 } from "./domains/users/index.js";
@@ -84,22 +84,22 @@ export const relationService = new RelationService(
 );
 
 // HTTP Controllers
-export const authControllerHTTP = new AuthControllerHTTP(authService);
-export const verificationControllerHTTP = new VerificationControllerHTTP(
+export const authControllerHttp = new AuthControllerHttp(authService);
+export const verificationControllerHttp = new VerificationControllerHttp(
   emailVerificationService
 );
-export const userControllerHTTP = new UserControllerHTTP(userService);
-export const channelControllerHTTP = new ChannelControllerHTTP(
+export const userControllerHttp = new UserControllerHttp(userService);
+export const channelControllerHttp = new ChannelControllerHttp(
   channelModel,
   userService
 );
-export const messageControllerHTTP = new MessageControllerHTTP(messageService);
-export const relationControllerHTTP = new RelationControllerHTTP(
+export const messageControllerHttp = new MessageControllerHttp(messageService);
+export const relationControllerHttp = new RelationControllerHttp(
   relationService
 );
-export const statusControllerHTTP = new StatusControllerHTTP(statusService);
+export const statusControllerHttp = new StatusControllerHttp(statusService);
 
-// WS Controllers
+// WebSocket Controllers
 export const chatControllerWS = new ChatControllerWS(messageService);
 export const profileSubscriptionControllerWS =
   new ProfileSubscriptionControllerWS(profileSubscriptionStore);

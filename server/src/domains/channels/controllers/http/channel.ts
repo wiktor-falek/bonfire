@@ -4,7 +4,7 @@ import type { UserService } from "../../../users/index.js";
 import type { ValidatedRequest } from "../../../../types.js";
 import type { getOtherUserProfileInDirectMessageChannelSchema } from "../../validators/channel.js";
 
-export class ChannelControllerHTTP {
+export class ChannelControllerHttp {
   constructor(
     private channelModel: ChannelModel,
     private userService: UserService

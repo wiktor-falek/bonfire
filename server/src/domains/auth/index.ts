@@ -1,4 +1,4 @@
-export { AuthControllerHTTP } from "./controllers/http/auth.js";
+export { AuthControllerHttp } from "./controllers/http/auth.js";
 export * from "./entities/session.js";
 export * from "./interfaces/session.js";
 export { AuthService } from "./services/auth.js";

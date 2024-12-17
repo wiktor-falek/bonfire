@@ -3,7 +3,7 @@ import type { MessageService } from "../../services/message.js";
 import type { getMessageSchema, postMessageSchema } from "../../validators/message.js";
 import type { ValidatedRequest } from "../../../../types.js";
 
-export class MessageControllerHTTP {
+export class MessageControllerHttp {
   constructor(private messageService: MessageService) {}
 
   async getMessages(

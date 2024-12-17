@@ -7,7 +7,7 @@ import type {
 import { type AuthService } from "../../services/auth.js";
 import config from "../../../../config.js";
 
-export class AuthControllerHTTP {
+export class AuthControllerHttp {
   constructor(private authService: AuthService) {}
 
   async login(req: ValidatedRequest<typeof postLoginSchema>, res: Response) {

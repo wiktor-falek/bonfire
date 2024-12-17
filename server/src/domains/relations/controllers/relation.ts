@@ -10,7 +10,7 @@ import {
 } from "../validators/relation.js";
 import { RelationService } from "../services/relation.js";
 
-export class RelationControllerHTTP {
+export class RelationControllerHttp {
   constructor(private relationService: RelationService) {}
 
   async getAllUserRelations(req: Request, res: Response) {

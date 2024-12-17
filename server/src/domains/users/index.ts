@@ -1,5 +1,5 @@
-export { StatusControllerHTTP } from "./controllers/http/status.js";
-export { UserControllerHTTP } from "./controllers/http/user.js";
+export { StatusControllerHttp } from "./controllers/http/status.js";
+export { UserControllerHttp } from "./controllers/http/user.js";
 export * from "./entities/user.js";
 export type * from "./interfaces/user.js";
 export type * from "./models/user.interface.js";

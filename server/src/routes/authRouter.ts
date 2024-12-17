@@ -3,7 +3,7 @@ import {
   postLoginSchema,
   postRegisterSchema,
 } from "../domains/auth/validators/auth.js";
-import { authControllerHTTP } from "../instances.js";
+import { authControllerHttp } from "../instances.js";
 import validate from "../middlewares/validate.js";
 
 export const router = Router();
@@ -11,10 +11,10 @@ export const router = Router();
 router.post(
   "/login",
   validate(postLoginSchema),
-  authControllerHTTP.login.bind(authControllerHTTP)
+  authControllerHttp.login.bind(authControllerHttp)
 );
 router.post(
   "/register",
   validate(postRegisterSchema),
-  authControllerHTTP.register.bind(authControllerHTTP)
+  authControllerHttp.register.bind(authControllerHttp)
 );

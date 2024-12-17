@@ -6,7 +6,7 @@ import {
   type getUserProfileByIdSchema,
 } from "../../validators/user.js";
 
-export class UserControllerHTTP {
+export class UserControllerHttp {
   constructor(private userService: UserService) {}
 
   async getCurrentUserProfile(req: Request, res: Response) {

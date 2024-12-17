@@ -1,4 +1,4 @@
-export { RelationControllerHTTP } from "./controllers/relation.js";
+export { RelationControllerHttp } from "./controllers/relation.js";
 export * from "./entities/invite.js";
 export * from "./entities/relation.js";
 export { FriendInviteModel } from "./models/invite.js";

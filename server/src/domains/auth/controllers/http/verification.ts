@@ -3,7 +3,7 @@ import type { ValidatedRequest } from "../../../../types.js";
 import { type EmailVerificationService } from "../../services/emailVerification.js";
 import { postVerifyToken } from "../../validators/verify.js";
 
-export class VerificationControllerHTTP {
+export class VerificationControllerHttp {
   constructor(private emailVerificationService: EmailVerificationService) {}
 
   async verifyToken(
