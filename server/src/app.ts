@@ -16,8 +16,7 @@ const app = express();
 app.options(
   "*",
   cors({
-    // origin: config.FRONTEND_URL
-    origin: true,
+    origin: ["https://" + config.FRONTEND_URL, "https://www." + config.FRONTEND_URL],
     credentials: true,
   })
 );
@@ -25,8 +24,7 @@ app.options(
 // Middlewares
 app.use(
   cors({
-    // origin: config.FRONTEND_URL
-    origin: true,
+    origin: ["https://" + config.FRONTEND_URL, "https://www." + config.FRONTEND_URL],
     credentials: true,
   })
 );

@@ -39,7 +39,7 @@ import {
 // Database connections
 const [redisClient, mongoClient] = await Promise.all([
   new Redis("redis://localhost:6379").connectOrThrow(),
-  new Mongo("mongodb://localhost:27017").connectOrThrow(),
+  new Mongo("mongodb://127.0.0.1:27017").connectOrThrow(),
 ]);
 
 // Databases
