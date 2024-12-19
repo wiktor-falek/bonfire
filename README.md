@@ -3,11 +3,23 @@
 A Discord like chatting application built for the sake of learning and experimenting.
 
 ## TODO
-- [ ] /verify page - success view with link to home page, error view with reason
-- [ ] /friends page - responsive design for mobile
+- [ ] Chat features
+  - [ ] Delete your message
+  - [ ] Multiline text input
+- [ ] Profile pictures - default and custom
+- [ ] Profile click closing modal when modal is open
+- [ ] Profile modal styling
+- [ ] Finish appearing offline when all devices are disconnected
 - [ ] /friends page - Add Friend styling
-- [ ] Finish appearing offline when all devices are disconnected (display the persisted status on going online)
+- [ ] /friends page - responsive design for mobile
+- [ ] Add/Pending/Remove friend in DMs
+- [ ] Get rid of console errors
+- [ ] Send message from my account whoever signs up (Chingu reviewer onboarding)
+
+## Future TODO
+- [ ] /verify page - success view with link to home page, error view with reason
 - [ ] Redis adapter for WebSocket
+- [ ] Socket reconnect mechanism - get up to date state
 
 ## Features
 
