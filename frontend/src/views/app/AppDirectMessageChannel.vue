@@ -212,9 +212,9 @@ watch(props, async () => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  /* background-color: #333333; */
   gap: 8px;
   overflow-y: scroll;
+  user-select: text;
 }
 
 .message {
