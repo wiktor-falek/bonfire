@@ -13,21 +13,19 @@ import {
 import config from "./config.js";
 
 const app = express();
-app.options(
-  "*",
-  cors({
-    origin: ["https://" + config.FRONTEND_URL, "https://www." + config.FRONTEND_URL],
-    credentials: true,
-  })
-);
+
+const corsConfig = cors({
+  origin:
+    config.NODE_ENV === "production"
+      ? ["https://" + config.FRONTEND_URL, "https://www." + config.FRONTEND_URL]
+      : "http://localhost:5173",
+  credentials: true,
+});
+
+app.options("*", corsConfig);
 
 // Middlewares
-app.use(
-  cors({
-    origin: ["https://" + config.FRONTEND_URL, "https://www." + config.FRONTEND_URL],
-    credentials: true,
-  })
-);
+app.use(corsConfig);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
