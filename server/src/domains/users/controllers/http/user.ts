@@ -42,9 +42,9 @@ export class UserControllerHttp {
 
   async getUserProfiles(req: Request, res: Response) {
     res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
-    // TODO: find more flexible solution for validating query in validation layer
-    const _userIds = req.query.userIds?.toString();
 
+    // TODO: find a flexible solution for validating query in validation layer
+    const _userIds = req.query.userIds?.toString();
     const validation = userProfilesSchema.safeParse(
       JSON.parse(_userIds ?? "[]")
     );

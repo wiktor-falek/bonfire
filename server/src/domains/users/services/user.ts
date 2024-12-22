@@ -5,10 +5,9 @@ import type { IUserModel } from "../models/user.interface.js";
 export class UserService {
   constructor(private userModel: IUserModel) {}
 
-  // TODO: naming is hard
-  private userToProfile(user: User, flag = false): UserProfile {
+  private userToProfile(user: User, isCurrentUser = false): UserProfile {
     let status: UserStatus;
-    if (user.status === "invisible" || (flag && !user.isOnline)) {
+    if (user.status === "invisible" || (isCurrentUser && !user.isOnline)) {
       status = "offline";
     } else {
       status = user.status;
@@ -21,8 +20,6 @@ export class UserService {
       status,
     };
   }
-
-  // TODO: probably refactor duplicate functions into one private with the flag
 
   async getCurrentUserProfileById(userId: string) {
     const findUserResult = await this.userModel.findById(userId);

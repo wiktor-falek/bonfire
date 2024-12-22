@@ -18,10 +18,10 @@ export class UserModel implements IUserModel {
 
   async createUser(user: User) {
     const emailIsInUseResult = await this.emailIsVerified(user.account.email);
-    
+
     if (!emailIsInUseResult.ok) {
-      return emailIsInUseResult
-    };
+      return emailIsInUseResult;
+    }
 
     const emailIsInUse = emailIsInUseResult.val;
 
@@ -184,6 +184,22 @@ export class UserModel implements IUserModel {
     }
   }
 
+  async setDisplayName(userId: string, displayName: string) {
+    try {
+      const updateResult = await this.collection.updateOne(
+        { id: userId },
+        { $set: { displayName } }
+      );
+
+      if (!updateResult.acknowledged) {
+        return Err("Failed to update display name");
+      }
+      return Ok();
+    } catch (_) {
+      return Err("Network Error");
+    }
+  }
+
   async getStatus(userId: string) {
     try {
       const result = await this.collection.findOne<{ status: UserStatus }>(
@@ -228,9 +244,9 @@ export class UserModel implements IUserModel {
           $set: { isOnline },
         }
       );
+      return Ok();
     } catch (_) {
       return Err("Network Error");
     }
-    return Err("xpp");
   }
 }

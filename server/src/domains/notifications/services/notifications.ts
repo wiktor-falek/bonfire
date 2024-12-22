@@ -20,7 +20,7 @@ export class NotificationService {
         .toClient(subscriberClientId)
         .send("subscription:user-profile:status", {
           profileId: userId,
-          status: "offline",
+          status,
         });
     }
   }
