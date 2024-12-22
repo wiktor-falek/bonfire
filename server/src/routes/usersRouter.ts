@@ -2,7 +2,7 @@ import { Router } from "express";
 import validate from "../middlewares/validate.js";
 import authGuard from "../middlewares/authGuard.js";
 import { getUserProfileByIdSchema } from "../domains/users/validators/user.js";
-import { patchUserStatus } from "../domains/users/validators/status.js";
+import { patchUserDisplayName, patchUserStatus } from "../domains/users/validators/status.js";
 import { userControllerHttp } from "../instances.js";
 import { statusControllerHttp } from "../instances.js";
 
@@ -28,4 +28,10 @@ router.patch(
   "/status",
   validate(patchUserStatus),
   statusControllerHttp.setStatus.bind(statusControllerHttp)
+);
+
+router.patch(
+  "/display-name",
+  validate(patchUserDisplayName),
+  statusControllerHttp.setDisplayName.bind(statusControllerHttp)
 );

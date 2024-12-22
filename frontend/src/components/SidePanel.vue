@@ -6,6 +6,7 @@ import RelativeModal from "./RelativeModal.vue";
 import OverlayModal from "./OverlayModal.vue";
 import emitter from "../emitter";
 import {
+  patchUserDisplayName,
   patchUserStatus,
   SelectableUserStatus,
   type UserProfile,
@@ -107,6 +108,18 @@ async function setStatus(status: SelectableUserStatus) {
     // make sure the state matches the backend
     const canonicalStatus = result.val.status;
     userStore.userProfile.status = canonicalStatus;
+  }
+}
+
+const displayNameEdit = ref(userStore.userProfile?.displayName ?? "");
+async function setDisplayName(displayName: string) {
+  const newDisplayName = displayNameEdit.value;
+  const result = await patchUserDisplayName(newDisplayName);
+
+  if (!result.ok) {
+    // TOOD: handle error
+  } else {
+    userStore.userProfile!.displayName = result.val.displayName;
   }
 }
 </script>
@@ -279,7 +292,11 @@ async function setStatus(status: SelectableUserStatus) {
     @close="handleCloseProfileSettingsModal"
     class="user-card__profile__modal"
   >
-    <div class="user-card__profile__modal__settings">
+    <div class="user-card__profile__modal__profile">
+      <h1>{{ userStore.userProfile?.displayName }}</h1>
+      <input v-model="displayNameEdit" type="text" />
+      <button @click="setDisplayName(displayNameEdit)">Edit</button>
+      <h1>@{{ userStore.userProfile?.username }}</h1>
       <button @click="setStatus('online')">Online</button>
       <button @click="setStatus('away')">Away</button>
       <button @click="setStatus('dnd')">Do Not Disturb</button>
@@ -542,11 +559,11 @@ hr {
   padding: 5px 6px;
 }
 
-.user-card__profile__modal__settings {
-  height: 480px;
-  width: 320px;
+.user-card__profile__modal__profile {
   background-color: #232428;
   border-radius: 12px;
+  width: 320px;
+  height: 480px;
 }
 .user-card__profile__modal {
   position: absolute;
@@ -581,6 +598,7 @@ hr {
   flex-direction: column;
   gap: 2px;
 }
+
 .user-card__profile__text > * {
   line-height: 1;
   font-size: 0.9rem;

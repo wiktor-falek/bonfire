@@ -55,6 +55,10 @@ class MockUserModel implements IUserModel {
     return Promise.resolve(Ok());
   }
 
+  setDisplayName(userId: string, displayName: string) {
+    return Promise.resolve(Ok());
+  }
+
   getStatus(userId: string): Promise<Result<UserStatus, string>> {
     return Promise.resolve(Ok("online"));
   }

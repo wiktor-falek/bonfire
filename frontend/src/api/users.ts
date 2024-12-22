@@ -33,3 +33,10 @@ export const patchUserStatus = (status: SelectableUserStatus) =>
       status,
     })
   )();
+
+export const patchUserDisplayName = (displayName: string) =>
+  wrapAxiosResult(() =>
+    api.patch<{ displayName: string }>("/api/users/display-name", {
+      displayName,
+    })
+  )();

@@ -188,7 +188,7 @@ export class UserModel implements IUserModel {
     try {
       const updateResult = await this.collection.updateOne(
         { id: userId },
-        { $set: { displayName } }
+        { $set: { "account.displayName": displayName } }
       );
 
       if (!updateResult.acknowledged) {
