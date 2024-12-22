@@ -3,9 +3,15 @@
 A Discord like chatting application built for the sake of learning and experimenting.
 
 ## TODO
+
+- [ ] Change display name
 - [ ] Chat features
   - [ ] Delete your message
   - [ ] Multiline text input
+- [ ] Notification on DM while the DM channel is not open
+- [ ] Update Friends changes in real time
+- [ ] Map user id to name from profile store
+- [ ] Notifications for new Pending friend
 - [ ] Profile pictures - default and custom
 - [ ] Profile click closing modal when modal is open
 - [ ] Profile modal styling
@@ -14,9 +20,10 @@ A Discord like chatting application built for the sake of learning and experimen
 - [ ] /friends page - responsive design for mobile
 - [ ] Add/Pending/Remove friend in DMs
 - [ ] Get rid of console errors
-- [ ] Send message from my account whoever signs up (Chingu reviewer onboarding)
+- [ ] Add friend and send message from my account to whoever signs up (Chingu reviewer onboarding)
 
 ## Future TODO
+
 - [ ] /verify page - success view with link to home page, error view with reason
 - [ ] Redis adapter for WebSocket
 - [ ] Socket reconnect mechanism - get up to date state
@@ -33,6 +40,7 @@ A Discord like chatting application built for the sake of learning and experimen
 - [ ] Logout from all devices
 
 ### Email
+
 - [x] Sending account verification email
 - [x] Verifying email by clicking a link
 - [ ] Sending email verification to a different email
