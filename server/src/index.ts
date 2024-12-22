@@ -36,7 +36,7 @@ export const [wsServerClient, socketClientManager] = wsApp.listen(wss, {
       `user_${userId}`
     ).length;
 
-    console.log({ devicesConnected });
+    console.log(`Connected devices of user ${userId}: ${devicesConnected}`);
 
     if (devicesConnected === 1) {
       userModel.getStatus(userId).then((result) => {
@@ -58,6 +58,8 @@ export const [wsServerClient, socketClientManager] = wsApp.listen(wss, {
     const devicesConnected = socketClientManager._getClientsFromNamespace(
       `user_${userId}`
     ).length;
+
+    console.log(`Connected devices of user ${userId}: ${devicesConnected}`);
 
     if (devicesConnected === 0) {
       userModel.setIsOnline(userId, false);
