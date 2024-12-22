@@ -2,6 +2,8 @@
 
 A Discord inspired chatting application built for the sake of learning and experimenting.
 
+LIVE LINK: https://bonfire.hericium.pro
+
 ## BUGS
 
 - [ ] display name disappearing in user card and DMs when updated
