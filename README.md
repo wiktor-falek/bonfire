@@ -1,6 +1,6 @@
 # Bonfire - browser chat application
 
-A Discord like chatting application built for the sake of learning and experimenting.
+A Discord inspired chatting application built for the sake of learning and experimenting.
 
 ## BUGS
 
