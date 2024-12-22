@@ -3,7 +3,8 @@ import type { NotificationService } from "../../notifications/services/notificat
 import type { SelectableUserStatus, UserStatus } from "../interfaces/user.js";
 import type { IUserModel } from "../models/user.interface.js";
 
-export class StatusService {
+// TODO: move to ProfileService?
+export class ProfileService {
   constructor(
     private userModel: IUserModel,
     private notificationService: NotificationService

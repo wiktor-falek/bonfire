@@ -5,6 +5,7 @@ A Discord like chatting application built for the sake of learning and experimen
 ## TODO
 
 - [ ] Change display name
+- [ ] Default to username on setting 0 length displayName
 - [ ] Chat features
   - [ ] Delete your message
   - [ ] Multiline text input

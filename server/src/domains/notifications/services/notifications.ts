@@ -24,4 +24,19 @@ export class NotificationService {
         });
     }
   }
+
+  notifyUserProfileDisplayNameChange(userId: string, displayName: string) {
+    const subscribers = this.profileSubscriptionStore.getSubscribers(userId);
+
+    const length = subscribers.length;
+    for (let i = 0; i < length; i++) {
+      const subscriberClientId = subscribers[i]!;
+      wsServerClient
+        .toClient(subscriberClientId)
+        .send("subscription:user-profile:displayName", {
+          profileId: userId,
+          displayName,
+        });
+    }
+  }
 }

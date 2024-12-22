@@ -11,6 +11,7 @@ export type IUserModel = {
   usernameExists(username: string): Promise<Result<boolean, string>>;
   verifyEmail(username: string, email: string): Promise<Result<unknown, string>>;
   changeEmail(username: string, email: string): Promise<Result<unknown, string>>;
+  setDisplayName(userId: string, displayName: string): Promise<Result<unknown, string>>;
   getStatus(userId: string): Promise<Result<UserStatus, string>>
   updateStatus(userId: string, status: SelectableUserStatus): Promise<Result<unknown, string>>;
   setIsOnline(userId: string, isOnline: boolean): Promise<Result<unknown, string>>;

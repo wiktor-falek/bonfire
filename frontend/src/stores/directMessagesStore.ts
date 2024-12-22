@@ -20,6 +20,18 @@ export const useDirectMessagesStore = defineStore("directMessages", () => {
     profile.status = status;
   });
 
+  socket.on(
+    "subscription:user-profile:displayName",
+    ({ profileId, displayName }) => {
+      const profile = userProfiles.value.find((p) => p.id === profileId);
+      if (!profile) {
+        return console.error("Tried to update subscribed profile, found none");
+      }
+
+      profile.displayName = displayName;
+    }
+  );
+
   const userProfiles = ref<UserProfile[]>([]);
 
   _retrievePersistedUserProfiles().then((profiles) => {

@@ -11,6 +11,7 @@ type ServerToClientEvents = {
   };
   userProfiles: UserProfile[];
   "subscription:user-profile:status": { profileId: string; status: UserStatus };
+  "subscription:user-profile:displayName": { profileId: string; displayName: string };
   "relation:friend-invite": { profile: UserProfile };
 };
 

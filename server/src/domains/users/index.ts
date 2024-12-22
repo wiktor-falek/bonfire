@@ -1,11 +1,10 @@
-export { StatusControllerHttp } from "./controllers/http/status.js";
+export { ProfileControllerHttp } from "./controllers/http/profile.js";
 export { UserControllerHttp } from "./controllers/http/user.js";
 export * from "./entities/user.js";
 export type * from "./interfaces/user.js";
 export type * from "./models/user.interface.js";
 export { UserModel } from "./models/user.js";
-export { StatusService } from "./services/status.js";
+export { ProfileService } from "./services/profile.js";
 export { UserService } from "./services/user.js";
 export * from "./validators/status.js";
 export * from "./validators/user.js";
-

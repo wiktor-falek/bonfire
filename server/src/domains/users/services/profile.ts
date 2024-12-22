@@ -41,4 +41,24 @@ export class ProfileService {
 
     return Ok<UserStatus>(status);
   }
+
+  async setDisplayName(userId: string, displayName: string) {
+    // TODO: prevent mutating db state and emitting on identical displayName
+
+    // TODO: if displayName.length === 0 default to username
+
+    const updateDisplayNameResult = await this.userModel.setDisplayName(
+      userId,
+      displayName
+    );
+
+    this.notificationService.notifyUserProfileDisplayNameChange(
+      userId,
+      displayName
+    );
+
+    if (!updateDisplayNameResult.ok) return updateDisplayNameResult;
+
+    return Ok(displayName);
+  }
 }

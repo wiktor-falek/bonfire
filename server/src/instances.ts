@@ -29,8 +29,8 @@ import {
   RelationService,
 } from "./domains/relations/index.js";
 import {
-  StatusControllerHttp,
-  StatusService,
+  ProfileControllerHttp,
+  ProfileService,
   UserControllerHttp,
   UserModel,
   UserService,
@@ -75,7 +75,7 @@ export const notificationService = new NotificationService(
 );
 export const messageService = new MessageService(channelModel);
 export const userService = new UserService(userModel);
-export const statusService = new StatusService(userModel, notificationService);
+export const statusService = new ProfileService(userModel, notificationService);
 export const relationService = new RelationService(
   userModel,
   friendInviteModel,
@@ -97,7 +97,7 @@ export const messageControllerHttp = new MessageControllerHttp(messageService);
 export const relationControllerHttp = new RelationControllerHttp(
   relationService
 );
-export const statusControllerHttp = new StatusControllerHttp(statusService);
+export const statusControllerHttp = new ProfileControllerHttp(statusService);
 
 // WebSocket Controllers
 export const chatControllerWS = new ChatControllerWS(messageService);
