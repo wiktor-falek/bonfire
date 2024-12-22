@@ -4,40 +4,6 @@ A Discord inspired chatting application built for the sake of learning and exper
 
 LIVE LINK: https://bonfire.hericium.pro
 
-## BUGS
-
-- [ ] display name disappearing in user card and DMs when updated
-
-## TODO
-
-- [x] Change display name
-  - [x] Default to username on inputting 0 length display name
-  - [ ] Show the updated display name everywhere (DM Channel title, Friends, your own User Card)
-- [x] Map user id to name from profile store
-- [ ] Chat features
-  - [ ] Deleting your messages
-    - [ ] Emit to remove existing messages in clients states
-  - [ ] Multiline text input
-- [ ] Removing a Friend
-- [ ] Notification on DM while the DM channel is not open
-- [ ] Update Friends changes in real time
-- [ ] Notifications for new Pending friend
-- [ ] Profile pictures - default and custom
-- [ ] Profile click closing modal when modal is open
-- [ ] Profile modal styling
-- [ ] Finish appearing offline when all devices are disconnected
-- [ ] /friends page - Add Friend styling
-- [ ] /friends page - responsive design for mobile
-- [ ] Add/Pending/Remove friend in DMs
-- [ ] Get rid of console errors
-- [ ] Add friend and send message from my account to whoever signs up (Chingu reviewer onboarding)
-
-## Future TODO
-
-- [ ] /verify page - success view with link to home page, error view with reason
-- [ ] Redis adapter for WebSocket
-- [ ] Socket reconnect mechanism - get up to date state
-
 ## Features
 
 ### Auth
@@ -133,3 +99,37 @@ LIVE LINK: https://bonfire.hericium.pro
 
 See [Frontend README.md](./frontend/README.md) and [Server README.md](./server/README.md)
 for instructions on running the project locally
+
+## BUGS
+
+- [ ] display name disappearing in user card and DMs when updated
+
+## TODO
+
+- [x] Change display name
+  - [x] Default to username on inputting 0 length display name
+  - [ ] Show the updated display name everywhere (DM Channel title, Friends, your own User Card)
+- [x] Map user id to name from profile store
+- [ ] Chat features
+  - [ ] Deleting your messages
+    - [ ] Emit to remove existing messages in clients states
+  - [ ] Multiline text input
+- [ ] Removing a Friend
+- [ ] Notification on DM while the DM channel is not open
+- [ ] Update Friends changes in real time
+- [ ] Notifications for new Pending friend
+- [ ] Profile pictures - default and custom
+- [ ] Profile click closing modal when modal is open
+- [ ] Profile modal styling
+- [ ] Finish appearing offline when all devices are disconnected
+- [ ] /friends page - Add Friend styling
+- [ ] /friends page - responsive design for mobile
+- [ ] Add/Pending/Remove friend in DMs
+- [ ] Get rid of console errors
+- [ ] Add friend and send message from my account to whoever signs up (Chingu reviewer onboarding)
+
+## Future TODO
+
+- [ ] /verify page - success view with link to home page, error view with reason
+- [ ] Redis adapter for WebSocket
+- [ ] Socket reconnect mechanism - get up to date state
