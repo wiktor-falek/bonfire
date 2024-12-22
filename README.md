@@ -3,6 +3,7 @@
 A Discord like chatting application built for the sake of learning and experimenting.
 
 ## BUGS
+
 - [ ] display name disappearing in user card and DMs when updated
 
 ## TODO
@@ -112,11 +113,11 @@ A Discord like chatting application built for the sake of learning and experimen
 - Pinia
 - WebSocket API
 
-## External dependencies
+## Required system level dependencies
 
-- NodeJS v20.11.1 LTS
-- MongoDB
-- Redis
+- NodeJS 18+
+- MongoDB (latest)
+- Redis (latest)
 
 ## Running the project locally
 
