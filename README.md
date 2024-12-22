@@ -2,16 +2,21 @@
 
 A Discord like chatting application built for the sake of learning and experimenting.
 
+## BUGS
+- [ ] display name disappearing in user card and DMs when updated
+
 ## TODO
 
-- [ ] Change display name
-- [ ] Default to username on setting 0 length displayName
+- [x] Change display name
+  - [x] Default to username on inputting 0 length display name
+  - [ ] Show the updated display name everywhere (DM Channel title, Friends, your own User Card)
+- [x] Map user id to name from profile store
 - [ ] Chat features
-  - [ ] Delete your message
+  - [ ] Deleting your messages
+    - [ ] Emit to remove existing messages in clients states
   - [ ] Multiline text input
 - [ ] Notification on DM while the DM channel is not open
 - [ ] Update Friends changes in real time
-- [ ] Map user id to name from profile store
 - [ ] Notifications for new Pending friend
 - [ ] Profile pictures - default and custom
 - [ ] Profile click closing modal when modal is open
