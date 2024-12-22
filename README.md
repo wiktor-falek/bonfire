@@ -16,6 +16,7 @@ A Discord like chatting application built for the sake of learning and experimen
   - [ ] Deleting your messages
     - [ ] Emit to remove existing messages in clients states
   - [ ] Multiline text input
+- [ ] Removing a Friend
 - [ ] Notification on DM while the DM channel is not open
 - [ ] Update Friends changes in real time
 - [ ] Notifications for new Pending friend
@@ -54,10 +55,17 @@ A Discord like chatting application built for the sake of learning and experimen
 - [ ] Changing email
 - [ ] Account recovery
 
+### Realtime Updates
+
+- [x] A two way mapping where each subscriber tracks the profiles they are subscribed to, and each profile tracks the subscribers subscribed to it
+- [x] Multiple devices per user
+- [x] Subscribing to profiles of users when shown on screen
+- [x] Dispatching real time events (e.g. status and display name updates) to all active devices of a user
+
 ### Profile
 
 - [x] Updating status (Online, Away, Dnd, Offline), dispatched to subscribing users in real time
-- [ ] Updating display name
+- [x] Updating display name
 - [ ] About me section
 
 ### User relations
