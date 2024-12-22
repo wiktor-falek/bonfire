@@ -123,7 +123,14 @@ watch(props, async () => {
         <div class="message__image"></div>
         <div class="message__wrapper">
           <div class="message__top">
-            <p class="message__top__display-name">{{ message.senderId }}</p>
+            <p class="message__top__display-name">
+              {{
+                userStore.userProfile?.id === message.senderId
+                  ? userStore.userProfile.displayName
+                  : userProfilesStore.getUserProfile(message.senderId)
+                      ?.displayName
+              }}
+            </p>
             <p class="message__top__date">
               {{ formatTimestamp(message.timestamp) }}
             </p>

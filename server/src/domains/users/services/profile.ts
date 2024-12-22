@@ -1,7 +1,8 @@
-import { Ok } from "resultat";
+import { Err, Ok } from "resultat";
 import type { NotificationService } from "../../notifications/services/notifications.js";
 import type { SelectableUserStatus, UserStatus } from "../interfaces/user.js";
 import type { IUserModel } from "../models/user.interface.js";
+import type { Nullable } from "vitest";
 
 export class ProfileService {
   constructor(
@@ -45,20 +46,27 @@ export class ProfileService {
   async setDisplayName(userId: string, displayName: string) {
     // TODO: prevent mutating db state and emitting on identical displayName
 
-    // TODO: if displayName.length === 0 default to username
+    let newDisplayName: string = displayName;
+    if (displayName.length === 0) {
+      const findUserResult = await this.userModel.findById(userId);
+      if (!findUserResult.ok || findUserResult.val === null)
+        return Err("Failed to find user");
+
+      newDisplayName = findUserResult.val.account.username;
+    }
 
     const updateDisplayNameResult = await this.userModel.setDisplayName(
       userId,
-      displayName
+      newDisplayName
     );
 
     this.notificationService.notifyUserProfileDisplayNameChange(
       userId,
-      displayName
+      newDisplayName
     );
 
     if (!updateDisplayNameResult.ok) return updateDisplayNameResult;
 
-    return Ok(displayName);
+    return Ok(newDisplayName);
   }
 }

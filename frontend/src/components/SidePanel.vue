@@ -294,7 +294,7 @@ async function setDisplayName(displayName: string) {
   >
     <div class="user-card__profile__modal__profile">
       <h1>{{ userStore.userProfile?.displayName }}</h1>
-      <input v-model="displayNameEdit" type="text" />
+      <input v-model="displayNameEdit" type="text" :placeholder="userStore.userProfile?.username" />
       <button @click="setDisplayName(displayNameEdit)">Edit</button>
       <h1>@{{ userStore.userProfile?.username }}</h1>
       <button @click="setStatus('online')">Online</button>
