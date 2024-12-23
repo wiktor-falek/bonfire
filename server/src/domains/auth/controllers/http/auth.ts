@@ -42,7 +42,7 @@ export class AuthControllerHttp {
       email,
       password,
       username,
-      displayName ?? username
+      displayName.length === 0 ? username : displayName
     );
 
     if (!registerResult.ok) {
