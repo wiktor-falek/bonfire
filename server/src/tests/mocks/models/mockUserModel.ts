@@ -70,6 +70,10 @@ class MockUserModel implements IUserModel {
   setIsOnline(userId: string, isOnline: boolean) {
     return Promise.resolve(Ok());
   }
+
+  setAllIsOnline(isOnline: boolean) {
+    return Promise.resolve(Ok());
+  }
 }
 
 export default MockUserModel;

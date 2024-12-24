@@ -15,4 +15,5 @@ export type IUserModel = {
   getStatus(userId: string): Promise<Result<UserStatus, string>>
   updateStatus(userId: string, status: SelectableUserStatus): Promise<Result<unknown, string>>;
   setIsOnline(userId: string, isOnline: boolean): Promise<Result<unknown, string>>;
+  setAllIsOnline(isOnline: boolean): Promise<Result<unknown, string>>;
 };
