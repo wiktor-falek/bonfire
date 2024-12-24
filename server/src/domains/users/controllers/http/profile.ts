@@ -41,6 +41,6 @@ export class ProfileControllerHttp {
       return res.status(400).json({ error: result.err });
     }
 
-    return res.status(200).json({ status: result.val });
+    return res.status(200).json({ displayName: result.val });
   }
 }

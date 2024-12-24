@@ -249,4 +249,19 @@ export class UserModel implements IUserModel {
       return Err("Network Error");
     }
   }
+
+  async setAllIsOnline(isOnline: boolean) {
+    try {
+      const updateResult = await this.collection.updateMany(
+        { isOnline: !isOnline },
+        {
+          $set: { isOnline },
+        }
+      );
+      if (updateResult.matchedCount === updateResult.modifiedCount) return Ok();
+      return Err("Failed to set isOnline of each user");
+    } catch (_) {
+      return Err("Network Error");
+    }
+  }
 }
