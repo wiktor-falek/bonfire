@@ -32,7 +32,7 @@ LIVE LINK: https://bonfire.hericium.pro
 
 ### Profile
 
-- [x] Updating status (Online, Away, Dnd, Offline), dispatched to subscribing users in real time
+- [x] Updating status (Online | Away | Dnd | Offline)
 - [x] Updating display name
 - [ ] About me section
 
@@ -106,6 +106,7 @@ for instructions on running the project locally
 
 ## TODO
 
+- [ ] Redirect to /login on 401
 - [x] Change display name
   - [x] Default to username on inputting 0 length display name
   - [ ] Show the updated display name everywhere (DM Channel title, Friends, your own User Card)
