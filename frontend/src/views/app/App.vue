@@ -23,10 +23,23 @@ socket.on("clientId", (clientId) => {
 onBeforeMount(async () => {
   socket.connect();
 
-  const getCurrentProfileResult = await getCurrentProfile();
+  const retryGetProfile = async (retries = 3, delay = 500) => {
+    for (let i = 0; i < retries - 1; i++) {
+      const getCurrentProfileResult = await getCurrentProfile();
+      if (getCurrentProfileResult.ok) return getCurrentProfileResult;
+      await new Promise((resolve) => setTimeout(resolve, delay * (i + 1)));
+    }
+    return getCurrentProfile();
+  };
+
+  const getCurrentProfileResult = await retryGetProfile();
+
   if (getCurrentProfileResult.ok) {
     const profile = getCurrentProfileResult.val;
     userStore.setUserProfile(profile);
+  } else {
+    console.error(getCurrentProfileResult.err);
+    // TODO: error screen
   }
 
   const getRelationsResult = await getRelations();
