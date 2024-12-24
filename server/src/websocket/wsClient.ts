@@ -127,7 +127,7 @@ export class WsClient<
     data: Events[K]
   ) {
     const clients =
-      this.socketClientManager._getClientsFromNamespace(namespace);
+      this.socketClientManager.getClientsFromNamespace(namespace);
     this._send(eventName, data, clients);
   }
 
@@ -137,7 +137,7 @@ export class WsClient<
     data: Events[K]
   ) {
     const clients =
-      this.socketClientManager._getClientsFromNamespace(namespace);
+      this.socketClientManager.getClientsFromNamespace(namespace);
     this._sendBroadcast(eventName, data, clients);
   }
 
@@ -242,7 +242,7 @@ export class WsServerClient<
     data: Events[K]
   ) {
     const clients =
-      this.socketClientManager._getClientsFromNamespace(namespace);
+      this.socketClientManager.getClientsFromNamespace(namespace);
     this._send(eventName, data, clients);
   }
 
