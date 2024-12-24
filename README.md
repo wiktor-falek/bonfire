@@ -106,6 +106,8 @@ for instructions on running the project locally
 
 ## TODO
 
+- [ ] Store all users (except the current user) in userStore
+  - [ ] Make relationStore point to users in userStore
 - [ ] Redirect to /login on 401
 - [x] Change display name
   - [x] Default to username on inputting 0 length display name
