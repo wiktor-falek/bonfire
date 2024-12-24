@@ -8,33 +8,40 @@ import { WsClient, WsServerClient } from "./wsClient.js";
 import type { AnyZodObject } from "zod";
 import type { IncomingMessage } from "node:http";
 
-class WebSocketApp {
-  private handlers: {
-    [key: string]: {
-      cb: (
-        client: WsClient<ServerToClientEvents>,
-        data: unknown,
-        userId: string
-      ) => any;
-      schema: AnyZodObject;
-    };
-  };
-  private registered: boolean;
-  constructor() {
-    this.handlers = {};
-    this.registered = false;
-  }
+type Handler = (
+  client: WsClient<ServerToClientEvents>,
+  data: any,
+  userId: string
+) => any;
 
-  register(
-    eventType: string,
-    cb: (
-      client: WsClient<ServerToClientEvents>,
-      data: any,
-      userId: string
-    ) => any,
-    schema: AnyZodObject
-  ) {
-    if (this.registered) {
+type Schema = AnyZodObject;
+
+type HandlerWithSchema = {
+  cb: Handler;
+  schema: Schema;
+};
+
+type OnListeningHandler = () => any;
+type OnConnectionHandler = (
+  client: WsClient<ServerToClientEvents>,
+  req: IncomingMessage,
+  userId: string
+) => any;
+type OnCloseHandler = (
+  client: WsClient<ServerToClientEvents>,
+  userId: string
+) => any;
+
+class WebSocketApp {
+  private listening: boolean = false;
+  private handlers: Record<string, HandlerWithSchema> = {};
+  private onListeningHandler: OnListeningHandler | null = null;
+  private onConnectionHandler: OnConnectionHandler | null = null;
+  private onCloseHandler: OnCloseHandler | null = null;
+  constructor() {}
+
+  register(eventType: string, cb: Handler, schema: Schema) {
+    if (this.listening) {
       throw new Error("Cannot register event handler after listening");
     }
 
@@ -47,18 +54,38 @@ class WebSocketApp {
     return this;
   }
 
-  listen(
-    wss: WebSocketServer,
-    options: {
-      onListening?: () => any;
-      onConnection?: (
-        client: WsClient<ServerToClientEvents>,
-        req: IncomingMessage,
-        userId: string
-      ) => any;
-      onClose?: (client: WsClient<ServerToClientEvents>, userId: string) => any;
+  onListening(cb: OnListeningHandler) {
+    if (this.listening) {
+      throw new Error("Cannot register handler after listening");
     }
+
+    if (this.onListeningHandler !== null)
+      throw new Error("Handler 'onListening' has already been defined");
+    this.onListeningHandler = cb;
+    return this;
+  }
+
+  onConnection(
+    cb: (
+      client: WsClient<ServerToClientEvents>,
+      req: IncomingMessage,
+      userId: string
+    ) => any
   ) {
+    if (this.onConnectionHandler !== null)
+      throw new Error("Handler 'onConnection' has already been defined");
+    this.onConnectionHandler = cb;
+    return this;
+  }
+
+  onClose(cb: OnCloseHandler) {
+    if (this.onCloseHandler !== null)
+      throw new Error("Handler 'onClose' has already been defined");
+    this.onCloseHandler = cb;
+    return this;
+  }
+
+  listen(wss: WebSocketServer) {
     const socketClientManager = new SocketClientManager<ServerToClientEvents>();
     const wsServerClient = new WsServerClient<ServerToClientEvents>(
       wss,
@@ -66,7 +93,7 @@ class WebSocketApp {
     );
 
     wss.on("listening", () => {
-      options.onListening?.();
+      this.onListeningHandler?.();
     });
 
     wss.on("connection", async (ws, req) => {
@@ -92,11 +119,11 @@ class WebSocketApp {
       // by using client.to(`user_${userId}`).send(...)
       client.subscribe(`user_${userId}`);
 
-      options.onConnection?.(client, req, userId);
+      this.onConnectionHandler?.(client, req, userId);
 
       ws.on("close", () => {
         socketClientManager.deleteClient(client);
-        options.onClose?.(client, userId);
+        this.onCloseHandler?.(client, userId);
       });
 
       ws.on("message", (data) => {
@@ -132,7 +159,7 @@ class WebSocketApp {
       });
     });
 
-    return [wsServerClient, socketClientManager] as const;
+    return { wsServerClient, socketClientManager } as const;
   }
 }
 

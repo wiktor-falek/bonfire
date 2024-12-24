@@ -17,7 +17,8 @@ export type JSONSerializable =
   | { [key: string]: JSONSerializable };
 
 export function serialize(eventName: string, data: JSONSerializable) {
-  return JSON.stringify({ type: eventName, data });
+  const event: WebSocketEvent = { type: eventName, data };
+  return JSON.stringify(event);
 }
 
 export function deserialize(data: RawData): WebSocketEvent | null {

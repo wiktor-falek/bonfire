@@ -47,6 +47,10 @@ class SocketClientManager<
     return this.clients.delete(client.id);
   }
 
+  getClientsFromNamespace(namespace: string) {
+    return Array.from(this.namespaces.get(namespace) ?? []);
+  }
+
   _joinNamespace(namespace: string, client: WsClient<Events>) {
     const namespaceSet = this.namespaces.get(namespace) ?? new Set();
     namespaceSet.add(client);
@@ -70,10 +74,6 @@ class SocketClientManager<
     this.clientSubscribedNamespaces.get(client.id)?.delete(namespace);
 
     return this.namespaces.get(namespace)?.delete(client) ?? false;
-  }
-
-  _getClientsFromNamespace(namespace: string) {
-    return Array.from(this.namespaces.get(namespace) ?? []);
   }
 }
 
