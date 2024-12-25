@@ -11,7 +11,10 @@ type ServerToClientEvents = {
   };
   userProfiles: UserProfile[];
   "subscription:user-profile:status": { profileId: string; status: UserStatus };
-  "subscription:user-profile:displayName": { profileId: string; displayName: string };
+  "subscription:user-profile:displayName": {
+    profileId: string;
+    displayName: string;
+  };
   "relation:friend-invite": { profile: UserProfile };
 };
 
@@ -33,6 +36,8 @@ type QueueEvent<ClientToServerK extends keyof ClientToServerEvents> = {
   type: ClientToServerK;
   data: ClientToServerEvents[ClientToServerK];
 };
+
+const HEARTBEAT_VALUE = 69;
 
 class WebSocketClient {
   private static instance: WebSocketClient;
@@ -72,6 +77,18 @@ class WebSocketClient {
     });
 
     this.socket.addEventListener("message", (messageEvent) => {
+      const isBinary =
+        messageEvent.data instanceof ArrayBuffer ||
+        messageEvent.data instanceof Blob;
+
+      if (isBinary) {
+        console.log("ping");
+        const data = new Uint8Array(1);
+        data[0] = HEARTBEAT_VALUE;
+        this.socket?.send(data);
+        return;
+      }
+
       const event: WebSocketEvent = JSON.parse(messageEvent.data);
       this.emitter.emit(
         event.type,

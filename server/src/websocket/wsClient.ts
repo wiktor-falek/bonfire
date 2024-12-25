@@ -10,12 +10,14 @@ export class WsClient<
 > {
   readonly ws: WebSocket;
   readonly id: string;
+  isAlive: boolean;
   constructor(
     ws: WebSocket,
     private socketClientManager: SocketClientManager<Events>
   ) {
     this.ws = ws;
     this.id = uuidv4();
+    this.isAlive = true;
   }
 
   /**
@@ -126,8 +128,7 @@ export class WsClient<
     eventName: K,
     data: Events[K]
   ) {
-    const clients =
-      this.socketClientManager.getClientsFromNamespace(namespace);
+    const clients = this.socketClientManager.getClientsFromNamespace(namespace);
     this._send(eventName, data, clients);
   }
 
@@ -136,8 +137,7 @@ export class WsClient<
     eventName: K,
     data: Events[K]
   ) {
-    const clients =
-      this.socketClientManager.getClientsFromNamespace(namespace);
+    const clients = this.socketClientManager.getClientsFromNamespace(namespace);
     this._sendBroadcast(eventName, data, clients);
   }
 
@@ -241,8 +241,7 @@ export class WsServerClient<
     eventName: K,
     data: Events[K]
   ) {
-    const clients =
-      this.socketClientManager.getClientsFromNamespace(namespace);
+    const clients = this.socketClientManager.getClientsFromNamespace(namespace);
     this._send(eventName, data, clients);
   }
 

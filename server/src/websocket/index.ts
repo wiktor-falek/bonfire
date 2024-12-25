@@ -32,6 +32,9 @@ type OnCloseHandler = (
   userId: string
 ) => any;
 
+const HEARTBEAT_VALUE = 69;
+const HEARTBEAT_INTERVAL = 1000 * 20;
+
 class WebSocketApp {
   private listening: boolean = false;
   private handlers: Record<string, HandlerWithSchema> = {};
@@ -114,23 +117,17 @@ class WebSocketApp {
       const session = result.val;
       const { userId } = session;
 
-      // Subscribe the client to a personal namespace of the user.
-      // This enables sending events to all connected devices of that user,
-      // by using client.to(`user_${userId}`).send(...)
-      client.subscribe(`user_${userId}`);
-
       this.onConnectionHandler?.(client, req, userId);
 
-      ws.on("close", () => {
-        socketClientManager.deleteClient(client);
-        this.onCloseHandler?.(client, userId);
-      });
-
-      ws.on("message", (data) => {
+      ws.on("message", (data, isBinary) => {
         if (ws.readyState !== WebSocket.OPEN) {
           return console.error(
             "Received message but connection is not fully open"
           );
+        }
+
+        if (isBinary && (data as any)[0] === HEARTBEAT_VALUE) {
+          console.log("pong");
         }
 
         const event = deserialize(data);
@@ -157,7 +154,24 @@ class WebSocketApp {
 
         cb(client, validation.data, userId);
       });
+
+      ws.on("close", () => {
+        socketClientManager.deleteClient(client);
+        this.onCloseHandler?.(client, userId);
+      });
     });
+
+    setInterval(() => {
+      for (const client of socketClientManager.clients.values()) {
+        if (!client.isAlive) {
+          client.ws.terminate();
+          socketClientManager.deleteClient(client);
+        } else {
+          client.isAlive = false;
+          client.ws.send(HEARTBEAT_VALUE, { binary: true });
+        }
+      }
+    }, HEARTBEAT_INTERVAL);
 
     return { wsServerClient, socketClientManager } as const;
   }

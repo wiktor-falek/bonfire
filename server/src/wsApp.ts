@@ -36,6 +36,11 @@ const wsApp = new WebSocketApp()
   .onConnection((client, req, userId) => {
     console.log(`User ${userId} Client ${client.id} connected`);
 
+    // Subscribe the client to a personal namespace of the user.
+    // This enables sending events to all connected devices of that user,
+    // by using client.to(`user_${userId}`).send(...)
+    client.subscribe(`user_${userId}`);
+
     userModel.setIsOnline(userId, true);
 
     const devicesConnected = socketClientManager.getClientsFromNamespace(
