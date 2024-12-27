@@ -73,9 +73,7 @@ class WebSocketClient {
     this.socket.addEventListener("open", () => {
       this.isOpen = true;
 
-      const length = this.queue.length;
-      for (let i = 0; i < length; i++) {
-        const { type, data } = this.queue[i]!;
+      for (const { type, data } of this.queue) {
         this.emit(type, data);
       }
       this.queue = [];
@@ -86,7 +84,7 @@ class WebSocketClient {
     type: K,
     data: ClientToServerEvents[K]
   ) {
-    if (!this.isOpen || !this.socket) {
+    if (!this.socket || !this.isOpen) {
       this.queue.push({ type, data });
       return;
     }
