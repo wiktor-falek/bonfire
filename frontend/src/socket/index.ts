@@ -1,31 +1,5 @@
 import mitt, { type Emitter } from "mitt";
-import { UserStatus, type UserProfile } from "../api/users";
-
-type ServerToClientEvents = {
-  error: { reason: string };
-  clientId: string;
-  "chat:message": {
-    senderId: string;
-    content: string;
-    timestamp: number;
-  };
-  userProfiles: UserProfile[];
-  "subscription:user-profile:status": { profileId: string; status: UserStatus };
-  "subscription:user-profile:displayName": {
-    profileId: string;
-    displayName: string;
-  };
-  "relation:friend-invite": { profile: UserProfile };
-};
-
-type ClientToServerEvents = {
-  "chat:direct-message": {
-    recipientId: string;
-    content: string;
-  };
-  "subscribe:user-profiles": { profileIds: string[] };
-  "unsubscribe:user-profiles": { profileIds: string[] };
-};
+import { ClientToServerEvents, ServerToClientEvents } from "./types";
 
 type WebSocketEvent = {
   type: keyof ServerToClientEvents;
@@ -85,7 +59,7 @@ class WebSocketClient {
         console.log("ping");
         const data = new Uint8Array(1);
         data[0] = HEARTBEAT_VALUE;
-        this.socket?.send(data);
+        this.socket?.send(data); // pong back to keep connection alive
         return;
       }
 
