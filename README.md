@@ -2,7 +2,7 @@
 
 A Discord inspired chatting application built for the sake of learning and experimenting.
 
-LIVE LINK: https://bonfire.hericium.pro
+~~LIVE LINK: https://bonfire.hericium.pro~~
 
 ## Features
 
